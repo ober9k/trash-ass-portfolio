@@ -1,16 +1,11 @@
 import '@/app.css';
+import { router } from "@/routes/routes.tsx";
+import { RouterProvider } from "@tanstack/react-router";
 
 function App() {
   return (
     <>
-      <section className="m-2 p-2">
-        <h1 className="text-xl">
-          Trash Ass Portfolio.
-        </h1>
-        <p>
-          Experimental app for some cryptocurrency portfolio tracking as apps like Blockfolio and Delta aren't too great nowadays.
-        </p>
-      </section>
+      <RouterProvider router={router} />
     </>
   );
 }
