@@ -1,5 +1,9 @@
 import "@/app.css";
+import { routeTree } from "@/routes/routeTree.tsx";
+import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { useEffect } from "react";
+
+export const router = createRouter({ routeTree });
 
 function App() {
   /* test API call to server */
@@ -16,7 +20,7 @@ function App() {
 
   return (
     <>
-      <h1>Hello World</h1>
+      <RouterProvider router={router} />
     </>
   );
 }
