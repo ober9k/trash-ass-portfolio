@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+.wrapper {
+  @apply p-1;
+}
+
+.heading {
+  @apply pb-0.5;
+  @apply text-xs text-gray-500 font-medium uppercase;
+}
+
+.total {
+  @apply flex gap-2;
+}
+
+.totalValue {
+  @apply text-2xl font-medium;
+}
+
+.totalCurrency {
+  @apply content-end;
+  @apply text-xs font-medium;
+}
+
+.gain {
+  @apply flex gap-2;
+}
+
+.gainValue {
+  @apply py-0.5;
+  @apply text-sm text-green-500 font-medium;
+}
+
+.gainPercent {
+  @apply px-1 py-0.5;
+  @apply bg-green-100 rounded;
+  @apply text-sm text-green-500 font-medium;
+}
