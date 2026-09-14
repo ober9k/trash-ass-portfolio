@@ -34,7 +34,8 @@
     "skipLibCheck": true,
 
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@shared/*": ["./../shared/src/*"]
     },
     "allowSyntheticDefaultImports": true
   }
