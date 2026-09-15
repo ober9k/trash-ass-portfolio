@@ -15,26 +15,12 @@ export async function getPrices(): Promise<Price[]> {
 }
 
 export async function getPortfolio() {
-  const prices = await getPrices();
   const tokens = await getTokens();
-
-  const getQuote = (symbol: string): number => {
-    return prices.find((price) => price.symbol === symbol.toUpperCase())
-      .quotes[0]
-      .price;
-  }
-
-  const getTotal = (symbol: string): number => {
-    const price = getQuote(symbol);
-    const token = tokens.find((token) => token.symbol === symbol)
-
-    return price * token.quantity;
-  };
 
   let total = 0;
 
   tokens.forEach((token) => {
-    total += getTotal(token.symbol);
+    total += token.value;
   });
 
   const currency    = "AUD"; /* TODO: temporary data */
@@ -47,6 +33,14 @@ export async function getPortfolio() {
 }
 
 export async function getTokens() {
+  const prices = await getPrices();
+
+  const getQuote = (symbol: string): number => {
+    return prices.find((price) => price.symbol === symbol.toUpperCase())
+      .quotes[0]
+      .price;
+  }
+
   /* mix price handling into here */
   const tokens = transactions.reduce((acc, cur) => {
     let token = acc.find((x) => x.symbol === cur.symbol);
@@ -71,6 +65,11 @@ export async function getTokens() {
 
   tokens.forEach((token) => {
     token.average = (token.total / token.quantity);
+    token.value   = (token.quantity * getQuote(token.symbol));
+  });
+
+  tokens.sort((tokenA, tokenB) => {
+    return tokenB.value - tokenA.value;
   });
 
   return tokens;

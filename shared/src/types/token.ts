@@ -19,4 +19,5 @@ export type Token = {
   fee:      number,
   total:    number,
   average:  number,
+  value:    number, /* TODO: rename */
 };
