@@ -1,9 +1,11 @@
 import "@/app.css";
 import { routeTree } from "@/routes/routeTree.tsx";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { useEffect } from "react";
 
 export const router = createRouter({ routeTree });
+const queryClient = new QueryClient();
 
 function App() {
   /* test API call to server */
@@ -20,7 +22,9 @@ function App() {
 
   return (
     <>
-      <RouterProvider router={router} />
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
     </>
   );
 }
