@@ -15,9 +15,7 @@ export async function getPrices(): Promise<Price[]> {
 
 export async function getPortfolio() {
   const prices = await getPrices();
-  const tokens = getTokens();
-  // console.log(prices[0]);
-  console.log(tokens);
+  const tokens = await getTokens();
 
   const getQuote = (symbol: string): number => {
     return prices.find((price) => price.symbol === symbol.toUpperCase())
@@ -38,12 +36,17 @@ export async function getPortfolio() {
     total += getTotal(token.symbol);
   });
 
+  const currency    = "AUD"; /* TODO: temporary data */
+  const gainTotal   = 1; /* TODO: temporary data */
+  const gainPercent = 1; /* TODO: temporary data */
+
   return {
-    total,
+    total, currency, gainTotal, gainPercent,
   };
 }
 
-export function getTokens() {
+export async function getTokens() {
+  /* mix price handling into here */
   return transactions.reduce((acc, cur) => {
     let token = acc.find((x) => x.symbol === cur.symbol);
 

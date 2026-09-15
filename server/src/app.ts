@@ -1,3 +1,4 @@
+import { getPortfolio, getTokens } from "@/services";
 import { buildPlaceholderMessage } from "@/utils";
 import cors from "cors";
 import express, { type Express, type Request, type Response } from "express";
@@ -25,15 +26,19 @@ app.get("/api/hello", (req: Request, res: Response) => {
 /**
  * List current value of user's portfolio.
  */
-app.get("/api/me/portfolio", (req: Request, res: Response) => {
-  return res.json(buildPlaceholderMessage("me.portfolio()"));
+app.get("/api/me/portfolio", async (req: Request, res: Response) => {
+  res.status(200).json(
+    await getPortfolio(),
+  );
 });
 
 /**
  * List all of current user's tokens.
  */
-app.get("/api/me/tokens", (req: Request, res: Response) => {
-  return res.json(buildPlaceholderMessage("me.tokens()"));
+app.get("/api/me/tokens", async (req: Request, res: Response) => {
+  res.status(200).json(
+    await getTokens(),
+  );
 });
 
 /**
