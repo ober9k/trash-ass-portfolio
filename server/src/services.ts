@@ -1,5 +1,6 @@
 import { transactions } from "@/data/mock/transactions";
 import type { Price } from "@shared/types/price";
+import { getTokenName } from "../utils/tokenUtils";
 
 export async function getPrices(): Promise<Price[]> {
   const result = await fetch('https://pro-api.coinmarketcap.com/v2/simple/price?symbol=ada,doge,hype,neo,pepe,vet,xlm,zbcn,zec&convert=aud', {
@@ -58,6 +59,7 @@ export async function getTokens() {
     else {
       acc.push({
         symbol:   cur.symbol,
+        name:     getTokenName(cur.symbol),
         quantity: cur.quantity,
         fee:      cur.fee,
         total:    cur.total,
