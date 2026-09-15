@@ -1,7 +1,7 @@
 import { portfolioLoader } from "@/api/loaders.ts";
 import DefaultLayout from "@/layouts/defaultLayout.tsx";
-import Portfolio from "@/pages/portfolio.tsx";
-import Transactions from "@/pages/transactions.tsx";
+import PortfolioPage from "@/pages/portfolioPage.tsx";
+import TransactionsPage from "@/pages/transactionsPage.tsx";
 import { createRootRoute, createRoute, } from "@tanstack/react-router";
 
 const rootBeforeLoader = async ({ context }) => {
@@ -16,14 +16,14 @@ export const rootRoute = createRootRoute({
 const portfolioRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/',
-  component: Portfolio,
+  component: PortfolioPage,
   loader: portfolioLoader,
 })
 
 const transactionsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/transactions',
-  component: Transactions,
+  component: TransactionsPage,
 })
 
 export const routeTree = rootRoute.addChildren([portfolioRoute, transactionsRoute]);

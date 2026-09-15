@@ -1,4 +1,4 @@
-function Transactions() {
+function TransactionsPage() {
   return (
     <>
       <h1>Transactions</h1>
@@ -7,4 +7,4 @@ function Transactions() {
   );
 }
 
-export default Transactions;
+export default TransactionsPage;

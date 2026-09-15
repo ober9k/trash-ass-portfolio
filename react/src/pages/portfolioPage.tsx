@@ -2,7 +2,7 @@ import type { PortfolioLoaderProps } from "@/api/loaders.ts";
 import PortfolioTotal from "@/components/portfolio/portfolioTotal.tsx";
 import { getRouteApi } from "@tanstack/react-router";
 
-function Portfolio() {
+function PortfolioPage() {
   const { portfolio }: PortfolioLoaderProps = getRouteApi("/").useLoaderData();
 
   return (
@@ -13,4 +13,4 @@ function Portfolio() {
   );
 }
 
-export default Portfolio;
+export default PortfolioPage;
