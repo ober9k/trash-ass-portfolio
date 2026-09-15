@@ -24,10 +24,11 @@
     "noUncheckedSideEffectImports": true,
     
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@shared/*": ["./../shared/src/*"]
     }
   },
   "include": [
-    "./src", "../src"
+    "./src", "../src", "./../shared/src"
   ]
 }
