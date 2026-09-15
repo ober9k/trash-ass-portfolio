@@ -1,3 +1,4 @@
+import { portfolioLoader } from "@/api/loaders.ts";
 import DefaultLayout from "@/layouts/defaultLayout.tsx";
 import Portfolio from "@/pages/portfolio.tsx";
 import Transactions from "@/pages/transactions.tsx";
@@ -16,6 +17,7 @@ const portfolioRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/',
   component: Portfolio,
+  loader: portfolioLoader,
 })
 
 const transactionsRoute = createRoute({

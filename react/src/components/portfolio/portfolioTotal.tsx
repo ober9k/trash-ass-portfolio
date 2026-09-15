@@ -1,14 +1,12 @@
+import { type Portfolio } from "@shared/types/portfolio.ts";
 import styles from "./portfolioTotal.module.css";
 
 type Props = {
-  total:       number,
-  currency:    string,
-  gain:        number,
-  gainPercent: number,
+  portfolio: Portfolio,
 };
 
 function PortfolioTotal(props: Props) {
-  const { total, currency, gain, gainPercent } = props;
+  const { total, currency, gainTotal, gainPercent } = props.portfolio;
 
   return (
     <>
@@ -26,7 +24,7 @@ function PortfolioTotal(props: Props) {
         </section>
         <section className={styles.gain}>
           <span className={styles.gainValue}>
-            +${gain.toFixed(2)}
+            +${gainTotal.toFixed(2)}
           </span>
           <span className={styles.gainPercent}>
             +${gainPercent.toFixed(2)}%

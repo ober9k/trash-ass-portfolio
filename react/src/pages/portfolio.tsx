@@ -1,17 +1,14 @@
+import type { PortfolioLoaderProps } from "@/api/loaders.ts";
 import PortfolioTotal from "@/components/portfolio/portfolioTotal.tsx";
+import { getRouteApi } from "@tanstack/react-router";
 
 function Portfolio() {
-  const totalWorth = {
-    total:       10126.00,
-    currency:    "AUD",
-    gain:        125.00,
-    gainPercent: 1.25,
-  };
+  const { portfolio }: PortfolioLoaderProps = getRouteApi("/").useLoaderData();
 
   return (
     <>
       <h1>Portfolio</h1>
-      <PortfolioTotal {...totalWorth} />
+      <PortfolioTotal portfolio={portfolio} />
     </>
   );
 }
