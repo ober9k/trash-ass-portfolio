@@ -27,7 +27,7 @@ function TokenDisplay(props: Props) {
           </p>
         </section>
         <section>
-          <h3 className={"text-md font-medium text-right"}>$1,234.00</h3>
+          <h3 className={"text-md font-medium text-right"}>${parseValue(token.value)}</h3>
         </section>
       </article>
     </>
