@@ -47,7 +47,7 @@ export async function getPortfolio() {
 
 export async function getTokens() {
   /* mix price handling into here */
-  return transactions.reduce((acc, cur) => {
+  const tokens = transactions.reduce((acc, cur) => {
     let token = acc.find((x) => x.symbol === cur.symbol);
 
     if (token) {
@@ -56,9 +56,20 @@ export async function getTokens() {
       token.total    += cur.total;
     }
     else {
-      acc.push({ ...cur });
+      acc.push({
+        symbol:   cur.symbol,
+        quantity: cur.quantity,
+        fee:      cur.fee,
+        total:    cur.total,
+      });
     }
 
     return acc;
   }, []);
+
+  tokens.forEach((token) => {
+    token.average = parseInt((token.total / token.quantity).toFixed(8));
+  });
+
+  return tokens;
 }
