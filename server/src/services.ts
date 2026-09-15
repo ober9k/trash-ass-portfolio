@@ -68,7 +68,7 @@ export async function getTokens() {
   }, []);
 
   tokens.forEach((token) => {
-    token.average = parseInt((token.total / token.quantity).toFixed(8));
+    token.average = (token.total / token.quantity);
   });
 
   return tokens;

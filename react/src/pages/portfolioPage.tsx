@@ -5,6 +5,8 @@ import { getRouteApi } from "@tanstack/react-router";
 function PortfolioPage() {
   const { portfolio }: PortfolioLoaderProps = getRouteApi("/").useLoaderData();
 
+  console.log(tokens);
+
   return (
     <>
       <h1>Portfolio</h1>
