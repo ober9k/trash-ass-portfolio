@@ -1,5 +1,6 @@
 import TokenIcon from "@/components/tokens/tokenIcon.tsx";
 import type { Token } from "@shared/types/token.ts";
+import { Link } from "@tanstack/react-router";
 
 function parseValue(value: number): string {
   return parseFloat(value.toFixed(2)).toLocaleString();
@@ -19,7 +20,11 @@ function TokenDisplay(props: Props) {
           <TokenIcon token={token} />
         </section>
         <section className={"grow"}>
-          <h3 className={"text-md font-medium"}>{token.name}</h3>
+          <h3 className={"text-md font-medium"}>
+            <Link to={"/transactions/$tokenId"} params={{ tokenId: token.symbol }}>
+              {token.name}
+            </Link>
+          </h3>
           <p className={"leading-none"}>
             <small className={"text-xs font-medium text-gray-500"}>
               {parseValue(token.quantity)} {token.symbol.toUpperCase()}
