@@ -1,4 +1,5 @@
 import type { TransactionsLoaderProps } from "@/api/loaders.ts";
+import TransactionDisplay from "@/components/transactions/transactionDisplay.tsx";
 import { getRouteApi } from "@tanstack/react-router";
 
 function TransactionsPage() {
@@ -7,7 +8,9 @@ function TransactionsPage() {
   return (
     <>
       <h1>Transactions</h1>
-      TBD.
+      {transactions.map((transaction, key) => (
+        <TransactionDisplay transaction={transaction} key={key} />
+      ))}
     </>
   );
 }
