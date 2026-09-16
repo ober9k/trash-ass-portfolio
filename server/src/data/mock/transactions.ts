@@ -2,9 +2,6 @@ import { Symbol, type SymbolType } from "@shared/types/token";
 
 export const transactions = [
   // ADA
-  { symbol: symbols.ADA,  quantity: 4.20433753,      price: 0.29436832, fee: 0.01237624, total: 1.25000002, purchasedAt: new Date("2026-08-07T01:04:00+10:00") },
-  { symbol: symbols.ADA,  quantity: 4.61166123,      price: 0.26836832, fee: 0.01237624, total: 1.25000002, purchasedAt: new Date("2026-08-14T00:31:00+10:00") },
-  { symbol: Symbol.ADA,  quantity: 4.20433753,      price: 0.29436832, fee: 0.01237624, total: 1.25000002, purchasedAt: new Date("2026-08-07T01:04:00+10:00") },
   { symbol: Symbol.ADA,  quantity: 4.20433753,      price: 0.29436832, fee: 0.01237624, total: 1.25000002, purchasedAt: new Date("2026-08-07T01:04:00+10:00") },
   { symbol: Symbol.ADA,  quantity: 4.61166123,      price: 0.26836832, fee: 0.01237624, total: 1.25000002, purchasedAt: new Date("2026-08-14T00:31:00+10:00") },
   // DOGE
