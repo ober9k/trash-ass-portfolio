@@ -1,4 +1,4 @@
-import { getPortfolio, getTokens } from "@/services";
+import { getPortfolio, getTokens, getTransactionsByTokenId } from "@/services";
 import { buildPlaceholderMessage } from "@/utils";
 import cors from "cors";
 import express, { type Express, type Request, type Response } from "express";
@@ -52,8 +52,14 @@ app.post("/api/me/tokens", (req: Request, res: Response) => {
 /**
  * List all of current user's transactions by tokenId.
  */
-app.get("/api/me/tokens/:tokenId/transactions", (req: Request, res: Response) => {
-  return res.json(buildPlaceholderMessage("me.tokens().by(tokenId).transactions()"));
+app.get("/api/me/tokens/:tokenId/transactions", async (req: Request, res: Response) => {
+  const tokenId = req.params.tokenId as string;
+
+  /* validate tokenId/symbol */
+
+  res.status(200).json(
+    await getTransactionsByTokenId(tokenId),
+  );
 });
 
 /**

@@ -74,3 +74,13 @@ export async function getTokens() {
 
   return tokens;
 }
+
+/**
+ * initial simplified handling (unsafe)
+ * @param tokenId
+ */
+export async function getTransactionsByTokenId(tokenId: string) {
+  return transactions.filter((transaction) => {
+    return transaction.symbol === tokenId;
+  });
+}
