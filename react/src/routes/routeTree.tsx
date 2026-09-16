@@ -1,4 +1,4 @@
-import { portfolioLoader } from "@/api/loaders.ts";
+import { portfolioLoader, transactionsLoader } from "@/api/loaders.ts";
 import DefaultLayout from "@/layouts/defaultLayout.tsx";
 import PortfolioPage from "@/pages/portfolioPage.tsx";
 import TransactionsPage from "@/pages/transactionsPage.tsx";
@@ -22,8 +22,9 @@ const portfolioRoute = createRoute({
 
 const transactionsRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/transactions',
+  path: '/transactions/$tokenId',
   component: TransactionsPage,
+  loader: transactionsLoader,
 })
 
 export const routeTree = rootRoute.addChildren([portfolioRoute, transactionsRoute]);
