@@ -1,5 +1,6 @@
 import { type Portfolio } from "@shared/types/portfolio.ts";
 import type { Token } from "@shared/types/token.ts";
+import { type Transaction } from "@shared/types/transaction.ts";
 import axios from "axios";
 
 const RootApiPath = "http://localhost/"; /* TODO: .env instead */
@@ -25,3 +26,9 @@ export async function fetchTokens({ queryKey }: { queryKey: readonly string[] })
   const { data } = await axios.get(buildApiUrl(...queryKey));
   return data as Token[];
 }
+
+export async function fetchTransactions({ queryKey }: { queryKey: readonly string[] }): Promise<Transaction[]> {
+  const { data } = await axios.get(buildApiUrl(...queryKey));
+  return data as Transaction[];
+}
+
