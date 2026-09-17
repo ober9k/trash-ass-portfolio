@@ -1,5 +1,8 @@
 import { transactions } from "@/data/mock/transactions";
 import type { Price } from "@shared/types/price";
+import { type SymbolType } from "@shared/types/token";
+import type { TransactionTotal } from "@shared/types/transaction";
+import { TransactionType } from "@shared/types/transaction";
 import { getTokenName } from "../utils/tokenUtils";
 
 export async function getPrices(): Promise<Price[]> {
@@ -83,4 +86,44 @@ export async function getTransactionsByTokenId(tokenId: string) {
   return transactions.filter((transaction) => {
     return transaction.symbol === tokenId;
   });
+}
+
+/**
+ * Generate a summary of values for a token.
+ * TODO: this is just roughly built for the prototyping
+ * @param tokenId
+ */
+export async function getTransactionsSummary(tokenId: string) {
+  const prices = await getPrices();
+
+  const getQuote = (symbol: string): number => {
+    return prices.find((price) => price.symbol === symbol.toUpperCase())
+      .quotes[0]
+      .price;
+  }
+
+  const filteredTransactions = transactions.filter((transaction) => {
+    return transaction.symbol === tokenId;
+  });
+
+  const totalQuantity = filteredTransactions.reduce((acc, cur) => acc + cur.quantity, 0);
+
+  const buyTransactions = filteredTransactions
+    .filter((t) => t.transactionType === TransactionType.Buy);
+
+  const buyTotal = buyTransactions
+    .reduce((a, c) => a + (c.quantity * c.price), 0);
+
+
+  const totalTransaction: TransactionTotal = {
+    symbol:       tokenId as SymbolType,
+    quantity:     totalQuantity,
+    marketValue:  totalQuantity * getQuote(tokenId),
+    totalValue:   buyTotal,
+    buyAverage:   buyTotal / buyTransactions.length,
+    buyTotal:     buyTotal,
+    transactions: filteredTransactions.length,
+  };
+
+  return totalTransaction;
 }

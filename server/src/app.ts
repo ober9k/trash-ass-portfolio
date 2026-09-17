@@ -1,4 +1,4 @@
-import { getPortfolio, getTokens, getTransactionsByTokenId } from "@/services";
+import { getPortfolio, getTokens, getTransactionsByTokenId, getTransactionsSummary } from "@/services";
 import { buildPlaceholderMessage } from "@/utils";
 import cors from "cors";
 import express, { type Express, type Request, type Response } from "express";
@@ -59,6 +59,19 @@ app.get("/api/me/tokens/:tokenId/transactions", async (req: Request, res: Respon
 
   res.status(200).json(
     await getTransactionsByTokenId(tokenId),
+  );
+});
+
+/**
+ * Yield a transaction summary for the user's token holdings.
+ */
+app.get("/api/me/tokens/:tokenId/summary", async (req: Request, res: Response) => {
+  const tokenId = req.params.tokenId as string;
+
+  /* validate tokenId/symbol */
+
+  res.status(200).json(
+    await getTransactionsSummary(tokenId),
   );
 });
 
