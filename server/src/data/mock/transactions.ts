@@ -1,4 +1,5 @@
-import { Symbol, type SymbolType } from "@shared/types/token";
+import { Symbol } from "@shared/types/token";
+import { TransactionType } from "@shared/types/transaction";
 
 export const transactions = [
   // ADA
@@ -37,4 +38,6 @@ export const transactions = [
   { symbol: Symbol.PEPE, quantity: 595238.09523809, price: 0.00000416, fee: 0.02475248, total: 2.50094296, purchasedAt: new Date("2026-07-23T23:22:00+10:00") },
   { symbol: Symbol.PEPE, quantity: 606796.11650485, price: 0.00000408, fee: 0.02475248, total: 2.50048064, purchasedAt: new Date("2026-07-30T21:05:00+10:00") },
   { symbol: Symbol.PEPE, quantity: 599520.38369304, price: 0.00000413, fee: 0.02475248, total: 2.50077166, purchasedAt: new Date("2026-08-07T00:54:00+10:00") },
-];
+].map((t) => ({
+  ...t, transactionType: TransactionType.Buy, /* default */
+}));
