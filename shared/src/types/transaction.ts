@@ -22,10 +22,9 @@ export type Transaction = {
 export type TransactionTotal = {
   symbol:       SymbolType,
   quantity:     number,
+  marketValue:  number,
+  totalValue:   number,
   buyAverage:   number,
-  sellAverage:  number,
   buyTotal:     number,
-  sellTotal:    number,
-  feeTotal:     number,
   transactions: number,
 };
