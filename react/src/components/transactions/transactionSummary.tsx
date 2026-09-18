@@ -1,5 +1,6 @@
 import TokenIcon from "@/components/tokens/tokenIcon.tsx";
 import PercentDisplay from "@/components/utils/percentDisplay.tsx";
+import TokenDisplay from "@/components/utils/tokenDisplay.tsx";
 import type { Token } from "@shared/types/token.ts";
 import type { TransactionTotal } from "@shared/types/transaction.ts";
 
@@ -47,7 +48,7 @@ function TransactionSummary(props: Props) {
         </section>
         <section className={"flex justify-center p-1"}>
           <PropertyDisplay title={"Holdings"}>
-            {summary.quantity.toFixed(4)} {summary.symbol.toUpperCase()}
+            <TokenDisplay {...summary} />
           </PropertyDisplay>
           <PropertyDisplay title={"Market Value"}>
              ${summary.marketValue.toFixed(2)} USD
