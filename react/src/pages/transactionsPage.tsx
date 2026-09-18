@@ -8,8 +8,8 @@ function TransactionsPage() {
 
   return (
     <>
-      <h1>Transactions</h1>
       <TransactionSummary transactionTotal={transactionTotal} />
+      <h2 className={"px-4 py-1 uppercase text-sm"}>Transactions</h2>
       {transactions.map((transaction, key) => (
         <TransactionDisplay transaction={transaction} key={key} />
       ))}

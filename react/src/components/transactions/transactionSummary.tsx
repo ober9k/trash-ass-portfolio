@@ -45,12 +45,10 @@ function TransactionSummary(props: Props) {
           <h1 className={"ml-1 text-2xl"}>{summary.name}</h1>
         </header>
         <section className={"flex justify-center p-1"}>
-          <div className={"grow"}>
-            <PropertyDisplay title={profitTitle}>
-              <CurrencyDisplay value={profitValue} />
-              <PercentDisplay marketValue={summary.marketValue} purchaseValue={summary.totalValue} />
-            </PropertyDisplay>
-          </div>
+          <PropertyDisplay title={profitTitle}>
+            <CurrencyDisplay value={profitValue} />
+            <PercentDisplay marketValue={summary.marketValue} purchaseValue={summary.totalValue} />
+          </PropertyDisplay>
         </section>
         <section className={"flex justify-center p-1"}>
           <PropertyDisplay title={"Holdings"}>

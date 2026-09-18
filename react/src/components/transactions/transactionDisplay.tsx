@@ -1,7 +1,20 @@
+import CurrencyDisplay from "@/components/utils/currencyDisplay.tsx";
+import TokenDisplay from "@/components/utils/tokenDisplay.tsx";
 import type { Transaction } from "@shared/types/transaction.ts";
 
-function parseValue(value: number): string {
-  return parseFloat(value.toFixed(2)).toLocaleString();
+function PropertyDisplay({ title, children }) {
+  return (
+    <>
+      <div className={"grow"}>
+        <h3 className={"py-1 text-xs text-center text-gray-600 font-medium uppercase"}>
+          {title}
+        </h3>
+        <h4 className={"text-center text-sm font-bold"}>
+          {children}
+        </h4>
+      </div>
+    </>
+  );
 }
 
 type Props = {
@@ -13,25 +26,25 @@ function TransactionDisplay(props: Props) {
 
   return (
     <>
-      <article className={"flex gap-2 m-2 p-2 border border-gray-200 rounded bg-gray-100"}>
-        <ul>
-          <li>
-            Purchased At:&nbsp;
-            <strong>{transaction.purchasedAt}</strong>
-          </li>
-          <li>
-            Quantity:&nbsp;
-            <strong>{transaction.quantity}</strong>
-          </li>
-          <li>
-            Price:&nbsp;
-            <strong>${parseValue(transaction.price)}</strong>
-          </li>
-          <li>
-            Total Cost:&nbsp;
-            <strong>${parseValue(transaction.total)}</strong>
-          </li>
-        </ul>
+      <article className={"m-2 p-2 flex gap-1 flex-col bg-gray-100 border-1 border-gray-300 rounded"}>
+        <section className={"flex justify-center p-1"}>
+          <div className={"grow"}>
+            <PropertyDisplay title={"Purchased"}>
+              {transaction.purchasedAt.toLocaleString().replace("T", " @ ").replace(".000Z", "")}
+            </PropertyDisplay>
+          </div>
+        </section>
+        <section className={"flex justify-center p-1"}>
+          <PropertyDisplay title={"Quantity"}>
+            <TokenDisplay {...transaction} />
+          </PropertyDisplay>
+          <PropertyDisplay title={"Buy Price"}>
+            <CurrencyDisplay value={transaction.price} />
+          </PropertyDisplay>
+          <PropertyDisplay title={"Total Cost"}>
+            <CurrencyDisplay value={transaction.total} />
+          </PropertyDisplay>
+        </section>
       </article>
     </>
   );
