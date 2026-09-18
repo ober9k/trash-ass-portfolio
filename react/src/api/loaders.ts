@@ -1,7 +1,7 @@
-import { portfolioQueryOptions, tokensQueryOptions, transactionsQueryOptions } from "@/api/queryOptions.ts";
+import { portfolioQueryOptions, tokensQueryOptions, tokenTransactionsTotalOptions, transactionsQueryOptions } from "@/api/queryOptions.ts";
 import { type Portfolio } from "@shared/types/portfolio.ts";
 import type { Token } from "@shared/types/token.ts";
-import type { Transaction } from "@shared/types/transaction.ts";
+import type { Transaction, TransactionTotal } from "@shared/types/transaction.ts";
 
 export type PortfolioLoaderProps = {
   portfolio: Portfolio,
@@ -10,6 +10,7 @@ export type PortfolioLoaderProps = {
 
 export type TransactionsLoaderProps = {
   transactions: Transaction[],
+  transactionTotal: TransactionTotal,
 };
 
 export async function portfolioLoader({ context }): Promise<PortfolioLoaderProps> {
@@ -23,8 +24,19 @@ export async function transactionsLoader({ context, params }): Promise<Transacti
   const { queryKey, queryFn } = transactionsQueryOptions;
   const newQueryKey = [ ...queryKey, params.tokenId, "transactions" ];
 
+  const transactionsOption = {
+    ...transactionsQueryOptions,
+    queryKey: [ ...transactionsQueryOptions.queryKey, params.tokenId, "transactions" ]
+  };
+
+  const transactionTotalOption = {
+    ...tokenTransactionsTotalOptions,
+    queryKey: [ ...tokenTransactionsTotalOptions.queryKey, params.tokenId, "summary" ]
+  };
+
   return {
-    transactions: await context.queryClient.query({ queryKey: newQueryKey, queryFn }),
+    transactions: await context.queryClient.query(transactionsOption),
+    transactionTotal: await context.queryClient.query(transactionTotalOption)
   };
 }
 
