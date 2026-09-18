@@ -21,6 +21,7 @@ export type Transaction = {
 
 export type TransactionTotal = {
   symbol:       SymbolType,
+  name:         string,
   quantity:     number,
   marketValue:  number,
   totalValue:   number,

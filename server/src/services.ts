@@ -117,6 +117,7 @@ export async function getTransactionsSummary(tokenId: string) {
 
   const totalTransaction: TransactionTotal = {
     symbol:       tokenId as SymbolType,
+    name:         getTokenName(tokenId as SymbolType),
     quantity:     totalQuantity,
     marketValue:  totalQuantity * getQuote(tokenId),
     totalValue:   buyTotal,
