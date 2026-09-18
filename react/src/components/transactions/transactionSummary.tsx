@@ -1,4 +1,5 @@
 import TokenIcon from "@/components/tokens/tokenIcon.tsx";
+import CurrencyDisplay from "@/components/utils/currencyDisplay.tsx";
 import PercentDisplay from "@/components/utils/percentDisplay.tsx";
 import TokenDisplay from "@/components/utils/tokenDisplay.tsx";
 import type { Token } from "@shared/types/token.ts";
@@ -31,17 +32,22 @@ function TransactionSummary(props: Props) {
     name:   summary.name,
   };
 
+  const profitValue = summary.marketValue - summary.totalValue;
+  const profitTitle = (profitValue > 0)
+    ? "Total Profit"
+    : "Total Loss";
+
   return (
     <>
-      <article className={"m-2 p-2 flex gap-1 flex-col bg-gray-200 border-1 border-gray-300 rounded"}>
+      <article className={"m-2 p-2 flex gap-1 flex-col bg-gray-100 border-1 border-gray-300 rounded"}>
         <header className={"flex justify-center p-1"}>
           <TokenIcon token={token} size="sm" />
           <h1 className={"ml-1 text-2xl"}>{summary.name}</h1>
         </header>
         <section className={"flex justify-center p-1"}>
           <div className={"grow"}>
-            <PropertyDisplay title={"Total Profit"}>
-              ${(summary.marketValue - summary.totalValue).toFixed(2)} USD
+            <PropertyDisplay title={profitTitle}>
+              <CurrencyDisplay value={profitValue} />
               <PercentDisplay marketValue={summary.marketValue} purchaseValue={summary.totalValue} />
             </PropertyDisplay>
           </div>
@@ -51,10 +57,10 @@ function TransactionSummary(props: Props) {
             <TokenDisplay {...summary} />
           </PropertyDisplay>
           <PropertyDisplay title={"Market Value"}>
-             ${summary.marketValue.toFixed(2)} USD
+            <CurrencyDisplay value={summary.marketValue} />
           </PropertyDisplay>
           <PropertyDisplay title={"Total Cost"}>
-            ${summary.totalValue.toFixed(2)} USD
+            <CurrencyDisplay value={summary.totalValue} />
           </PropertyDisplay>
         </section>
       </article>
