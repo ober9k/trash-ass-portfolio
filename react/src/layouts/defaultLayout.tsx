@@ -4,7 +4,7 @@ import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 function DefaultLayout() {
   return(
     <>
-      <Link to={"/"}>Portfolio</Link> | <Link to={"/transactions"}>Transactions</Link>
+      {/*<Link to={"/"}>Portfolio</Link> | <Link to={"/transactions"}>Transactions</Link>*/}
       <Outlet />
       <TanStackRouterDevtools />
     </>
