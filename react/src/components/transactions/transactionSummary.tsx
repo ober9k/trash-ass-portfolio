@@ -1,24 +1,10 @@
 import TokenIcon from "@/components/tokens/tokenIcon.tsx";
 import CurrencyDisplay from "@/components/utils/currencyDisplay.tsx";
 import PercentDisplay from "@/components/utils/percentDisplay.tsx";
+import PropertyDisplay from "@/components/utils/propertyDisplay.tsx";
 import TokenDisplay from "@/components/utils/tokenDisplay.tsx";
 import type { Token } from "@shared/types/token.ts";
 import type { TransactionTotal } from "@shared/types/transaction.ts";
-
-function PropertyDisplay({ title, children }) {
-  return (
-    <>
-      <div className={"grow"}>
-        <h3 className={"py-1 text-xs text-center text-gray-600 font-medium uppercase"}>
-          {title}
-        </h3>
-        <h4 className={"text-center text-sm font-bold"}>
-          {children}
-        </h4>
-      </div>
-    </>
-  );
-}
 
 type Props = {
   transactionTotal: TransactionTotal,

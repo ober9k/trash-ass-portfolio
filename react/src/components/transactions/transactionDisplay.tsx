@@ -1,21 +1,7 @@
 import CurrencyDisplay from "@/components/utils/currencyDisplay.tsx";
+import PropertyDisplay from "@/components/utils/propertyDisplay.tsx";
 import TokenDisplay from "@/components/utils/tokenDisplay.tsx";
 import type { Transaction } from "@shared/types/transaction.ts";
-
-function PropertyDisplay({ title, children }) {
-  return (
-    <>
-      <div className={"grow"}>
-        <h3 className={"py-1 text-xs text-center text-gray-600 font-medium uppercase"}>
-          {title}
-        </h3>
-        <h4 className={"text-center text-sm font-bold"}>
-          {children}
-        </h4>
-      </div>
-    </>
-  );
-}
 
 type Props = {
   transaction: Transaction,
