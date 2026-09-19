@@ -1,11 +1,11 @@
 import { portfolioQueryOptions, tokensQueryOptions, tokenTransactionsTotalOptions, transactionsQueryOptions } from "@/api/queryOptions.ts";
 import { type Portfolio } from "@shared/types/portfolio.ts";
-import type { Token } from "@shared/types/token.ts";
+import type { Asset } from "@shared/types/asset.ts";
 import type { Transaction, TransactionTotal } from "@shared/types/transaction.ts";
 
 export type PortfolioLoaderProps = {
   portfolio: Portfolio,
-  tokens:    Token[],
+  tokens:    Asset[],
 };
 
 export type TransactionsLoaderProps = {

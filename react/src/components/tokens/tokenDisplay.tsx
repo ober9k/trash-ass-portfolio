@@ -1,5 +1,5 @@
 import TokenIcon from "@/components/tokens/tokenIcon.tsx";
-import type { Token } from "@shared/types/token.ts";
+import type { Asset } from "@shared/types/asset.ts";
 import { Link } from "@tanstack/react-router";
 
 function parseValue(value: number): string {
@@ -7,32 +7,32 @@ function parseValue(value: number): string {
 }
 
 type Props = {
-  token: Token,
+  asset: Asset,
 };
 
 function TokenDisplay(props: Props) {
-  const { token } = props;
+  const { asset } = props;
 
   return (
     <>
       <article className={"flex gap-2 m-2 p-2 border border-gray-200 rounded bg-gray-100"}>
         <section>
-          <TokenIcon token={token} />
+          <TokenIcon asset={asset} />
         </section>
         <section className={"grow"}>
           <h3 className={"text-md font-medium"}>
-            <Link to={"/transactions/$tokenId"} params={{ tokenId: token.symbol }}>
-              {token.name}
+            <Link to={"/transactions/$tokenId"} params={{ tokenId: asset.token }}>
+              {asset.name}
             </Link>
           </h3>
           <p className={"leading-none"}>
             <small className={"text-xs font-medium text-gray-500"}>
-              {parseValue(token.quantity)} {token.symbol.toUpperCase()}
+              {parseValue(asset.quantity)} {asset.token.toUpperCase()}
             </small>
           </p>
         </section>
         <section>
-          <h3 className={"text-md font-medium text-right"}>${parseValue(token.value)}</h3>
+          <h3 className={"text-md font-medium text-right"}>${parseValue(asset.value)}</h3>
         </section>
       </article>
     </>

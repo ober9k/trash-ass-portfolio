@@ -1,18 +1,18 @@
-import type { SymbolType } from "@shared/types/token.ts";
+import { Token } from "@shared/types/token.ts";
 
 type Props = {
-  symbol:   SymbolType,
-  name:     string,
+  token:    Token,
+  name?:    string,
   quantity: number,
 }
 
 function TokenDisplay(props: Props) {
-  const { symbol, name, quantity } = props;
+  const { token, name = "", quantity } = props; /* fix up name handling */
 
   return (
     <>
       <span className={"[&_abbr]:no-underline [&_abbr]:border-b [&_abbr]:border-gray-400 [&_abbr]:border-dashed"}>
-        {quantity.toFixed(4)} <abbr title={name}>{symbol.toUpperCase()}</abbr>
+        {quantity.toFixed(4)} <abbr title={name}>{token.toUpperCase()}</abbr>
       </span>
     </>
   )

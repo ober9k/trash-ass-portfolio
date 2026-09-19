@@ -1,15 +1,16 @@
-import { Symbol, type Token } from "@shared/types/token.ts";
-import { DefaultIconSize, getIconClass, getIconUrl, type IconSize } from "@/utils/icon.ts";
+import { DefaultIconSize, getIconClass, getIconUrl } from "@/utils/iconUtils.ts";
+import type { IconSize } from "@/utils/iconUtils.ts";
+import { type Asset } from "@shared/types/asset.ts";
 
 type Props = {
-  token: Partial<Token>,
+  asset: Partial<Asset>,
   size?: IconSize,
 };
 
 function TokenIcon(props: Props) {
-  const { symbol, name } = token;
-  const iconUrl = getIconUrl(symbol);
-  const { symbol, size = DefaultIconSize } = props;
+  const { asset, size = DefaultIconSize } = props;
+  const { token, name } = asset;
+  const iconUrl = getIconUrl(token);
 
   return (
     <>

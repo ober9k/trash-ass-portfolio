@@ -1,16 +1,16 @@
-import { Symbol, type SymbolType } from "@shared/types/token";
+import { Token } from "@shared/types/token";
 
 const tokenNames = new Map<string, string>()
-  .set(Symbol.ADA,  "Cardano")
-  .set(Symbol.DOGE, "DogeCoin")
-  .set(Symbol.HYPE, "Hyperliquid")
-  .set(Symbol.NEO,  "Neo")
-  .set(Symbol.PEPE, "Pepe")
-  .set(Symbol.VET,  "VeChain")
-  .set(Symbol.XLM,  "Stellar")
-  .set(Symbol.ZBCN, "Zebec Network")
-  .set(Symbol.ZEC,  "Zcash");
+  .set(Token.ADA,  "Cardano")
+  .set(Token.DOGE, "DogeCoin")
+  .set(Token.HYPE, "Hyperliquid")
+  .set(Token.NEO,  "Neo")
+  .set(Token.PEPE, "Pepe")
+  .set(Token.VET,  "VeChain")
+  .set(Token.XLM,  "Stellar")
+  .set(Token.ZBCN, "Zebec Network")
+  .set(Token.ZEC,  "Zcash");
 
-export function getTokenName(symbol: SymbolType): string {
+export function getTokenName(symbol: Token): string {
   return tokenNames.get(symbol);
 }

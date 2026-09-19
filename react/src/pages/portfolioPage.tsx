@@ -13,7 +13,7 @@ function PortfolioPage() {
       <h1>Portfolio</h1>
       <PortfolioTotal portfolio={portfolio} />
       {tokens.map((token, key) => (
-        <TokenDisplay token={token} key={key} />
+        <TokenDisplay asset={token} key={key} />
       ))}
     </>
   );

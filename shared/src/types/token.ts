@@ -1,4 +1,4 @@
-export const Symbol = {
+export const Token = {
   ADA:  "ada",
   DOGE: "doge",
   HYPE: "hype",
@@ -10,14 +10,4 @@ export const Symbol = {
   ZEC:  "zec",
 } as const;
 
-export type SymbolType = typeof Symbol[keyof typeof Symbol];
-
-export type Token = {
-  name:     string,
-  symbol:   SymbolType,
-  quantity: number,
-  fee:      number,
-  total:    number,
-  average:  number,
-  value:    number, /* TODO: rename */
-};
+export type Token = typeof Token[keyof typeof Token];

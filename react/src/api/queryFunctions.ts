@@ -1,5 +1,5 @@
 import { type Portfolio } from "@shared/types/portfolio.ts";
-import type { Token } from "@shared/types/token.ts";
+import type { Asset } from "@shared/types/asset.ts";
 import { type Transaction, type TransactionTotal } from "@shared/types/transaction.ts";
 import axios from "axios";
 
@@ -22,9 +22,9 @@ export async function fetchPortfolio({ queryKey }: { queryKey: readonly string[]
   return data as Portfolio;
 }
 
-export async function fetchTokens({ queryKey }: { queryKey: readonly string[] }): Promise<Token[]> {
+export async function fetchTokens({ queryKey }: { queryKey: readonly string[] }): Promise<Asset[]> {
   const { data } = await axios.get(buildApiUrl(...queryKey));
-  return data as Token[];
+  return data as Asset[];
 }
 
 export async function fetchTransactions({ queryKey }: { queryKey: readonly string[] }): Promise<Transaction[]> {

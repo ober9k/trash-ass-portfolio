@@ -1,4 +1,4 @@
-import { SymbolType } from "./token";
+import { Token } from "./token";
 
 export const TransactionType = {
   Buy:      "buy",
@@ -9,7 +9,7 @@ export const TransactionType = {
 export type TransactionType = typeof TransactionType[keyof typeof TransactionType];
 
 export type Transaction = {
-  symbol:      SymbolType,
+  token:       Token,
   quantity:    number,
   price:       number,
   fee:         number,
@@ -20,7 +20,7 @@ export type Transaction = {
 };
 
 export type TransactionTotal = {
-  symbol:       SymbolType,
+  token:        Token,
   name:         string,
   quantity:     number,
   marketValue:  number,

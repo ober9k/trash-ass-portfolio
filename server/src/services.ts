@@ -1,6 +1,7 @@
 import { transactions } from "@/data/mock/transactions";
+import { Currency } from "@shared/types/currency";
 import type { Price } from "@shared/types/price";
-import { type SymbolType } from "@shared/types/token";
+import { Token } from "@shared/types/token";
 import type { TransactionTotal } from "@shared/types/transaction";
 import { TransactionType } from "@shared/types/transaction";
 import { getTokenName } from "../utils/tokenUtils";
@@ -26,7 +27,7 @@ export async function getPortfolio() {
     total += token.value;
   });
 
-  const currency    = "AUD"; /* TODO: temporary data */
+  const currency    = Currency.AUD; /* TODO: temporary data */
   const gainTotal   = 1; /* TODO: temporary data */
   const gainPercent = 1; /* TODO: temporary data */
 
@@ -67,6 +68,7 @@ export async function getTokens() {
   }, []);
 
   tokens.forEach((token) => {
+    token.token   = token.symbol; /* temp while fixing all the naming */
     token.average = (token.total / token.quantity);
     token.value   = (token.quantity * getQuote(token.symbol));
   });
@@ -85,7 +87,11 @@ export async function getTokens() {
 export async function getTransactionsByTokenId(tokenId: string) {
   return transactions.filter((transaction) => {
     return transaction.symbol === tokenId;
-  });
+  }).map((transaction) => ({
+    /* temporary fix whilst tidying up naming */
+    ...transaction,
+    token: transaction.symbol,
+  }));
 }
 
 /**
@@ -116,8 +122,8 @@ export async function getTransactionsSummary(tokenId: string) {
 
 
   const totalTransaction: TransactionTotal = {
-    symbol:       tokenId as SymbolType,
-    name:         getTokenName(tokenId as SymbolType),
+    token:        tokenId as Token,
+    name:         getTokenName(tokenId as Token),
     quantity:     totalQuantity,
     marketValue:  totalQuantity * getQuote(tokenId),
     totalValue:   buyTotal,
