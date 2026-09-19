@@ -26,10 +26,6 @@ function TransactionSummary(props: Props) {
   return (
     <>
       <article className={"m-2 p-2 flex gap-1 flex-col bg-gray-100 border-1 border-gray-300 rounded"}>
-        <header className={"flex justify-center p-1"}>
-          <TokenIcon asset={token} size="sm" />
-          <h1 className={"ml-1 text-2xl"}>{summary.name}</h1>
-        </header>
         <section className={"flex justify-center p-1"}>
           <PropertyDisplay title={profitTitle}>
             <CurrencyDisplay value={profitValue} />

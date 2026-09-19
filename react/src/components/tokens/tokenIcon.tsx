@@ -14,7 +14,7 @@ function TokenIcon(props: Props) {
 
   return (
     <>
-      <img className={`m-1 ${getIconClass(size)} rounded-full`} src={iconUrl as string} alt={name} />
+      <img className={`${getIconClass(size)} rounded-full`} src={iconUrl as string} alt={name} />
     </>
   );
 }

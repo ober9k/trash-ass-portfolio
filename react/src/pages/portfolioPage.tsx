@@ -1,7 +1,9 @@
 import type { PortfolioLoaderProps } from "@/api/loaders.ts";
+import NavigationMenu from "@/components/layout/navigationMenu";
 import PortfolioTotal from "@/components/portfolio/portfolioTotal.tsx";
 import TokenDisplay from "@/components/tokens/tokenDisplay.tsx";
-import { getRouteApi } from "@tanstack/react-router";
+import { getRouteApi, Link } from "@tanstack/react-router";
+import { Menu } from "lucide-react";
 
 function PortfolioPage() {
   const { portfolio, tokens }: PortfolioLoaderProps = getRouteApi("/").useLoaderData();
@@ -10,7 +12,9 @@ function PortfolioPage() {
 
   return (
     <>
-      <h1>Portfolio</h1>
+      <NavigationMenu>
+        Portfolio
+      </NavigationMenu>
       <PortfolioTotal portfolio={portfolio} />
       {tokens.map((token, key) => (
         <TokenDisplay asset={token} key={key} />
