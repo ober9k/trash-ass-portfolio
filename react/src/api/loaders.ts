@@ -1,12 +1,11 @@
-import { helloQueryOptions, portfolioQueryOptions, tokensQueryOptions, tokenTransactionsTotalOptions, transactionsQueryOptions } from "@/api/queryOptions.ts";
-import { type Portfolio } from "@shared/types/portfolio.ts";
-import type { Asset } from "@shared/types/asset.ts";
+import { helloQueryOptions, portfolioAssetsQueryOptions, portfolioQueryOptions, tokenTransactionsTotalOptions, transactionsQueryOptions } from "@/api/queryOptions.ts";
+import type { Portfolio, PortfolioAsset } from "@shared/types/portfolio.ts";
 import type { Transaction, TransactionTotal } from "@shared/types/transaction.ts";
 
 export type PortfolioLoaderProps = {
   hello:     any,
   portfolio: Portfolio,
-  tokens:    Asset[],
+  portfolioAssets: PortfolioAsset[],
 };
 
 export type TransactionsLoaderProps = {
@@ -18,7 +17,7 @@ export async function portfolioLoader({ context }): Promise<PortfolioLoaderProps
   return {
     hello:     await context.queryClient.query(helloQueryOptions),
     portfolio: await context.queryClient.query(portfolioQueryOptions),
-    tokens:    await context.queryClient.query(tokensQueryOptions),
+    portfolioAssets: await context.queryClient.query(portfolioAssetsQueryOptions),
   };
 }
 

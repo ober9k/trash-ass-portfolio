@@ -6,7 +6,7 @@ import { getRouteApi, Link } from "@tanstack/react-router";
 import { Menu, User } from "lucide-react";
 
 function PortfolioPage() {
-  const { portfolio, tokens }: PortfolioLoaderProps = getRouteApi("/").useLoaderData();
+  const { portfolio, portfolioAssets }: PortfolioLoaderProps = getRouteApi("/").useLoaderData();
 
   const rightItem = (
     <Link to={"/auth/sign-in"}><User size={20} /></Link>
@@ -18,8 +18,8 @@ function PortfolioPage() {
         Portfolio
       </NavigationMenu>
       <PortfolioTotal portfolio={portfolio} />
-      {tokens.map((token, key) => (
-        <TokenDisplay asset={token} key={key} />
+      {portfolioAssets.map((asset, key) => (
+        <TokenDisplay asset={asset} key={key} />
       ))}
     </>
   );

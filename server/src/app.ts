@@ -1,4 +1,4 @@
-import { getPortfolio, getTokens, getTransactionsByTokenId, getTransactionsSummary } from "@/services";
+import { getPortfolio, getPortfolioAssets, getTransactionsByTokenId, getTransactionsSummary } from "@/services";
 import { buildPlaceholderMessage } from "@/utils";
 import cors from "cors";
 import express, { type Express, type Request, type Response } from "express";
@@ -34,10 +34,11 @@ app.get("/api/me/portfolio", async (req: Request, res: Response) => {
 
 /**
  * List all of current user's tokens.
+ * TODO: improve naming
  */
-app.get("/api/me/tokens", async (req: Request, res: Response) => {
+app.get("/api/me/portfolio/assets", async (req: Request, res: Response) => {
   res.status(200).json(
-    await getTokens(),
+    await getPortfolioAssets(),
   );
 });
 

@@ -5,7 +5,7 @@ import serviceAccount from "../../secret/serviceAccountKey.json" assert { type: 
 
 dotenv.config();
 
-initializeApp({
+export const firebaseApp = initializeApp({
   credential: cert(serviceAccount),
 });
 

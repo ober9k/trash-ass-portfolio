@@ -1,10 +1,16 @@
+import { fetchAssets } from "@/apis/assets";
+import { fetchTransactions } from "@/apis/transactions";
 import { transactions } from "@/data/mock/transactions";
 import { Currency } from "@shared/types/currency";
+import type { PortfolioAsset, Summary } from "@shared/types/portfolio";
 import type { Price } from "@shared/types/price";
 import { Token } from "@shared/types/token";
 import type { TransactionTotal } from "@shared/types/transaction";
 import { TransactionType } from "@shared/types/transaction";
 import { getTokenName } from "../utils/tokenUtils";
+import { Firestore } from "@google-cloud/firestore";
+
+Firestore.name; /* hack: leave in for types (for now) */
 
 export async function getPrices(): Promise<Price[]> {
   const result = await fetch('https://pro-api.coinmarketcap.com/v2/simple/price?symbol=ada,doge,hype,neo,pepe,vet,xlm,zbcn,zec&convert=aud', {
@@ -19,12 +25,12 @@ export async function getPrices(): Promise<Price[]> {
 }
 
 export async function getPortfolio() {
-  const tokens = await getTokens();
+  const assets = await getPortfolioAssets();
 
   let total = 0;
 
-  tokens.forEach((token) => {
-    total += token.value;
+  assets.forEach((a) => {
+    total += a.summary.value;
   });
 
   const currency    = Currency.AUD; /* TODO: temporary data */
@@ -36,7 +42,7 @@ export async function getPortfolio() {
   };
 }
 
-export async function getTokens() {
+export async function getPortfolioAssets(): Promise<PortfolioAsset[]> {
   const prices = await getPrices();
 
   const getQuote = (symbol: string): number => {
@@ -45,39 +51,29 @@ export async function getTokens() {
       .price;
   }
 
-  /* mix price handling into here */
-  const tokens = transactions.reduce((acc, cur) => {
-    let token = acc.find((x) => x.symbol === cur.symbol);
+  const assets = await fetchAssets();
+  const transactions = await fetchTransactions();
 
-    if (token) {
-      token.quantity += cur.quantity;
-      token.fee      += cur.fee;
-      token.total    += cur.total;
-    }
-    else {
-      acc.push({
-        symbol:   cur.symbol,
-        name:     getTokenName(cur.symbol),
-        quantity: cur.quantity,
-        fee:      cur.fee,
-        total:    cur.total,
-      });
-    }
+  assets.forEach((a) => {
+    const filteredTransactions = transactions.filter((t) => t.assetId === a.id);
 
-    return acc;
-  }, []);
+    // a.transactions = transactions;
+    a.summary = filteredTransactions.reduce((acc, cur) => {
+      acc.quantity += cur.quantity;
+      acc.total    += cur.total;
+      acc.fee      += cur.fee;
+      acc.average   = acc.total / acc.quantity;
+      return acc;
+    }, { quantity: 0, total: 0, fee: 0 });
 
-  tokens.forEach((token) => {
-    token.token   = token.symbol; /* temp while fixing all the naming */
-    token.average = (token.total / token.quantity);
-    token.value   = (token.quantity * getQuote(token.symbol));
+    a.summary.value = (a.summary.quantity * getQuote(a.ticker.toLowerCase()))
   });
 
-  tokens.sort((tokenA, tokenB) => {
-    return tokenB.value - tokenA.value;
+  assets.sort((a: PortfolioAsset, b: PortfolioAsset) => {
+    return b.summary.value - a.summary.value;
   });
 
-  return tokens;
+  return assets;
 }
 
 /**
