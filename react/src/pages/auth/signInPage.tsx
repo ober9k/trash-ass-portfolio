@@ -1,7 +1,9 @@
 import NavigationMenu from "@/components/layout/navigationMenu.tsx";
 import { auth, signInWithGooglePopup } from "@/firebase.ts";
 import useAuthContext from "@/hooks/useAuthContext.ts";
+import { Link } from "@tanstack/react-router";
 import { signOut } from "firebase/auth";
+import { ArrowLeft, User } from "lucide-react";
 
 function SignInPage() {
   const { user, setUser } = useAuthContext();
@@ -25,9 +27,13 @@ function SignInPage() {
     }
   };
 
+  const leftItem = (
+    <Link to={"/"}><ArrowLeft size={20} /></Link>
+  );
+
   return (
     <>
-      <NavigationMenu>
+      <NavigationMenu leftItem={leftItem}>
         Sign In
       </NavigationMenu>
       {user ? (

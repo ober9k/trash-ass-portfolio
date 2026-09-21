@@ -9,12 +9,22 @@ type AuthProviderProps = {
 
 function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<AuthUser>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     return onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
+      setIsLoading(false);
     });
   }, []);
+
+  if (isLoading) {
+    return (
+      <div className={"flex justify-center items-center h-screen"}>
+        <p>Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>
