@@ -7,3 +7,6 @@ node_modules
 # IDE configurations/etc.
 .idea
 .vscode
+
+# Server configurations/etc.
+/server/secret

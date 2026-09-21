@@ -1,7 +1,9 @@
-import { type Portfolio } from "@shared/types/portfolio.ts";
+import { auth, getInitialAuthState } from "@/firebase.ts";
 import type { Asset } from "@shared/types/asset.ts";
+import { type Portfolio } from "@shared/types/portfolio.ts";
 import { type Transaction, type TransactionTotal } from "@shared/types/transaction.ts";
 import axios from "axios";
+import { onAuthStateChanged } from "firebase/auth";
 
 const RootApiPath = "http://localhost/"; /* TODO: .env instead */
 const RootApiPort = "8080";              /* TODO: .env instead */
@@ -15,6 +17,27 @@ export function buildApiUrl(...parts: string[]): string {
   url.pathname = ["api", ...parts].join("/");
 
   return url.toString();
+}
+
+export async function getAuthConfig() {
+  const user = await getInitialAuthState();
+
+  if (!user) {
+    return {};
+  }
+
+  const idToken = await user.getIdToken(true);
+
+  return {
+    headers: {
+      "Authorization": `Bearer ${idToken}`,
+    },
+  }
+}
+
+export async function fetchHello({ queryKey }: { queryKey: readonly string[] }): Promise<Portfolio> {
+  const { data } = await axios.get(buildApiUrl(...queryKey), await getAuthConfig());
+  return data as Portfolio;
 }
 
 export async function fetchPortfolio({ queryKey }: { queryKey: readonly string[] }): Promise<Portfolio> {

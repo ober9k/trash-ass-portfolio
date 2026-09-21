@@ -1,8 +1,12 @@
 import "@/app.css";
+import AuthProvider from "@/providers/authProvider.tsx";
 import { routeTree } from "@/routes/routeTree.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
-import { useEffect } from "react";
+import axios from "axios";
+
+/* pass with all requests */
+axios.defaults.withCredentials = true;
 
 export const router = createRouter({
   routeTree,
@@ -13,23 +17,14 @@ export const router = createRouter({
 const queryClient = new QueryClient();
 
 function App() {
-  /* test API call to server */
-  useEffect(() => {
-    fetch("http://localhost:8080/api/hello")
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("data", data);
-      })
-      .catch((error) => {
-        console.error("Unable to query test API endpoint.")
-      });
-  }, []);
 
   return (
     <>
+    <AuthProvider>
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
       </QueryClientProvider>
+    </AuthProvider>
     </>
   );
 }

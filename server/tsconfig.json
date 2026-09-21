@@ -32,11 +32,12 @@
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
 
     "paths": {
       "@/*": ["./src/*"],
       "@shared/*": ["./../shared/src/*"]
-    },
-    "allowSyntheticDefaultImports": true
+    }
   }
 }

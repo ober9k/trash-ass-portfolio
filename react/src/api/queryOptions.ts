@@ -1,4 +1,9 @@
-import { fetchPortfolio, fetchTokens, fetchTransactions, fetchTransactionTotal } from "@/api/queryFunctions.ts";
+import { fetchHello, fetchPortfolio, fetchTokens, fetchTransactions, fetchTransactionTotal } from "@/api/queryFunctions.ts";
+
+export const helloQueryOptions = {
+  queryKey: ["hello"],
+  queryFn:  fetchHello
+};
 
 export const portfolioQueryOptions = {
   queryKey: ["me", "portfolio"],
