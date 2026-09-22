@@ -33,6 +33,15 @@ app.get("/api/me/portfolio", async (req: Request, res: Response) => {
 });
 
 /**
+ * Get a summary of the current portfolio
+ */
+app.get("/api/me/portfolio/summary", async (req: Request, res: Response) => {
+  res.status(200).json(
+    await getPortfolioSummary(),
+  );
+});
+
+/**
  * List all of current user's tokens.
  * TODO: improve naming
  */

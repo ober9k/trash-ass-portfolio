@@ -1,22 +1,22 @@
 import CurrencyDisplay from "@/components/utils/currencyDisplay.tsx";
 import PercentDisplay from "@/components/utils/percentDisplay.tsx";
 import PropertyDisplay from "@/components/utils/propertyDisplay.tsx";
-import type { Portfolio } from "@shared/types/portfolio.ts";
+import type { PortfolioSummary } from "@shared/types/portfolio.ts";
 
 type Props = {
-  portfolio: Portfolio, /* this will be reworked */
+  summary: PortfolioSummary,
 };
 
-function PortfolioCard(props: Props) {
-  const { portfolio } = props;
+function SummaryCard(props: Props) {
+  const { summary } = props;
 
   return (
     <>
       <article>
         <section className={"flex justify-center p-2"}>
           <PropertyDisplay title={"Market Value"}>
-            <CurrencyDisplay currentValue={portfolio.total} />
-            <PercentDisplay currentValue={portfolio.total} purchaseValue={portfolio.total * 0.95 /* temp value */} />
+            <CurrencyDisplay currentValue={summary.currentValue} />
+            <PercentDisplay currentValue={summary.currentValue} purchaseValue={summary.purchaseValue} />
           </PropertyDisplay>
         </section>
       </article>
@@ -24,4 +24,4 @@ function PortfolioCard(props: Props) {
   );
 }
 
-export default PortfolioCard;
+export default SummaryCard;

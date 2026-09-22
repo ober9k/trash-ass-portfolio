@@ -2,6 +2,7 @@ import { fetchAssets } from "@/apis/assets";
 import { fetchTransactions } from "@/apis/transactions";
 import { transactions } from "@/data/mock/transactions";
 import { Currency } from "@shared/types/currency";
+import { type PortfolioSummary } from "@shared/types/portfolio";
 import type { PortfolioAsset, Summary } from "@shared/types/portfolio";
 import type { Price } from "@shared/types/price";
 import { Token } from "@shared/types/token";
@@ -40,6 +41,46 @@ export async function getPortfolio() {
   return {
     total, currency, gainTotal, gainPercent,
   };
+}
+
+/**
+ * initial simplified handling (unsafe)
+ * TODO: this duplicates the other part for now
+ */
+export async function getPortfolioSummary(): Promise<PortfolioSummary> {
+  const prices = await getPrices();
+
+  const getQuote = (symbol: string): number => {
+    return prices.find((price) => price.symbol === symbol.toUpperCase())
+      .quotes[0]
+      .price;
+  }
+
+  const assets = await fetchAssets();
+  const transactions = await fetchTransactions();
+
+  assets.forEach((a) => {
+    const filteredTransactions = transactions.filter((t) => t.assetId === a.id);
+
+    // a.transactions = transactions;
+    a.summary = filteredTransactions.reduce((acc, cur) => {
+      acc.quantity += cur.quantity;
+      acc.total    += cur.total;
+      acc.fee      += cur.fee;
+      acc.average   = acc.total / acc.quantity;
+      return acc;
+    }, { quantity: 0, total: 0, fee: 0 });
+
+    a.summary.value = (a.summary.quantity * getQuote(a.ticker.toLowerCase()))
+  });
+
+  const summary = assets.reduce((acc, cur) => {
+    acc.currentValue  += cur.summary.value;
+    acc.purchaseValue += cur.summary.total;
+    return acc;
+  }, { currentValue: 0, purchaseValue: 0 });
+
+  return summary;
 }
 
 export async function getPortfolioAssets(): Promise<PortfolioAsset[]> {

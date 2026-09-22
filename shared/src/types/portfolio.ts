@@ -7,6 +7,11 @@ export type Portfolio = {
   gainPercent: number,
 };
 
+export type PortfolioSummary = {
+  currentValue:  number,
+  purchaseValue: number,
+}
+
 export type PortfolioAsset = {
   name:    string,
   ticker:  Ticker,
