@@ -1,6 +1,7 @@
+import AssetDisplay from "@/components/utils/assetDisplay.tsx";
 import CurrencyDisplay from "@/components/utils/currencyDisplay.tsx";
 import PropertyDisplay from "@/components/utils/propertyDisplay.tsx";
-import TokenDisplay from "@/components/utils/tokenDisplay.tsx";
+import { Ticker } from "@shared/types/ticker.ts";
 import type { Transaction } from "@shared/types/transaction.ts";
 
 type Props = {
@@ -22,7 +23,7 @@ function TransactionDisplay(props: Props) {
         </section>
         <section className={"flex justify-center p-1"}>
           <PropertyDisplay title={"Quantity"}>
-            <TokenDisplay {...transaction} />
+            <AssetDisplay asset={{ ticker: Ticker.ADA, name: "Cardano" }} quantity={transaction.quantity} />
           </PropertyDisplay>
           <PropertyDisplay title={"Buy Price"}>
             <CurrencyDisplay currentValue={transaction.price} />

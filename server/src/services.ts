@@ -5,7 +5,7 @@ import { Currency } from "@shared/types/currency";
 import type { PortfolioAsset } from "@shared/types/portfolio";
 import { type PortfolioSummary } from "@shared/types/portfolio";
 import type { Price } from "@shared/types/price";
-import { Token } from "@shared/types/token";
+import { Ticker } from "@shared/types/ticker";
 import type { TransactionTotal } from "@shared/types/transaction";
 import { TransactionType } from "@shared/types/transaction";
 import { getTokenName } from "../utils/tokenUtils";
@@ -134,9 +134,9 @@ export async function getTransactionsByTokenId(tokenId: string) {
 /**
  * Generate a summary of values for a token.
  * TODO: this is just roughly built for the prototyping
- * @param tokenId
+ * @param ticker
  */
-export async function getTransactionsSummary(tokenId: string) {
+export async function getTransactionsSummary(ticker: Ticker) {
   const prices = await getPrices();
 
   const getQuote = (symbol: string): number => {
@@ -148,7 +148,7 @@ export async function getTransactionsSummary(tokenId: string) {
   const transactions = await fetchTransactions();
 
   const filteredTransactions = transactions.filter((transaction) => {
-    return transaction.symbol === tokenId;
+    return transaction.symbol === ticker;
   });
 
   const totalQuantity = filteredTransactions.reduce((acc, cur) => acc + cur.quantity, 0);
@@ -161,10 +161,10 @@ export async function getTransactionsSummary(tokenId: string) {
 
 
   const totalTransaction: TransactionTotal = {
-    token:        tokenId as Token,
-    name:         getTokenName(tokenId as Token),
+    ticker:       ticker,
+    name:         getTokenName(ticker),
     quantity:     totalQuantity,
-    marketValue:  totalQuantity * getQuote(tokenId),
+    marketValue:  totalQuantity * getQuote(ticker),
     totalValue:   buyTotal,
     buyAverage:   buyTotal / buyTransactions.length,
     buyTotal:     buyTotal,

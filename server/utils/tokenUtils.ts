@@ -1,16 +1,15 @@
-import { Token } from "@shared/types/token";
+import { Ticker } from "@shared/types/ticker";
 
-const tokenNames = new Map<string, string>()
-  .set(Token.ADA,  "Cardano")
-  .set(Token.DOGE, "DogeCoin")
-  .set(Token.HYPE, "Hyperliquid")
-  .set(Token.NEO,  "NEO")
-  .set(Token.PEPE, "PEPE")
-  .set(Token.VET,  "VeChain")
-  .set(Token.XLM,  "Stellar")
-  .set(Token.ZBCN, "Zebec Network")
-  .set(Token.ZEC,  "Zcash");
+const getAssetName = new Map<Ticker, string>()
+  .set(Ticker.ADA,  "Cardano")
+  .set(Ticker.DOGE, "DogeCoin")
+  .set(Ticker.HYPE, "Hyperliquid")
+  .set(Ticker.NEO,  "NEO")
+  .set(Ticker.PEPE, "PEPE")
+  .set(Ticker.VET,  "VeChain")
+  .set(Ticker.XLM,  "Stellar")
+  .set(Ticker.ZBCN, "Zebec Network")
+  .set(Ticker.ZEC,  "Zcash");
 
-export function getTokenName(symbol: Token): string {
-  return tokenNames.get(symbol);
+export function getTokenName(ticker: Ticker): string {
 }

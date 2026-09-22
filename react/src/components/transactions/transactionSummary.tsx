@@ -1,8 +1,8 @@
+import AssetDisplay from "@/components/utils/assetDisplay.tsx";
 import CurrencyDisplay from "@/components/utils/currencyDisplay.tsx";
 import PercentDisplay from "@/components/utils/percentDisplay.tsx";
 import PropertyDisplay from "@/components/utils/propertyDisplay.tsx";
-import TokenDisplay from "@/components/utils/tokenDisplay.tsx";
-import type { Asset } from "@shared/types/asset.ts";
+import type { AltAsset } from "@shared/types/asset.ts";
 import type { TransactionTotal } from "@shared/types/transaction.ts";
 
 type Props = {
@@ -12,9 +12,9 @@ type Props = {
 function TransactionSummary(props: Props) {
   const { transactionTotal: summary } = props;
 
-  const token: Partial<Asset> = {
-    token: summary.token,
-    name:   summary.name,
+  const asset: AltAsset = {
+    ticker:  summary.ticker, /* TODO: fix up name handling */
+    name:    summary.name,   /* TODO: fix up name handling */
   };
 
   const profitValue = summary.marketValue - summary.totalValue;
@@ -33,7 +33,7 @@ function TransactionSummary(props: Props) {
         </section>
         <section className={"flex justify-center p-1"}>
           <PropertyDisplay title={"Holdings"}>
-            <TokenDisplay {...summary} />
+            <AssetDisplay asset={asset} quantity={summary.quantity} />
           </PropertyDisplay>
           <PropertyDisplay title={"Market Value"}>
             <CurrencyDisplay currentValue={summary.marketValue} />

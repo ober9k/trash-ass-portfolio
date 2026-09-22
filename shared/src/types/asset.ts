@@ -1,8 +1,8 @@
-import { Ticker, Token } from "./token";
+import { Ticker } from "./ticker";
 
 export type Asset = {
+  ticker:   Ticker,
   name:     string,
-  token:    Token,
   quantity: number,
   fee:      number,
   total:    number,

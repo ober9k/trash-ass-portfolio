@@ -3,7 +3,6 @@ import AssetIcon from "@/components/assets/assetIcon.tsx";
 import NavigationMenu from "@/components/layout/navigationMenu";
 import TransactionDisplay from "@/components/transactions/transactionDisplay.tsx";
 import TransactionSummary from "@/components/transactions/transactionSummary.tsx";
-import type { Ticker } from "@shared/types/token.ts";
 import { getRouteApi, Link } from "@tanstack/react-router";
 import { ArrowLeft, Menu } from "lucide-react";
 
@@ -18,7 +17,7 @@ function TransactionsPage() {
     <Link to={"/"}><Menu size={20} /></Link>
   );
 
-  const tokenIconAsset = { name: transactionTotal.name, ticker: transactionTotal.token.toUpperCase() as Ticker };
+  const tokenIconAsset = { name: transactionTotal.name, ticker: transactionTotal.ticker };
 
   return (
     <>

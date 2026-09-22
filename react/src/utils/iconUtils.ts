@@ -7,7 +7,7 @@ import vetUrl from "@/assets/icons/vet.png";
 import xlmUrl from "@/assets/icons/xlm.png";
 import zbcnUrl from "@/assets/icons/zbcn.png";
 import zecUrl from "@/assets/icons/zec.png";
-import { Ticker } from "@shared/types/token.ts";
+import { Ticker } from "@shared/types/ticker.ts";
 
 export type IconSize = "xs" | "sm" | "md" | "lg";
 export const defaultSize: IconSize = "md"; /* value used for now */

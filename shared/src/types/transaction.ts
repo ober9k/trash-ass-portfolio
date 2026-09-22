@@ -1,4 +1,4 @@
-import { Token } from "./token";
+import { Ticker } from "./token";
 
 export const TransactionType = {
   Buy:      "buy",
@@ -9,7 +9,7 @@ export const TransactionType = {
 export type TransactionType = typeof TransactionType[keyof typeof TransactionType];
 
 export type Transaction = {
-  token:       Token,
+  ticker:      Ticker,
   quantity:    number,
   price:       number,
   fee:         number,
@@ -20,7 +20,7 @@ export type Transaction = {
 };
 
 export type TransactionTotal = {
-  token:        Token,
+  ticker:       Ticker,
   name:         string,
   quantity:     number,
   marketValue:  number,

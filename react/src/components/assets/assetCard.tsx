@@ -1,8 +1,7 @@
 import AssetIcon from "@/components/assets/assetIcon.tsx";
+import AssetDisplay from "@/components/utils/assetDisplay.tsx";
 import CurrencyDisplay from "@/components/utils/currencyDisplay.tsx";
-import TokenDisplay from "@/components/utils/tokenDisplay.tsx";
 import type { PortfolioAsset } from "@shared/types/portfolio.ts";
-import type { Token } from "@shared/types/token.ts";
 import { Link } from "@tanstack/react-router";
 
 type Props = {
@@ -27,7 +26,7 @@ function AssetCard(props: Props) {
           </h3>
           <p className={"leading-none"}>
             <small className={"text-xs font-medium text-gray-500"}>
-              <TokenDisplay token={asset.ticker.toLowerCase() as Token} quantity={summary.quantity} />
+              <AssetDisplay asset={asset} quantity={summary.quantity} />
             </small>
           </p>
         </section>
