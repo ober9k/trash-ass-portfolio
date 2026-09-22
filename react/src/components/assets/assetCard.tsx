@@ -1,18 +1,17 @@
 import AssetIcon from "@/components/assets/assetIcon.tsx";
+import CurrencyDisplay from "@/components/utils/currencyDisplay.tsx";
+import TokenDisplay from "@/components/utils/tokenDisplay.tsx";
 import type { PortfolioAsset } from "@shared/types/portfolio.ts";
+import type { Token } from "@shared/types/token.ts";
 import { Link } from "@tanstack/react-router";
-
-function parseValue(value: number): string {
-  return parseFloat(value.toFixed(2)).toLocaleString();
-}
 
 type Props = {
   asset: PortfolioAsset,
 };
 
-function TokenDisplay(props: Props) {
+function AssetCard(props: Props) {
   const { asset } = props;
-  const { name, ticker, summary } = asset;
+  const { ticker, summary } = asset;
 
   return (
     <>
@@ -28,16 +27,19 @@ function TokenDisplay(props: Props) {
           </h3>
           <p className={"leading-none"}>
             <small className={"text-xs font-medium text-gray-500"}>
-              {parseValue(summary.quantity)} {ticker}
+              <TokenDisplay token={asset.ticker.toLowerCase() as Token} quantity={summary.quantity} />
             </small>
           </p>
         </section>
         <section>
-          <h3 className={"text-md font-medium text-right"}>${parseValue(summary.value)}</h3>
+          <h4 className={"text-right text-sm font-bold"}>
+            <CurrencyDisplay currentValue={summary.value} />
+            {/*<PercentDisplay currentValue={summary.value} purchaseValue={summary.total} />*/}
+          </h4>
         </section>
       </article>
     </>
   );
 }
 
-export default TokenDisplay;
+export default AssetCard;

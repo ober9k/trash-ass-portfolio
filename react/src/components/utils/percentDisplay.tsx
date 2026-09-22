@@ -14,7 +14,7 @@ function PercentDisplay(props: Props) {
 
   return (
     <>
-      <span className={`mx-1 px-1 py-1 rounded ${gainClass}`}>
+      <span className={`mx-1 px-1 py-1 rounded ${gainClass} text-xs font-normal`}>
         {gain > 0 && "+"}
         {gain.toFixed(precision)}%
       </span>

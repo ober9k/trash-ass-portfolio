@@ -39,11 +39,6 @@ export async function fetchHello({ queryKey }: { queryKey: readonly string[] }):
   return data as Portfolio;
 }
 
-export async function fetchPortfolio({ queryKey }: { queryKey: readonly string[] }): Promise<Portfolio> {
-  const { data } = await axios.get(buildApiUrl(...queryKey));
-  return data as Portfolio;
-}
-
 export async function fetchPortfolioSummary({ queryKey }: { queryKey: readonly string[] }): Promise<PortfolioSummary> {
   const { data } = await axios.get(buildApiUrl(...queryKey));
   return data as PortfolioSummary;
