@@ -1,4 +1,3 @@
-import { transactions } from "@/data/mock/transactions";
 import { firestoreDb } from "@/firebase";
 import { QuerySnapshot } from "firebase-admin/firestore";
 

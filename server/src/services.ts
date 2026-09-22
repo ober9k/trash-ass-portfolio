@@ -1,6 +1,5 @@
 import { fetchAssets } from "@/apis/assets";
 import { fetchTransactions } from "@/apis/transactions";
-import { transactions } from "@/data/mock/transactions";
 import { Currency } from "@shared/types/currency";
 import { type PortfolioSummary } from "@shared/types/portfolio";
 import type { PortfolioAsset, Summary } from "@shared/types/portfolio";
@@ -144,6 +143,8 @@ export async function getTransactionsSummary(tokenId: string) {
       .quotes[0]
       .price;
   }
+
+  const transactions = await fetchTransactions();
 
   const filteredTransactions = transactions.filter((transaction) => {
     return transaction.symbol === tokenId;
