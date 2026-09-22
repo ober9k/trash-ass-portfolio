@@ -27,8 +27,8 @@ function TransactionSummary(props: Props) {
       <article className={"m-2 p-2 flex gap-1 flex-col bg-gray-100 border-1 border-gray-300 rounded"}>
         <section className={"flex justify-center p-1"}>
           <PropertyDisplay title={profitTitle}>
-            <CurrencyDisplay value={profitValue} />
-            <PercentDisplay marketValue={summary.marketValue} purchaseValue={summary.totalValue} />
+            <CurrencyDisplay currentValue={profitValue} />
+            <PercentDisplay currentValue={summary.marketValue} purchaseValue={summary.totalValue} />
           </PropertyDisplay>
         </section>
         <section className={"flex justify-center p-1"}>
@@ -36,10 +36,10 @@ function TransactionSummary(props: Props) {
             <TokenDisplay {...summary} />
           </PropertyDisplay>
           <PropertyDisplay title={"Market Value"}>
-            <CurrencyDisplay value={summary.marketValue} />
+            <CurrencyDisplay currentValue={summary.marketValue} />
           </PropertyDisplay>
           <PropertyDisplay title={"Total Cost"}>
-            <CurrencyDisplay value={summary.totalValue} />
+            <CurrencyDisplay currentValue={summary.totalValue} />
           </PropertyDisplay>
         </section>
       </article>

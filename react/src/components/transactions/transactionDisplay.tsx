@@ -25,10 +25,10 @@ function TransactionDisplay(props: Props) {
             <TokenDisplay {...transaction} />
           </PropertyDisplay>
           <PropertyDisplay title={"Buy Price"}>
-            <CurrencyDisplay value={transaction.price} />
+            <CurrencyDisplay currentValue={transaction.price} />
           </PropertyDisplay>
           <PropertyDisplay title={"Total Cost"}>
-            <CurrencyDisplay value={transaction.total} />
+            <CurrencyDisplay currentValue={transaction.total} />
           </PropertyDisplay>
         </section>
       </article>

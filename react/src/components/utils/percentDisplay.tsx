@@ -1,13 +1,13 @@
 type Props = {
-  marketValue:   number,
+  currentValue:  number,
   purchaseValue: number,
   precision?:    number,
 };
 
 function PercentDisplay(props: Props) {
-  const { marketValue, purchaseValue, precision = 1 } = props;
+  const { currentValue, purchaseValue, precision = 1 } = props;
 
-  const gain = ((marketValue / purchaseValue) - 1) * 100;
+  const gain = ((currentValue / purchaseValue) - 1) * 100;
   const gainClass = (gain > 0)
     ? "bg-green-200 text-green-600"
     : "bg-red-200 text-red-600";
