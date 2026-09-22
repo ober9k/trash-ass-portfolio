@@ -1,6 +1,5 @@
-import TokenIcon from "@/components/tokens/tokenIcon.tsx";
+import AssetIcon from "@/components/assets/assetIcon.tsx";
 import type { PortfolioAsset } from "@shared/types/portfolio.ts";
-import type { Token } from "@shared/types/token.ts";
 import { Link } from "@tanstack/react-router";
 
 function parseValue(value: number): string {
@@ -15,13 +14,11 @@ function TokenDisplay(props: Props) {
   const { asset } = props;
   const { name, ticker, summary } = asset;
 
-  const tokenIconAsset = { name, token: ticker.toLowerCase() as Token };
-
   return (
     <>
       <article className={"flex gap-2 m-2 p-2 border border-gray-200 rounded bg-gray-100"}>
         <section>
-          <TokenIcon asset={tokenIconAsset} />
+          <AssetIcon asset={asset} />
         </section>
         <section className={"grow"}>
           <h3 className={"text-md font-medium"}>

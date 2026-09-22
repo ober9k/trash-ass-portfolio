@@ -1,4 +1,3 @@
-import TokenIcon from "@/components/tokens/tokenIcon.tsx";
 import CurrencyDisplay from "@/components/utils/currencyDisplay.tsx";
 import PercentDisplay from "@/components/utils/percentDisplay.tsx";
 import PropertyDisplay from "@/components/utils/propertyDisplay.tsx";

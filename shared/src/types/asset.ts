@@ -11,6 +11,6 @@ export type Asset = {
 };
 
 export type AltAsset = {
-  name:   string,
   ticker: Ticker,
+  name:   string,
 }
