@@ -27,7 +27,7 @@ export async function transactionsLoader({ context, params }): Promise<Transacti
 
   const transactionsOption = {
     ...transactionsQueryOptions,
-    queryKey: [ ...transactionsQueryOptions.queryKey, params.tokenId.toUpperCase() ]
+    queryKey: [ ...transactionsQueryOptions.queryKey, params.tokenId.toUpperCase(), "transactions" ]
   };
 
   return {

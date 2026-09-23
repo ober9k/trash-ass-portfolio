@@ -1,4 +1,4 @@
-import { getPortfolio, getPortfolioAssets, getPortfolioAssetsByAssetId, getPortfolioAssetSummary, getPortfolioSummary } from "@/services";
+import { getPortfolio, getPortfolioAssets, getPortfolioAssetTransactions, getPortfolioAssetSummary, getPortfolioSummary } from "@/services";
 import { buildPlaceholderMessage } from "@/utils";
 import type { Ticker } from "@shared/types/ticker";
 import cors from "cors";
@@ -61,19 +61,6 @@ app.post("/api/me/tokens", (req: Request, res: Response) => {
 });
 
 /**
- * List all of current user's transactions by tokenId.
- */
-app.get("/api/me/portfolio/assets/:assetId", async (req: Request, res: Response) => {
-  const assetId = req.params.assetId as string;
-
-  /* validate tokenId/symbol */
-
-  res.status(200).json(
-    await getPortfolioAssetsByAssetId(assetId),
-  );
-});
-
-/**
  * List all of current user's tokens.
  * TODO: improve naming and reduce duplication
  */
@@ -82,6 +69,19 @@ app.get("/api/me/portfolio/assets/:assetId/summary", async (req: Request, res: R
 
   res.status(200).json(
     await getPortfolioAssetSummary(assetId),
+  );
+});
+
+/**
+ * List all of current user's transactions by tokenId.
+ */
+app.get("/api/me/portfolio/assets/:assetId/transactions", async (req: Request, res: Response) => {
+  const assetId = req.params.assetId as string;
+
+  /* validate tokenId/symbol */
+
+  res.status(200).json(
+    await getPortfolioAssetTransactions(assetId),
   );
 });
 

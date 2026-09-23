@@ -1,11 +1,12 @@
-import { fetchAssets } from "@/apis/assets";
-import { fetchTransactions } from "@/apis/transactions";
+import { fetchAssetByTicker, fetchAssets } from "@/apis/assets";
+import { fetchTransactions, fetchTransactionsByAssetId } from "@/apis/transactions";
 import { Firestore } from "@google-cloud/firestore";
 import { Currency } from "@shared/types/currency";
 import type { PortfolioAsset } from "@shared/types/portfolio";
 import { type PortfolioSummary } from "@shared/types/portfolio";
 import type { Price } from "@shared/types/price";
 import { Ticker } from "@shared/types/ticker";
+import type { Transaction } from "@shared/types/transaction";
 
 Firestore.name; /* hack: leave in for types (for now) */
 
@@ -125,9 +126,10 @@ export async function getPortfolioAssetSummary(assetId: Ticker): Promise<Portfol
 /**
  * initial simplified handling (unsafe)
  * TODO: this duplicates the other part for now
+ * TODO: this is copy pasted and not even remotely close to being optimized
  * @param assetId
  */
-export async function getPortfolioAssetsByAssetId(assetId: string): Promise<PortfolioAsset[]> {
+export async function getPortfolioAssetTransactions(assetId: string): Promise<Transaction[]> {
   const prices = await getPrices();
 
   const getQuote = (symbol: string): number => {
@@ -136,28 +138,19 @@ export async function getPortfolioAssetsByAssetId(assetId: string): Promise<Port
       .price;
   }
 
-  const assets = await fetchAssets();
-  const filteredAssets = assets.filter((a) => a.ticker === assetId);
-  const transactions = await fetchTransactions();
+  const asset = await fetchAssetByTicker(assetId);
+  const dbTransactions = await fetchTransactionsByAssetId(asset.id);
 
-  filteredAssets.forEach((a) => {
-    const filteredTransactions = transactions.filter((t) => t.assetId === a.id);
+  const transactions = dbTransactions.map((t) => {
+    delete t.accountId;
+    delete t.assetId;
 
-    a.transactions = filteredTransactions;
-    a.summary = filteredTransactions.reduce((acc, cur) => {
-      acc.quantity += cur.quantity;
-      acc.total    += cur.total;
-      acc.fee      += cur.fee;
-      acc.average   = acc.total / acc.quantity;
-      return acc;
-    }, { quantity: 0, total: 0, fee: 0 });
-
-    a.summary.value = (a.summary.quantity * getQuote(a.ticker.toLowerCase()))
+    return {
+      ...t,
+      asset: asset,
+      currentValue: t.quantity * getQuote(asset.ticker.toLowerCase()),
+    } as Transaction;
   });
 
-  filteredAssets.sort((a: PortfolioAsset, b: PortfolioAsset) => {
-    return b.summary.value - a.summary.value;
-  });
-
-  return filteredAssets;
+  return transactions;
 }

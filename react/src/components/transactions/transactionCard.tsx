@@ -1,14 +1,13 @@
 import AssetDisplay from "@/components/utils/assetDisplay.tsx";
 import CurrencyDisplay from "@/components/utils/currencyDisplay.tsx";
 import PropertyDisplay from "@/components/utils/propertyDisplay.tsx";
-import { Ticker } from "@shared/types/ticker.ts";
 import type { Transaction } from "@shared/types/transaction.ts";
 
 type Props = {
   transaction: Transaction,
 };
 
-function TransactionDisplay(props: Props) {
+function TransactionCard(props: Props) {
   const { transaction } = props;
 
   return (
@@ -17,13 +16,13 @@ function TransactionDisplay(props: Props) {
         <section className={"flex justify-center p-1"}>
           <div className={"grow"}>
             <PropertyDisplay title={"Purchased"}>
-              {transaction.purchasedAt.toLocaleString().replace("T", " @ ").replace(".000Z", "")}
+              {/*{transaction.purchasedAt.toLocaleString().replace("T", " @ ").replace(".000Z", "")}*/}
             </PropertyDisplay>
           </div>
         </section>
         <section className={"flex justify-center p-1"}>
           <PropertyDisplay title={"Quantity"}>
-            <AssetDisplay asset={{ ticker: Ticker.ADA, name: "Cardano" }} quantity={transaction.quantity} />
+            <AssetDisplay asset={transaction.asset} quantity={transaction.quantity} />
           </PropertyDisplay>
           <PropertyDisplay title={"Buy Price"}>
             <CurrencyDisplay currentValue={transaction.price} />
@@ -37,4 +36,4 @@ function TransactionDisplay(props: Props) {
   );
 }
 
-export default TransactionDisplay;
+export default TransactionCard;

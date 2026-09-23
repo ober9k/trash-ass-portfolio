@@ -11,6 +11,16 @@ export type Asset = {
 };
 
 export type AltAsset = {
+  id:     string,
   ticker: Ticker,
   name:   string,
 }
+
+/**
+ * TODO: temporary type whilst refactoring
+ */
+export type DbAsset = {
+  id:     string,
+  ticker: Ticker,
+  name:   string,
+};
