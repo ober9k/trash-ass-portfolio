@@ -10,15 +10,21 @@ import type { Transaction } from "@shared/types/transaction";
 
 Firestore.name; /* hack: leave in for types (for now) */
 
+const cmcApiKey = process.env["CMC_PRO_API_KEY"] || "";
+const cmcApiUrl = process.env["CMC_PRO_API_URL"] || "";
+
+function buildApiUrl(): string {
+  return [cmcApiUrl, "simple", "price"].join("/");
+}
+
 export async function getPrices(): Promise<Price[]> {
-  const result = await fetch('https://pro-api.coinmarketcap.com/v2/simple/price?symbol=ada,doge,hype,neo,pepe,vet,xlm,zbcn,zec&convert=aud', {
+  const result = await fetch(`${buildApiUrl()}?symbol=ada,doge,hype,neo,pepe,vet,xlm,zbcn,zec&convert=aud`, {
     headers: {
-      'x-cmc_pro_api_key': ''
+      "x-cmc_pro_api_key": cmcApiKey,
     }
   });
 
   const json = await result.json();
-
   return json.data; /* double nested */
 }
 
