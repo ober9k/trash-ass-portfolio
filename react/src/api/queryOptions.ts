@@ -1,26 +1,35 @@
 import { fetchHello, fetchPortfolioAsset, fetchPortfolioAssets, fetchPortfolioSummary, fetchTransactions } from "@/api/queryFunctions.ts";
+import type { Ticker } from "@shared/types/ticker.ts";
 
 export const helloQueryOptions = {
   queryKey: ["hello"],
   queryFn:  fetchHello
 };
 
-export const portfolioSummaryQueryOptions = {
-  queryKey: ["me", "portfolio", "summary"],
-  queryFn:  fetchPortfolioSummary
-};
+export function buildPortfolioSummaryQueryOptions() {
+  return {
+    queryKey: ["me", "portfolio", "summary"],
+    queryFn:  fetchPortfolioSummary,
+  };
+}
 
-export const portfolioAssetsQueryOptions = {
-  queryKey: ["me", "portfolio", "assets"],
-  queryFn:  fetchPortfolioAssets
-};
+export function buildPortfolioAssetsQueryOptions() {
+  return {
+    queryKey: ["me", "portfolio", "assets"],
+    queryFn:  fetchPortfolioAssets,
+  }
+}
 
-export const transactionsQueryOptions = {
-  queryKey: ["me", "portfolio", "assets"], /* expand this with `$tokenId` and `transactions` */
-  queryFn:  fetchTransactions
-};
+export function buildAssetSummaryOptions(ticker: Ticker) {
+  return {
+    queryKey: ["me", "portfolio", "assets", ticker.toString(), "summary"],
+    queryFn:  fetchPortfolioAsset
+  };
+}
 
-export const portfolioAssetQueryOptions = {
-  queryKey: ["me", "portfolio", "assets"], /* expand this with `$tokenId` and `summary` */
-  queryFn:  fetchPortfolioAsset
-};
+export function buildAssetTransactionsOptions(ticker: Ticker) {
+  return {
+    queryKey: ["me", "portfolio", "assets", ticker.toString(), "transactions"],
+    queryFn:  fetchTransactions,
+  };
+}
