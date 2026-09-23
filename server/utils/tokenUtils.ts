@@ -12,4 +12,5 @@ const getAssetName = new Map<Ticker, string>()
   .set(Ticker.ZEC,  "Zcash");
 
 export function getTokenName(ticker: Ticker): string {
+  return getAssetName.get(ticker);
 }

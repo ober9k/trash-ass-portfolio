@@ -1,6 +1,6 @@
-import { helloQueryOptions, portfolioAssetsQueryOptions, portfolioSummaryQueryOptions, tokenTransactionsTotalOptions, transactionsQueryOptions } from "@/api/queryOptions.ts";
+import { helloQueryOptions, portfolioAssetQueryOptions, portfolioAssetsQueryOptions, portfolioSummaryQueryOptions, transactionsQueryOptions } from "@/api/queryOptions.ts";
 import type { PortfolioAsset, PortfolioSummary } from "@shared/types/portfolio.ts";
-import type { Transaction, TransactionTotal } from "@shared/types/transaction.ts";
+import type { Transaction } from "@shared/types/transaction.ts";
 
 export type PortfolioLoaderProps = {
   hello:            any,
@@ -10,7 +10,7 @@ export type PortfolioLoaderProps = {
 
 export type TransactionsLoaderProps = {
   transactions: Transaction[],
-  transactionTotal: TransactionTotal,
+  portfolioAsset: PortfolioAsset,
 };
 
 export async function portfolioLoader({ context }): Promise<PortfolioLoaderProps> {
@@ -27,17 +27,15 @@ export async function transactionsLoader({ context, params }): Promise<Transacti
 
   const transactionsOption = {
     ...transactionsQueryOptions,
-    queryKey: [ ...transactionsQueryOptions.queryKey, params.tokenId, "transactions" ]
-  };
-
-  const transactionTotalOption = {
-    ...tokenTransactionsTotalOptions,
-    queryKey: [ ...tokenTransactionsTotalOptions.queryKey, params.tokenId, "summary" ]
+    queryKey: [ ...transactionsQueryOptions.queryKey, params.tokenId.toUpperCase() ]
   };
 
   return {
     transactions: await context.queryClient.query(transactionsOption),
-    transactionTotal: await context.queryClient.query(transactionTotalOption)
+    portfolioAsset: await context.queryClient.query({
+      queryKey: [...portfolioAssetQueryOptions.queryKey, params.tokenId.toUpperCase(), "summary"],
+      queryFn:  portfolioAssetQueryOptions.queryFn,
+    }),
   };
 }
 

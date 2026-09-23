@@ -1,4 +1,4 @@
-import { Ticker } from "./token";
+import { Ticker } from "./ticker";
 
 export const TransactionType = {
   Buy:      "buy",
@@ -17,15 +17,4 @@ export type Transaction = {
   purchasedAt: Date,
   /* tbd for renaming */
   transactionType: TransactionType,
-};
-
-export type TransactionTotal = {
-  ticker:       Ticker,
-  name:         string,
-  quantity:     number,
-  marketValue:  number,
-  totalValue:   number,
-  buyAverage:   number,
-  buyTotal:     number,
-  transactions: number,
 };

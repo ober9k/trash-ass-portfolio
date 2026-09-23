@@ -6,10 +6,6 @@ import type { PortfolioAsset } from "@shared/types/portfolio";
 import { type PortfolioSummary } from "@shared/types/portfolio";
 import type { Price } from "@shared/types/price";
 import { Ticker } from "@shared/types/ticker";
-import type { TransactionTotal } from "@shared/types/transaction";
-import { TransactionType } from "@shared/types/transaction";
-import { getTokenName } from "../utils/tokenUtils";
-import { Firestore } from "@google-cloud/firestore";
 
 Firestore.name; /* hack: leave in for types (for now) */
 
@@ -117,26 +113,21 @@ export async function getPortfolioAssets(): Promise<PortfolioAsset[]> {
   return assets;
 }
 
-/**
- * initial simplified handling (unsafe)
- * @param tokenId
- */
-export async function getTransactionsByTokenId(tokenId: string) {
-  return transactions.filter((transaction) => {
-    return transaction.symbol === tokenId;
-  }).map((transaction) => ({
-    /* temporary fix whilst tidying up naming */
-    ...transaction,
-    token: transaction.symbol,
-  }));
+export async function getPortfolioAssetSummary(assetId: Ticker): Promise<PortfolioAsset> {
+  const assets = await getPortfolioAssets();
+
+  return assets
+    .filter((a) => a.ticker === assetId)
+    .pop();
 }
 
+
 /**
- * Generate a summary of values for a token.
- * TODO: this is just roughly built for the prototyping
- * @param ticker
+ * initial simplified handling (unsafe)
+ * TODO: this duplicates the other part for now
+ * @param assetId
  */
-export async function getTransactionsSummary(ticker: Ticker) {
+export async function getPortfolioAssetsByAssetId(assetId: string): Promise<PortfolioAsset[]> {
   const prices = await getPrices();
 
   const getQuote = (symbol: string): number => {
@@ -145,31 +136,28 @@ export async function getTransactionsSummary(ticker: Ticker) {
       .price;
   }
 
+  const assets = await fetchAssets();
+  const filteredAssets = assets.filter((a) => a.ticker === assetId);
   const transactions = await fetchTransactions();
 
-  const filteredTransactions = transactions.filter((transaction) => {
-    return transaction.symbol === ticker;
+  filteredAssets.forEach((a) => {
+    const filteredTransactions = transactions.filter((t) => t.assetId === a.id);
+
+    a.transactions = filteredTransactions;
+    a.summary = filteredTransactions.reduce((acc, cur) => {
+      acc.quantity += cur.quantity;
+      acc.total    += cur.total;
+      acc.fee      += cur.fee;
+      acc.average   = acc.total / acc.quantity;
+      return acc;
+    }, { quantity: 0, total: 0, fee: 0 });
+
+    a.summary.value = (a.summary.quantity * getQuote(a.ticker.toLowerCase()))
   });
 
-  const totalQuantity = filteredTransactions.reduce((acc, cur) => acc + cur.quantity, 0);
+  filteredAssets.sort((a: PortfolioAsset, b: PortfolioAsset) => {
+    return b.summary.value - a.summary.value;
+  });
 
-  const buyTransactions = filteredTransactions
-    .filter((t) => t.transactionType === TransactionType.Buy);
-
-  const buyTotal = buyTransactions
-    .reduce((a, c) => a + (c.quantity * c.price), 0);
-
-
-  const totalTransaction: TransactionTotal = {
-    ticker:       ticker,
-    name:         getTokenName(ticker),
-    quantity:     totalQuantity,
-    marketValue:  totalQuantity * getQuote(ticker),
-    totalValue:   buyTotal,
-    buyAverage:   buyTotal / buyTransactions.length,
-    buyTotal:     buyTotal,
-    transactions: filteredTransactions.length,
-  };
-
-  return totalTransaction;
+  return filteredAssets;
 }
