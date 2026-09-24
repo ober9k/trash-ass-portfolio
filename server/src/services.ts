@@ -18,7 +18,7 @@ function buildApiUrl(): string {
 }
 
 export async function getPrices(): Promise<Price[]> {
-  const result = await fetch(`${buildApiUrl()}?symbol=ada,doge,hype,neo,pepe,vet,xlm,zbcn,zec&convert=aud`, {
+  const result = await fetch(`${buildApiUrl()}?symbol=ada,axs,doge,hype,neo,pepe,sol,spx,vet,xlm,xrp,zbcn,zec&convert=aud`, {
     headers: {
       "x-cmc_pro_api_key": cmcApiKey,
     }

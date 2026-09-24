@@ -1,10 +1,14 @@
 import adaUrl from "@/assets/icons/ada.png";
+import axsUrl from "@/assets/icons/axs.png";
 import dogeUrl from "@/assets/icons/doge.png";
 import hypeUrl from "@/assets/icons/hype.png";
 import neoUrl from "@/assets/icons/neo.png";
 import pepeUrl from "@/assets/icons/pepe.png";
+import solUrl from "@/assets/icons/sol.png";
+import spxUrl from "@/assets/icons/spx.png";
 import vetUrl from "@/assets/icons/vet.png";
 import xlmUrl from "@/assets/icons/xlm.png";
+import xrpUrl from "@/assets/icons/xrp.png";
 import zbcnUrl from "@/assets/icons/zbcn.png";
 import zecUrl from "@/assets/icons/zec.png";
 import { Ticker } from "@shared/types/ticker.ts";
@@ -15,12 +19,16 @@ export const defaultSize: IconSize = "md"; /* value used for now */
 export function getIconUrl(ticker: Ticker): string {
   switch (ticker) {
     case Ticker.ADA:  return adaUrl as string;
+    case Ticker.AXS:  return axsUrl as string;
     case Ticker.DOGE: return dogeUrl as string;
     case Ticker.HYPE: return hypeUrl as string;
     case Ticker.NEO:  return neoUrl as string;
     case Ticker.PEPE: return pepeUrl as string;
+    case Ticker.SOL: return solUrl as string;
+    case Ticker.SPX: return spxUrl as string;
     case Ticker.VET:  return vetUrl as string;
     case Ticker.XLM:  return xlmUrl as string;
+    case Ticker.XRP:  return xrpUrl as string;
     case Ticker.ZBCN: return zbcnUrl as string;
     case Ticker.ZEC:  return zecUrl as string;
     default: throw Error("Unexpected value for `ticker`.");
