@@ -1,14 +1,16 @@
 import AssetDisplay from "@/components/utils/assetDisplay.tsx";
 import CurrencyDisplay from "@/components/utils/currencyDisplay.tsx";
 import PropertyDisplay from "@/components/utils/propertyDisplay.tsx";
-import type { Transaction } from "@shared/types/transaction.ts";
+import { type AssetTransaction } from "@shared/types/transaction.ts";
 
 type Props = {
-  transaction: Transaction,
+  transaction: AssetTransaction,
 };
 
 function TransactionCard(props: Props) {
   const { transaction } = props;
+
+  console.log("transaction", transaction);
 
   return (
     <>
@@ -16,7 +18,7 @@ function TransactionCard(props: Props) {
         <section className={"flex justify-center p-1"}>
           <div className={"grow"}>
             <PropertyDisplay title={"Purchased"}>
-              {/*{transaction.purchasedAt.toLocaleString().replace("T", " @ ").replace(".000Z", "")}*/}
+              {transaction.purchasedAt.toLocaleString().replace("T", " @ ").replace(".000Z", "")}
             </PropertyDisplay>
           </div>
         </section>

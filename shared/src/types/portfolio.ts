@@ -1,4 +1,4 @@
-import { Ticker } from "./token";
+import { Ticker } from "./ticker";
 
 export type Portfolio = {
   total:       number,

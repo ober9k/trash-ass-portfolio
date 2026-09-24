@@ -1,14 +1,9 @@
-import { portfolioLoader, transactionsLoader } from "@/api/loaders.ts";
+import { portfolioLoader, rootBeforeLoader, transactionsLoader } from "@/api/loaders.ts";
 import DefaultLayout from "@/layouts/defaultLayout.tsx";
 import SignInPage from "@/pages/auth/signInPage.tsx";
 import PortfolioPage from "@/pages/portfolioPage.tsx";
 import TransactionsPage from "@/pages/transactionsPage.tsx";
 import { createRootRoute, createRoute, } from "@tanstack/react-router";
-
-const rootBeforeLoader = async ({ context }) => {
-  console.log("rootBeforeLoader");
-  return {};
-}
 
 export const rootRoute = createRootRoute({
   component: DefaultLayout,

@@ -1,5 +1,4 @@
-import { AltAsset } from "./asset";
-import { Ticker } from "./ticker";
+import { type AltAsset } from "./asset";
 
 export const TransactionType = {
   Buy:      "buy",
@@ -8,17 +7,6 @@ export const TransactionType = {
 }
 
 export type TransactionType = typeof TransactionType[keyof typeof TransactionType];
-
-export type Transaction = {
-  ticker:      Ticker,
-  quantity:    number,
-  price:       number,
-  fee:         number,
-  total:       number,
-  purchasedAt: Date,
-  /* tbd for renaming */
-  transactionType: TransactionType,
-};
 
 export type AssetTransaction = {
   id:          string,

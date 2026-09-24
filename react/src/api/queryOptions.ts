@@ -1,10 +1,5 @@
-import { fetchHello, fetchPortfolioAsset, fetchPortfolioAssets, fetchPortfolioSummary, fetchTransactions } from "@/api/queryFunctions.ts";
+import { fetchPortfolioAsset, fetchPortfolioAssets, fetchPortfolioSummary, fetchTransactions } from "@/api/queryFunctions.ts";
 import type { Ticker } from "@shared/types/ticker.ts";
-
-export const helloQueryOptions = {
-  queryKey: ["hello"],
-  queryFn:  fetchHello
-};
 
 export function buildPortfolioSummaryQueryOptions() {
   return {

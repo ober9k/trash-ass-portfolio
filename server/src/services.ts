@@ -6,7 +6,7 @@ import type { PortfolioAsset } from "@shared/types/portfolio";
 import { type PortfolioSummary } from "@shared/types/portfolio";
 import type { Price } from "@shared/types/price";
 import { Ticker } from "@shared/types/ticker";
-import type { Transaction } from "@shared/types/transaction";
+import { type AssetTransaction } from "@shared/types/transaction";
 
 Firestore.name; /* hack: leave in for types (for now) */
 
@@ -135,7 +135,7 @@ export async function getPortfolioAssetSummary(assetId: Ticker): Promise<Portfol
  * TODO: this is copy pasted and not even remotely close to being optimized
  * @param assetId
  */
-export async function getPortfolioAssetTransactions(assetId: string): Promise<Transaction[]> {
+export async function getPortfolioAssetTransactions(assetId: string): Promise<AssetTransaction[]> {
   const prices = await getPrices();
 
   const getQuote = (symbol: string): number => {
@@ -155,7 +155,7 @@ export async function getPortfolioAssetTransactions(assetId: string): Promise<Tr
       ...t,
       asset: asset,
       currentValue: t.quantity * getQuote(asset.ticker.toLowerCase()),
-    } as Transaction;
+    } as AssetTransaction;
   });
 
   return transactions;

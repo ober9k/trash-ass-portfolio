@@ -2,6 +2,7 @@ import AssetDisplay from "@/components/utils/assetDisplay.tsx";
 import CurrencyDisplay from "@/components/utils/currencyDisplay.tsx";
 import PercentDisplay from "@/components/utils/percentDisplay.tsx";
 import PropertyDisplay from "@/components/utils/propertyDisplay.tsx";
+import type { AltAsset } from "@shared/types/asset.ts";
 import type { PortfolioAsset } from "@shared/types/portfolio.ts";
 
 type Props = {
@@ -17,6 +18,8 @@ function TransactionSummary(props: Props) {
     ? "Total Profit"
     : "Total Loss";
 
+  const altAsset = { id: "temp", ticker: asset.ticker, name: asset.name } as AltAsset;
+
   return (
     <>
       <article className={"m-2 p-2 flex gap-1 flex-col bg-gray-100 border-1 border-gray-300 rounded"}>
@@ -28,7 +31,7 @@ function TransactionSummary(props: Props) {
         </section>
         <section className={"flex justify-center p-1"}>
           <PropertyDisplay title={"Holdings"}>
-            <AssetDisplay asset={asset} quantity={summary.quantity} />
+            <AssetDisplay asset={altAsset} quantity={summary.quantity} />
           </PropertyDisplay>
           <PropertyDisplay title={"Market Value"}>
             <CurrencyDisplay currentValue={summary.value} />

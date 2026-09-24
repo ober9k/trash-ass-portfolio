@@ -1,7 +1,7 @@
 import { getInitialAuthState } from "@/firebase.ts";
 import type { Asset } from "@shared/types/asset.ts";
-import { type Portfolio, type PortfolioAsset, type PortfolioSummary } from "@shared/types/portfolio.ts";
-import { type Transaction } from "@shared/types/transaction.ts";
+import { type PortfolioAsset, type PortfolioSummary } from "@shared/types/portfolio.ts";
+import { type AssetTransaction } from "@shared/types/transaction.ts";
 import axios from "axios";
 
 const RootApiPath = "http://localhost/"; /* TODO: .env instead */
@@ -34,11 +34,6 @@ export async function getAuthConfig() {
   }
 }
 
-export async function fetchHello({ queryKey }: { queryKey: readonly string[] }): Promise<Portfolio> {
-  const { data } = await axios.get(buildApiUrl(...queryKey), await getAuthConfig());
-  return data as Portfolio;
-}
-
 export async function fetchPortfolioSummary({ queryKey }: { queryKey: readonly string[] }): Promise<PortfolioSummary> {
   const { data } = await axios.get(buildApiUrl(...queryKey));
   return data as PortfolioSummary;
@@ -49,9 +44,9 @@ export async function fetchPortfolioAssets({ queryKey }: { queryKey: readonly st
   return data as Asset[];
 }
 
-export async function fetchTransactions({ queryKey }: { queryKey: readonly string[] }): Promise<Transaction[]> {
+export async function fetchTransactions({ queryKey }: { queryKey: readonly string[] }): Promise<AssetTransaction[]> {
   const { data } = await axios.get(buildApiUrl(...queryKey));
-  return data as Transaction[];
+  return data as AssetTransaction[];
 }
 
 export async function fetchPortfolioAsset({ queryKey }: { queryKey: readonly string[] }): Promise<PortfolioAsset> {
