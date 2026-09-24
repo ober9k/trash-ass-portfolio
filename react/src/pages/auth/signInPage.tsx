@@ -3,10 +3,10 @@ import { auth, signInWithGooglePopup } from "@/firebase.ts";
 import useAuthContext from "@/hooks/useAuthContext.ts";
 import { Link } from "@tanstack/react-router";
 import { signOut } from "firebase/auth";
-import { ArrowLeft, User } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 
 function SignInPage() {
-  const { user, setUser } = useAuthContext();
+  const { user, logout } = useAuthContext();
 
   const loginWithGoogle = async () => {
     try {
@@ -20,7 +20,7 @@ function SignInPage() {
   const logoutUser = async () => {
     try {
       await signOut(auth);
-      setUser(null);
+      logout();
     }
     catch (error) {
       console.error("Sign-out error", error);

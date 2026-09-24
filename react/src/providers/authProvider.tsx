@@ -1,19 +1,22 @@
-import { AuthContext, type AuthUser } from "@/contexts/authContext.ts";
+import { AuthContext } from "@/contexts/authContext.ts";
 import { auth } from "@/firebase.ts";
-import { onAuthStateChanged } from "firebase/auth";
-import { ReactNode, useEffect, useState } from "react";
+import { onAuthStateChanged, type User } from "firebase/auth";
+import { type ReactNode, useEffect, useState } from "react";
 
 type AuthProviderProps = {
   children: ReactNode,
 };
 
 function AuthProvider({ children }: AuthProviderProps) {
-  const [user, setUser] = useState<AuthUser>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const login  = (user: User | null) => setUser(user);
+  const logout = () => setUser(null);
+
   useEffect(() => {
-    return onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
+    return onAuthStateChanged(auth, (user) => {
+      login(user);
       setIsLoading(false);
     });
   }, []);
@@ -27,7 +30,7 @@ function AuthProvider({ children }: AuthProviderProps) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, setUser }}>
+    <AuthContext.Provider value={{ user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
