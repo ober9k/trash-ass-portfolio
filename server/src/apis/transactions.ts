@@ -1,4 +1,4 @@
-import { firestoreDb } from "@/firebase";
+import { firestore } from "@/firebase";
 import type { DbTransaction } from "@shared/types/transaction";
 import { QuerySnapshot } from "firebase-admin/firestore";
 
@@ -26,13 +26,13 @@ function parseDocs(docs: QuerySnapshot): DbTransaction[] {
 }
 
 export async function fetchTransactions(): Promise<DbTransaction[]> {
-  const transactionsRef = firestoreDb.collection("transactions");
+  const transactionsRef = firestore.collection("transactions");
   const transactionsDocs = await transactionsRef.get();
   return parseDocs(transactionsDocs);
 }
 
 export async function fetchTransactionsByAssetId(assetId: string): Promise<DbTransaction[]> {
-  const transactionsRef = firestoreDb.collection("transactions").where("assetId", "==", assetId);
+  const transactionsRef = firestore.collection("transactions").where("assetId", "==", assetId);
   const transactionsDocs = await transactionsRef.get();
   return parseDocs(transactionsDocs);
 }

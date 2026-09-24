@@ -1,4 +1,4 @@
-import { auth } from "@/config/firebase";
+import { auth } from "@/firebase";
 import { type NextFunction, type Request, type Response } from "express";
 
 export const authenticateToken = async (req: Request, res: Response, next: NextFunction) => {
@@ -12,7 +12,6 @@ export const authenticateToken = async (req: Request, res: Response, next: NextF
   const token = authHeader.split(' ')[1];
 
   try {
-    const decodedToken = await auth.verifyIdToken(token);
     req.user = await auth.verifyIdToken(token);
     next();
   } catch (error) {
