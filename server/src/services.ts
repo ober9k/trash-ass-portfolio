@@ -51,31 +51,7 @@ export async function getPortfolio() {
  * TODO: this duplicates the other part for now
  */
 export async function getPortfolioSummary(): Promise<PortfolioSummary> {
-  const prices = await getPrices();
-
-  const getQuote = (symbol: string): number => {
-    return prices.find((price) => price.symbol === symbol.toUpperCase())
-      .quotes[0]
-      .price;
-  }
-
-  const assets = await fetchAssets();
-  const transactions = await fetchTransactions();
-
-  assets.forEach((a) => {
-    const filteredTransactions = transactions.filter((t) => t.assetId === a.id);
-
-    // a.transactions = transactions;
-    a.summary = filteredTransactions.reduce((acc, cur) => {
-      acc.quantity += cur.quantity;
-      acc.total    += cur.total;
-      acc.fee      += cur.fee;
-      acc.average   = acc.total / acc.quantity;
-      return acc;
-    }, { quantity: 0, total: 0, fee: 0 });
-
-    a.summary.value = (a.summary.quantity * getQuote(a.ticker.toLowerCase()))
-  });
+  const assets = await getPortfolioAssets();
 
   const summary = assets.reduce((acc, cur) => {
     acc.currentValue  += cur.summary.value;
@@ -96,22 +72,21 @@ export async function getPortfolioAssets(): Promise<PortfolioAsset[]> {
   }
 
   const assets = await fetchAssets();
-  const transactions = await fetchTransactions();
 
-  assets.forEach((a) => {
-    const filteredTransactions = transactions.filter((t) => t.assetId === a.id);
+  for (let a of assets) {
+    const transactions = await fetchTransactionsByAssetId(a.id);
 
     // a.transactions = transactions;
-    a.summary = filteredTransactions.reduce((acc, cur) => {
+    a.summary = transactions.reduce((acc, cur) => {
       acc.quantity += cur.quantity;
       acc.total    += cur.total;
       acc.fee      += cur.fee;
       acc.average   = acc.total / acc.quantity;
       return acc;
-    }, { quantity: 0, total: 0, fee: 0 });
+    }, { quantity: 0, total: 0, fee: 0, average: 0, value: 0 });
 
     a.summary.value = (a.summary.quantity * getQuote(a.ticker.toLowerCase()))
-  });
+  }
 
   assets.sort((a: PortfolioAsset, b: PortfolioAsset) => {
     return b.summary.value - a.summary.value;
