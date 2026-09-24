@@ -1,38 +1,33 @@
 import { firestore } from "@/firebase";
-import type { DbTransaction } from "@shared/types/transaction";
-import { QuerySnapshot } from "firebase-admin/firestore";
+import type { Transaction } from "@shared/types/transaction";
 
-function parseDocs(docs: QuerySnapshot): DbTransaction[] {
-  if (docs.empty) {
-    return [];
-  }
-
-  const results = [];
-
-  docs.forEach((t) => {
-    results.push({
-      id:          t.id,
-      accountId:   t.data().accountId,
-      assetId:     t.data().assetId,
-      price:       t.data().price,
-      quantity:    t.data().quantity,
-      fee:         t.data().fee,
-      total:       t.data().total,
-      purchasedAt: t.data().purchasedAt.toDate(),
-    });
-  });
-
-  return results;
+function toTransaction(doc): Transaction {
+  return {
+    id:          doc.id,
+    price:       doc.data().price,
+    quantity:    doc.data().quantity,
+    fee:         doc.data().fee,
+    total:       doc.data().total,
+    purchasedAt: doc.data().purchasedAt.toDate(),
+  };
 }
 
-export async function fetchTransactions(): Promise<DbTransaction[]> {
-  const transactionsRef = firestore.collection("transactions");
-  const transactionsDocs = await transactionsRef.get();
-  return parseDocs(transactionsDocs);
+/**
+ * Return all transactions.
+ * Not recommended for use as the asset is not returned.
+ */
+export async function fetchTransactions(): Promise<Transaction[]> {
+  const ref = firestore.collection("transactions");
+  const res = await ref.get();
+  return res.docs.map(toTransaction);
 }
 
-export async function fetchTransactionsByAssetId(assetId: string): Promise<DbTransaction[]> {
-  const transactionsRef = firestore.collection("transactions").where("assetId", "==", assetId);
-  const transactionsDocs = await transactionsRef.get();
-  return parseDocs(transactionsDocs);
+/**
+ * Return all linked transactions for the specified asset.
+ * @param assetId
+ */
+export async function fetchTransactionsByAssetId(assetId: string): Promise<Transaction[]> {
+  const ref = firestore.collection("transactions").where("assetId", "==", assetId);
+  const res = await ref.get();
+  return res.docs.map(toTransaction);
 }
