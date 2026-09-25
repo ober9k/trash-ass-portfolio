@@ -1,8 +1,8 @@
 import AssetCard from "@/components/assets/assetCard.tsx";
-import type { Portfolio } from "@shared/types/portfolio.ts";
+import type { Holding } from "@shared/types/portfolio.ts";
 
 type Props = {
-  holdings: Portfolio[],
+  holdings: Holding[],
 }
 
 function AssetCardList(props: Props) {

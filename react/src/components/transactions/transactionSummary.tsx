@@ -2,10 +2,10 @@ import AssetDisplay from "@/components/utils/assetDisplay.tsx";
 import CurrencyDisplay from "@/components/utils/currencyDisplay.tsx";
 import PercentDisplay from "@/components/utils/percentDisplay.tsx";
 import PropertyDisplay from "@/components/utils/propertyDisplay.tsx";
-import type { Portfolio } from "@shared/types/portfolio.ts";
+import type { Holding } from "@shared/types/portfolio.ts";
 
 type Props = {
-  holding: Portfolio,
+  holding: Holding,
 };
 
 function TransactionSummary(props: Props) {

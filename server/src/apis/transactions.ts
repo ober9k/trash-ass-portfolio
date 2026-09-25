@@ -1,5 +1,5 @@
 import { firestore } from "@/firebase";
-import type { DbTransaction } from "@shared/types/dbTransaction";
+import type { DbTransaction } from "@shared/types/db/dbTransaction";
 
 function toTransaction(doc): DbTransaction {
   return {

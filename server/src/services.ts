@@ -3,7 +3,7 @@ import { fetchTransactions, fetchTransactionsByAssetId } from "@/apis/transactio
 import { buildEmptyHolding, buildEmptyPortfolio, getDistinctAssetIds } from "@/utils";
 import { Firestore } from "@google-cloud/firestore";
 import { Currency } from "@shared/types/currency";
-import type { Transaction, Portfolio } from "@shared/types/portfolio";
+import type { Holding, Portfolio, Transaction } from "@shared/types/portfolio";
 import type { Price } from "@shared/types/price";
 import { Ticker } from "@shared/types/ticker";
 
@@ -109,7 +109,7 @@ export async function getHoldings(): Promise<Portfolio[]> {
     holdings.push(holding);
   }
 
-  holdings.sort((a: Portfolio, b: Portfolio) => {
+  holdings.sort((a: Holding, b: Holding) => {
     return b.summary.currentValue - a.summary.currentValue;
   });
 
@@ -120,12 +120,14 @@ export async function getHoldings(): Promise<Portfolio[]> {
  * Retrieve holding asset/summary based on the provided ticker.
  * @param ticker
  */
-export async function getHoldingByTicker(ticker: string): Promise<Portfolio> {
+export async function getHoldingByTicker(ticker: string): Promise<Holding> {
   const asset = await fetchAssetByTicker(ticker);
   const quote = await getAssetQuote(asset.ticker);
   const transactions = await fetchTransactionsByAssetId(asset.id);
 
   return transactions.reduce((h, t) => {
+    console.log("t", t);
+
     const s = h.summary;
     s.quantity     += t.quantity;
     s.fee          += t.fee;

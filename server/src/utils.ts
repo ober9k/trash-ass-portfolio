@@ -1,5 +1,5 @@
-import type { DbTransaction } from "@shared/types/dbTransaction";
-import type { Portfolio, Asset, Portfolio } from "@shared/types/portfolio";
+import type { DbTransaction } from "@shared/types/db/dbTransaction";
+import type { Asset, Holding, Portfolio } from "@shared/types/portfolio";
 
 export function buildPlaceholderMessage(message: string) {
   return { message };
@@ -13,7 +13,7 @@ export function buildEmptyPortfolio(): Portfolio {
   };
 }
 
-export function buildEmptyHolding(asset: Asset): Portfolio {
+export function buildEmptyHolding(asset: Asset): Holding {
   const summary = {
     quantity:     0,
     fee:          0,
