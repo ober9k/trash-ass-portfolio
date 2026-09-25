@@ -4,6 +4,7 @@ import type { DbTransaction } from "@shared/types/dbTransaction";
 function toTransaction(doc): DbTransaction {
   return {
     id:          doc.id,
+    assetId:     doc.data().assetId, /* used for grouping */
     price:       doc.data().price,
     quantity:    doc.data().quantity,
     fee:         doc.data().fee,

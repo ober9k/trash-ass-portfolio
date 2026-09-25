@@ -1,16 +1,15 @@
-import { buildHoldingOptions, buildHoldingTransactionsOptions, buildPortfolioAssetsQueryOptions, buildPortfolioSummaryQueryOptions } from "@/api/queryOptions.ts";
-import type { Holding, HoldingTransaction } from "@shared/types/holding.ts";
-import type { PortfolioAsset, PortfolioSummary } from "@shared/types/portfolio.ts";
+import { buildHoldingOptions, buildHoldingsQueryOptions, buildHoldingTransactionsOptions, buildPortfolioQueryOptions } from "@/api/queryOptions.ts";
+import type { Holding, Transaction, Portfolio } from "@shared/types/portfolio.ts";
 import type { Ticker } from "@shared/types/ticker.ts";
 
 export type PortfolioLoaderProps = {
-  portfolioSummary: PortfolioSummary,
-  portfolioAssets:  PortfolioAsset[],
+  portfolio: Portfolio,
+  holdings:  Holding[],
 };
 
 export type HoldingLoaderProps = {
-  holding:             Holding,
-  holdingTransactions: HoldingTransaction[],
+  holding:      Holding,
+  transactions: Transaction[],
 };
 
 export async function rootBeforeLoader(): Promise<string> {
@@ -19,8 +18,8 @@ export async function rootBeforeLoader(): Promise<string> {
 
 export async function portfolioLoader({ context }: any): Promise<PortfolioLoaderProps> {
   return {
-    portfolioSummary: await context.queryClient.query(buildPortfolioSummaryQueryOptions()),
-    portfolioAssets:  await context.queryClient.query(buildPortfolioAssetsQueryOptions()),
+    portfolio: await context.queryClient.query(buildPortfolioQueryOptions()),
+    holdings:  await context.queryClient.query(buildHoldingsQueryOptions()),
   };
 }
 
@@ -28,8 +27,8 @@ export async function transactionsLoader({ context, params }: any): Promise<Hold
   const ticker = params.tokenId.toUpperCase() as Ticker; /* add validation */
 
   return {
-    holding:             await context.queryClient.query(buildHoldingOptions(ticker)),
-    holdingTransactions: await context.queryClient.query(buildHoldingTransactionsOptions(ticker)),
+    holding:      await context.queryClient.query(buildHoldingOptions(ticker)),
+    transactions: await context.queryClient.query(buildHoldingTransactionsOptions(ticker)),
   };
 }
 

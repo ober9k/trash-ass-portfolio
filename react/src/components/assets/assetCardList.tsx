@@ -1,17 +1,17 @@
 import AssetCard from "@/components/assets/assetCard.tsx";
-import type { PortfolioAsset } from "@shared/types/portfolio.ts";
+import type { Portfolio } from "@shared/types/portfolio.ts";
 
 type Props = {
-  assets: PortfolioAsset[],
+  holdings: Portfolio[],
 }
 
 function AssetCardList(props: Props) {
-  const { assets } = props;
+  const { holdings } = props;
 
   return (
     <>
-      {assets.map((asset, key) => (
-        <AssetCard asset={asset} key={key} />
+      {holdings.map((holding, key) => (
+        <AssetCard holding={holding} key={key} />
       ))}
     </>
   );

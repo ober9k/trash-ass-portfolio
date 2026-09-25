@@ -1,11 +1,9 @@
-import { fetchAssetByTicker, fetchAssets } from "@/apis/assets";
-import { fetchTransactionsByAssetId } from "@/apis/transactions";
-import { buildEmptyHolding } from "@/utils";
+import { fetchAssetByTicker, fetchAssetsByIds } from "@/apis/assets";
+import { fetchTransactions, fetchTransactionsByAssetId } from "@/apis/transactions";
+import { buildEmptyHolding, buildEmptyPortfolio, getDistinctAssetIds } from "@/utils";
 import { Firestore } from "@google-cloud/firestore";
 import { Currency } from "@shared/types/currency";
-import type { Holding, HoldingTransaction } from "@shared/types/holding";
-import type { PortfolioAsset } from "@shared/types/portfolio";
-import { type PortfolioSummary } from "@shared/types/portfolio";
+import type { Transaction, Portfolio } from "@shared/types/portfolio";
 import type { Price } from "@shared/types/price";
 import { Ticker } from "@shared/types/ticker";
 
@@ -39,41 +37,10 @@ export async function getAssetQuote(ticker: Ticker, currency: Currency = Currenc
   return json.data.pop().quotes.pop(); /* double nested */
 }
 
-export async function getPortfolio() {
-  const assets = await getPortfolioAssets();
-
-  let total = 0;
-
-  assets.forEach((a) => {
-    total += a.summary.value;
-  });
-
-  const currency    = Currency.AUD; /* TODO: temporary data */
-  const gainTotal   = 1; /* TODO: temporary data */
-  const gainPercent = 1; /* TODO: temporary data */
-
-  return {
-    total, currency, gainTotal, gainPercent,
-  };
-}
-
 /**
- * initial simplified handling (unsafe)
- * TODO: this duplicates the other part for now
+ * Retrieve a basic summary of the portfolio.
  */
-export async function getPortfolioSummary(): Promise<PortfolioSummary> {
-  const assets = await getPortfolioAssets();
-
-  const summary = assets.reduce((acc, cur) => {
-    acc.currentValue  += cur.summary.value;
-    acc.purchaseValue += cur.summary.total;
-    return acc;
-  }, { currentValue: 0, purchaseValue: 0 });
-
-  return summary;
-}
-
-export async function getPortfolioAssets(): Promise<PortfolioAsset[]> {
+export async function getPortfolio(): Promise<Portfolio> {
   const prices = await getPrices();
 
   const getQuote = (symbol: string): number => {
@@ -82,35 +49,78 @@ export async function getPortfolioAssets(): Promise<PortfolioAsset[]> {
       .price;
   }
 
-  const assets = await fetchAssets();
+  const transactions = await fetchTransactions();
+  const assets = await fetchAssetsByIds(getDistinctAssetIds(transactions));
+  const holdings = [];
 
   for (let a of assets) {
-    const transactions = await fetchTransactionsByAssetId(a.id);
+    const filteredTransactions = transactions.filter((t) => t.assetId === a.id);
 
-    // a.transactions = transactions;
-    a.summary = transactions.reduce((acc, cur) => {
-      acc.quantity += cur.quantity;
-      acc.total    += cur.total;
-      acc.fee      += cur.fee;
-      acc.average   = acc.total / acc.quantity;
-      return acc;
-    }, { quantity: 0, total: 0, fee: 0, average: 0, value: 0 });
+    const holding = filteredTransactions.reduce((h, t) => {
+      const s = h.summary;
+      s.quantity     += t.quantity;
+      s.fee          += t.fee;
+      s.value        += t.value;
+      s.currentValue += t.quantity * getQuote(a.ticker);
+      s.averagePrice  = s.value / s.quantity; /* this could just also be calculated at the end */
+      return h;
+    }, buildEmptyHolding(a));
 
-    a.summary.value = (a.summary.quantity * getQuote(a.ticker.toLowerCase()))
+    holdings.push(holding);
   }
 
-  assets.sort((a: PortfolioAsset, b: PortfolioAsset) => {
-    return b.summary.value - a.summary.value;
+  return holdings.reduce((p, h) => {
+    p.value        += h.summary.value;
+    p.currentValue += h.summary.currentValue;
+    p.holdings++;
+    return p;
+  }, buildEmptyPortfolio())
+}
+
+/**
+ * Retrieve all assocated holdings.
+ */
+export async function getHoldings(): Promise<Portfolio[]> {
+  const prices = await getPrices();
+
+  const getQuote = (symbol: string): number => {
+    return prices.find((price) => price.symbol === symbol.toUpperCase())
+      .quotes[0]
+      .price;
+  }
+
+  const transactions = await fetchTransactions();
+  const assets = await fetchAssetsByIds(getDistinctAssetIds(transactions));
+  const holdings = [];
+
+  for (let a of assets) {
+    const filteredTransactions = transactions.filter((t) => t.assetId === a.id);
+
+    const holding = filteredTransactions.reduce((h, t) => {
+      const s = h.summary;
+      s.quantity     += t.quantity;
+      s.fee          += t.fee;
+      s.value        += t.value;
+      s.currentValue += t.quantity * getQuote(a.ticker);
+      s.averagePrice  = s.value / s.quantity; /* this could just also be calculated at the end */
+      return h;
+    }, buildEmptyHolding(a));
+
+    holdings.push(holding);
+  }
+
+  holdings.sort((a: Portfolio, b: Portfolio) => {
+    return b.summary.currentValue - a.summary.currentValue;
   });
 
-  return assets;
+  return holdings;
 }
 
 /**
  * Retrieve holding asset/summary based on the provided ticker.
  * @param ticker
  */
-export async function getHoldingByTicker(ticker: string): Promise<Holding> {
+export async function getHoldingByTicker(ticker: string): Promise<Portfolio> {
   const asset = await fetchAssetByTicker(ticker);
   const quote = await getAssetQuote(asset.ticker);
   const transactions = await fetchTransactionsByAssetId(asset.id);
@@ -131,7 +141,7 @@ export async function getHoldingByTicker(ticker: string): Promise<Holding> {
  Retrieve holding transactions based on the provided ticker.
  * @param ticker
  */
-export async function getHoldingTransactionsByTicker(ticker: string): Promise<HoldingTransaction[]> {
+export async function getHoldingTransactionsByTicker(ticker: string): Promise<Transaction[]> {
   const asset = await fetchAssetByTicker(ticker);
   const quote = await getAssetQuote(asset.ticker);
   const transactions = await fetchTransactionsByAssetId(asset.id);

@@ -6,7 +6,7 @@ import { getRouteApi, Link } from "@tanstack/react-router";
 import { User } from "lucide-react";
 
 function PortfolioPage() {
-  const { portfolioSummary, portfolioAssets }: PortfolioLoaderProps = getRouteApi("/").useLoaderData();
+  const { portfolio, holdings }: PortfolioLoaderProps = getRouteApi("/").useLoaderData();
 
   const rightItem = (
     <Link to={"/auth/sign-in"}><User size={20} /></Link>
@@ -17,8 +17,8 @@ function PortfolioPage() {
       <NavigationMenu rightItem={rightItem}>
         My Portfolio
       </NavigationMenu>
-      <SummaryCard summary={portfolioSummary} />
-      <AssetCardList assets={portfolioAssets} />
+      <SummaryCard portfolio={portfolio} />
+      <AssetCardList holdings={holdings} />
     </>
   );
 }

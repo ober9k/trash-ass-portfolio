@@ -1,7 +1,5 @@
 import { getInitialAuthState } from "@/firebase.ts";
-import type { Asset } from "@shared/types/asset.ts";
-import { type PortfolioAsset, type PortfolioSummary } from "@shared/types/portfolio.ts";
-import { type AssetTransaction } from "@shared/types/dbTransaction.ts";
+import type { Holding, Transaction, Portfolio } from "@shared/types/portfolio.ts";
 import axios from "axios";
 
 const RootApiPath = "http://localhost/"; /* TODO: .env instead */
@@ -34,23 +32,23 @@ export async function getAuthConfig() {
   }
 }
 
-export async function fetchPortfolioSummary({ queryKey }: { queryKey: readonly string[] }): Promise<PortfolioSummary> {
+export async function fetchPortfolio({ queryKey }: { queryKey: readonly string[] }): Promise<Portfolio> {
   const { data } = await axios.get(buildApiUrl(...queryKey));
-  return data as PortfolioSummary;
+  return data as Portfolio;
 }
 
-export async function fetchPortfolioAssets({ queryKey }: { queryKey: readonly string[] }): Promise<Asset[]> {
+export async function fetchHoldings({ queryKey }: { queryKey: readonly string[] }): Promise<Holding[]> {
   const { data } = await axios.get(buildApiUrl(...queryKey));
-  return data as Asset[];
+  return data as Holding[];
 }
 
-export async function fetchHoldingTransactionsByTicker({ queryKey }: { queryKey: readonly string[] }): Promise<AssetTransaction[]> {
+export async function fetchHoldingByTicker({ queryKey }: { queryKey: readonly string[] }): Promise<Holding> {
   const { data } = await axios.get(buildApiUrl(...queryKey));
-  return data as AssetTransaction[];
+  return data as Holding;
 }
 
-export async function fetchHoldingByTicker({ queryKey }: { queryKey: readonly string[] }): Promise<PortfolioAsset> {
+export async function fetchHoldingTransactionsByTicker({ queryKey }: { queryKey: readonly string[] }): Promise<Transaction[]> {
   const { data } = await axios.get(buildApiUrl(...queryKey));
-  return data as PortfolioAsset;
+  return data as Transaction[];
 }
 

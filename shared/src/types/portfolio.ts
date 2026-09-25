@@ -1,28 +1,36 @@
-import { AltAsset } from "./asset";
 import { Ticker } from "./ticker";
 
 export type Portfolio = {
-  total:       number,
-  currency:    string,
-  gainTotal:   number,
-  gainPercent: number,
-};
-
-export type PortfolioSummary = {
-  currentValue:  number,
-  purchaseValue: number,
+  value:        number,
+  currentValue: number,
+  holdings:     number,
 }
 
-export type PortfolioAsset = {
-  name:    string,
-  ticker:  Ticker,
+export type Holding = {
+  asset:   Asset,
   summary: Summary,
 };
 
+export type Asset = {
+  id:     string,
+  ticker: Ticker,
+  name:   string,
+};
+
 export type Summary = {
-  quantity: number,
-  total:    number,
-  fee:      number,
-  average:  number,
-  value:    number,
+  quantity:     number,
+  fee:          number,
+  value:        number,
+  currentValue: number,
+  averagePrice: number,
+};
+
+export type Transaction = {
+  id:           string,
+  price:        number,
+  quantity:     number,
+  fee:          number,
+  value:        number, /* as `total` in database */
+  currentValue: number,
+  purchasedAt:  Date,
 };

@@ -1,9 +1,9 @@
 import type { IconSize } from "@/utils/iconUtils.ts";
 import { defaultSize, getIconClass, getIconUrl } from "@/utils/iconUtils.ts";
-import type { AltAsset } from "@shared/types/asset.ts";
+import type { Asset } from "@shared/types/portfolio.ts";
 
 type Props = {
-  asset: AltAsset, /* to be changed to just `Asset` */
+  asset: Asset, /* to be changed to just `Asset` */
   size?: IconSize,
 };
 

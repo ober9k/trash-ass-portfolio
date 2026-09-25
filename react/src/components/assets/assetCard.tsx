@@ -1,42 +1,40 @@
 import AssetIcon from "@/components/assets/assetIcon.tsx";
 import AssetDisplay from "@/components/utils/assetDisplay.tsx";
 import CurrencyDisplay from "@/components/utils/currencyDisplay.tsx";
-import type { AltAsset } from "@shared/types/asset.ts";
-import type { PortfolioAsset } from "@shared/types/portfolio.ts";
+import PercentDisplay from "@/components/utils/percentDisplay.tsx";
+import type { Portfolio } from "@shared/types/portfolio.ts";
 import { Link } from "@tanstack/react-router";
 
 type Props = {
-  asset: PortfolioAsset,
+  holding: Portfolio,
 };
 
 function AssetCard(props: Props) {
-  const { asset } = props;
-  const { ticker, summary } = asset;
-
-  const altAsset = { id: "temp", ticker: asset.ticker, name: asset.name } as AltAsset;
+  const { holding } = props;
+  const { asset, summary } = holding;
 
   return (
     <>
       <article className={"flex gap-2 m-2 p-2 border border-gray-200 rounded bg-gray-100"}>
         <section>
-          <AssetIcon asset={altAsset} />
+          <AssetIcon asset={asset} />
         </section>
         <section className={"grow"}>
           <h3 className={"text-md font-medium"}>
-            <Link to={"/transactions/$tokenId"} params={{ tokenId: ticker.toLowerCase() }}>
+            <Link to={"/transactions/$tokenId"} params={{ tokenId: asset.ticker.toLowerCase() }}>
               {asset.name}
             </Link>
           </h3>
           <p className={"leading-none"}>
             <small className={"text-xs font-medium text-gray-500"}>
-              <AssetDisplay asset={altAsset} quantity={summary.quantity} />
+              <AssetDisplay asset={asset} quantity={summary.quantity} />
             </small>
           </p>
         </section>
         <section>
           <h4 className={"text-right text-sm font-bold"}>
-            <CurrencyDisplay currentValue={summary.value} />
-            {/*<PercentDisplay currentValue={summary.value} purchaseValue={summary.total} />*/}
+            <CurrencyDisplay currentValue={summary.currentValue} />
+            <PercentDisplay currentValue={summary.currentValue} purchaseValue={summary.value} />
           </h4>
         </section>
       </article>

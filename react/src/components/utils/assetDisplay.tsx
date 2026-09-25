@@ -1,7 +1,7 @@
-import type { HoldingAsset } from "@shared/types/holding.ts";
+import type { Asset } from "@shared/types/portfolio.ts";
 
 type Props = {
-  asset:    HoldingAsset,
+  asset:    Asset,
   quantity: number,
 }
 

@@ -1,11 +1,11 @@
 import AssetDisplay from "@/components/utils/assetDisplay.tsx";
 import CurrencyDisplay from "@/components/utils/currencyDisplay.tsx";
 import PropertyDisplay from "@/components/utils/propertyDisplay.tsx";
-import type { HoldingAsset, HoldingTransaction } from "@shared/types/holding.ts";
+import type { Asset, Transaction } from "@shared/types/portfolio.ts";
 
 type Props = {
-  asset:       HoldingAsset
-  transaction: HoldingTransaction,
+  asset:       Asset
+  transaction: Transaction,
 };
 
 function TransactionCard(props: Props) {

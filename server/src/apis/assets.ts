@@ -1,7 +1,5 @@
 import { firestore } from "@/firebase";
-import { type DbAsset } from "@shared/types/asset";
-import type { PortfolioAsset } from "@shared/types/portfolio";
-import { Ticker } from "@shared/types/ticker";
+import { type DbAsset } from "@shared/types/db/dbAsset";
 import { FieldPath, QuerySnapshot } from "firebase-admin/firestore";
 
 function parseDocs(docs: QuerySnapshot): any[] {
@@ -18,13 +16,13 @@ function parseDocs(docs: QuerySnapshot): any[] {
   return results;
 }
 
-export async function fetchAssets(): Promise<PortfolioAsset[]> {
+export async function fetchAssets(): Promise<DbAsset[]> {
   const assetsRef = firestore.collection("assets");
   const assetsDocs = await assetsRef.get();
   return parseDocs(assetsDocs);
 }
 
-export async function fetchAssetsByIds(assetIds: string[]) {
+export async function fetchAssetsByIds(assetIds: string[]): Promise<DbAsset[]> {
   const assetsRef = firestore.collection("assets").where(FieldPath.documentId(), "in", assetIds);
   const assetsDocs = await assetsRef.get();
   return parseDocs(assetsDocs);

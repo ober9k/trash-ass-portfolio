@@ -7,7 +7,7 @@ import { getRouteApi, Link } from "@tanstack/react-router";
 import { ArrowLeft, Menu } from "lucide-react";
 
 function TransactionsPage() {
-  const { holding, holdingTransactions }: HoldingLoaderProps = getRouteApi("/transactions/$tokenId").useLoaderData();
+  const { holding, transactions }: HoldingLoaderProps = getRouteApi("/transactions/$tokenId").useLoaderData();
   const { asset } = holding;
 
   const leftItem = (
@@ -27,7 +27,7 @@ function TransactionsPage() {
       <div className={"p-2"}>
         <TransactionSummary holding={holding} />
         <h2 className={"px-4 uppercase text-sm"}>Transactions</h2>
-        {holdingTransactions.map((transaction, key) => (
+        {transactions.map((transaction, key) => (
           <TransactionCard asset={asset} transaction={transaction} key={key} />
         ))}
       </div>

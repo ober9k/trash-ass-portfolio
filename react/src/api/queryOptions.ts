@@ -1,17 +1,17 @@
-import { fetchHoldingByTicker, fetchPortfolioAssets, fetchPortfolioSummary, fetchHoldingTransactionsByTicker } from "@/api/queryFunctions.ts";
+import { fetchHoldingByTicker, fetchHoldings, fetchPortfolio, fetchHoldingTransactionsByTicker } from "@/api/queryFunctions.ts";
 import type { Ticker } from "@shared/types/ticker.ts";
 
-export function buildPortfolioSummaryQueryOptions() {
+export function buildPortfolioQueryOptions() {
   return {
-    queryKey: ["me", "portfolio", "summary"],
-    queryFn:  fetchPortfolioSummary,
+    queryKey: ["me", "portfolio"],
+    queryFn:  fetchPortfolio,
   };
 }
 
-export function buildPortfolioAssetsQueryOptions() {
+export function buildHoldingsQueryOptions() {
   return {
-    queryKey: ["me", "portfolio", "assets"],
-    queryFn:  fetchPortfolioAssets,
+    queryKey: ["me", "portfolio", "holdings"],
+    queryFn:  fetchHoldings,
   }
 }
 
