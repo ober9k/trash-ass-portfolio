@@ -1,4 +1,4 @@
-import { fetchPortfolioAsset, fetchPortfolioAssets, fetchPortfolioSummary, fetchTransactions } from "@/api/queryFunctions.ts";
+import { fetchHoldingByTicker, fetchPortfolioAssets, fetchPortfolioSummary, fetchHoldingTransactionsByTicker } from "@/api/queryFunctions.ts";
 import type { Ticker } from "@shared/types/ticker.ts";
 
 export function buildPortfolioSummaryQueryOptions() {
@@ -15,16 +15,16 @@ export function buildPortfolioAssetsQueryOptions() {
   }
 }
 
-export function buildAssetSummaryOptions(ticker: Ticker) {
+export function buildHoldingOptions(ticker: Ticker) {
   return {
-    queryKey: ["me", "portfolio", "assets", ticker.toString(), "summary"],
-    queryFn:  fetchPortfolioAsset
+    queryKey: ["me", "portfolio", "holdings", ticker.toString()],
+    queryFn:  fetchHoldingByTicker
   };
 }
 
-export function buildAssetTransactionsOptions(ticker: Ticker) {
+export function buildHoldingTransactionsOptions(ticker: Ticker) {
   return {
-    queryKey: ["me", "portfolio", "assets", ticker.toString(), "transactions"],
-    queryFn:  fetchTransactions,
+    queryKey: ["me", "portfolio", "holdings", ticker.toString(), "transactions"],
+    queryFn:  fetchHoldingTransactionsByTicker,
   };
 }

@@ -2,23 +2,20 @@ import AssetDisplay from "@/components/utils/assetDisplay.tsx";
 import CurrencyDisplay from "@/components/utils/currencyDisplay.tsx";
 import PercentDisplay from "@/components/utils/percentDisplay.tsx";
 import PropertyDisplay from "@/components/utils/propertyDisplay.tsx";
-import type { AltAsset } from "@shared/types/asset.ts";
-import type { PortfolioAsset } from "@shared/types/portfolio.ts";
+import type { Holding } from "@shared/types/holding.ts";
 
 type Props = {
-  asset: PortfolioAsset,
+  holding: Holding,
 };
 
 function TransactionSummary(props: Props) {
-  const { asset } = props;
-  const { summary } = asset;
+  const { holding } = props;
+  const { asset, summary } = holding;
 
-  const profitValue = summary.value - summary.total;
+  const profitValue = summary.currentValue - summary.value;
   const profitTitle = (profitValue > 0)
     ? "Total Profit"
     : "Total Loss";
-
-  const altAsset = { id: "temp", ticker: asset.ticker, name: asset.name } as AltAsset;
 
   return (
     <>
@@ -26,18 +23,18 @@ function TransactionSummary(props: Props) {
         <section className={"flex justify-center p-1"}>
           <PropertyDisplay title={profitTitle}>
             <CurrencyDisplay currentValue={profitValue} />
-            <PercentDisplay currentValue={summary.value} purchaseValue={summary.total} />
+            <PercentDisplay currentValue={summary.currentValue} purchaseValue={summary.value} />
           </PropertyDisplay>
         </section>
         <section className={"flex justify-center p-1"}>
           <PropertyDisplay title={"Holdings"}>
-            <AssetDisplay asset={altAsset} quantity={summary.quantity} />
+            <AssetDisplay asset={asset} quantity={summary.quantity} />
           </PropertyDisplay>
           <PropertyDisplay title={"Market Value"}>
-            <CurrencyDisplay currentValue={summary.value} />
+            <CurrencyDisplay currentValue={summary.currentValue} />
           </PropertyDisplay>
           <PropertyDisplay title={"Total Cost"}>
-            <CurrencyDisplay currentValue={summary.total} />
+            <CurrencyDisplay currentValue={summary.value} />
           </PropertyDisplay>
         </section>
       </article>

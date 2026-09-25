@@ -1,12 +1,13 @@
 import { fetchAssetByTicker, fetchAssets } from "@/apis/assets";
-import { fetchTransactions, fetchTransactionsByAssetId } from "@/apis/transactions";
+import { fetchTransactionsByAssetId } from "@/apis/transactions";
+import { buildEmptyHolding } from "@/utils";
 import { Firestore } from "@google-cloud/firestore";
 import { Currency } from "@shared/types/currency";
+import type { Holding, HoldingTransaction } from "@shared/types/holding";
 import type { PortfolioAsset } from "@shared/types/portfolio";
 import { type PortfolioSummary } from "@shared/types/portfolio";
 import type { Price } from "@shared/types/price";
 import { Ticker } from "@shared/types/ticker";
-import { type AssetTransaction } from "@shared/types/transaction";
 
 Firestore.name; /* hack: leave in for types (for now) */
 
@@ -17,15 +18,25 @@ function buildApiUrl(): string {
   return [cmcApiUrl, "simple", "price"].join("/");
 }
 
-export async function getPrices(): Promise<Price[]> {
-  const result = await fetch(`${buildApiUrl()}?symbol=ada,axs,doge,hype,neo,pepe,sol,spx,vet,xlm,xrp,zbcn,zec&convert=aud`, {
-    headers: {
-      "x-cmc_pro_api_key": cmcApiKey,
-    }
-  });
+const headers = {
+  "x-cmc_pro_api_key": cmcApiKey,
+};
 
-  const json = await result.json();
+export async function getPrices(): Promise<Price[]> {
+  const result = await fetch(`${buildApiUrl()}?symbol=ada,axs,doge,hype,neo,pepe,sol,spx,vet,xlm,xrp,zbcn,zec&convert=aud`, { headers });
+  const json   = await result.json();
   return json.data; /* double nested */
+}
+
+/**
+ * Retrieve the quote for a single asset.
+ * @param ticker
+ * @param currency
+ */
+export async function getAssetQuote(ticker: Ticker, currency: Currency = Currency.AUD): Promise<{ symbol: string, price: number }> {
+  const result = await fetch(`${buildApiUrl()}?symbol=${ticker.toString()}&convert=${currency.toString()}`, { headers });
+  const json   = await result.json();
+  return json.data.pop().quotes.pop(); /* double nested */
 }
 
 export async function getPortfolio() {
@@ -95,43 +106,37 @@ export async function getPortfolioAssets(): Promise<PortfolioAsset[]> {
   return assets;
 }
 
-export async function getPortfolioAssetSummary(assetId: Ticker): Promise<PortfolioAsset> {
-  const assets = await getPortfolioAssets();
+/**
+ * Retrieve holding asset/summary based on the provided ticker.
+ * @param ticker
+ */
+export async function getHoldingByTicker(ticker: string): Promise<Holding> {
+  const asset = await fetchAssetByTicker(ticker);
+  const quote = await getAssetQuote(asset.ticker);
+  const transactions = await fetchTransactionsByAssetId(asset.id);
 
-  return assets
-    .filter((a) => a.ticker === assetId)
-    .pop();
+  return transactions.reduce((h, t) => {
+    const s = h.summary;
+    s.quantity     += t.quantity;
+    s.fee          += t.fee;
+    s.value        += t.value;
+    s.currentValue += t.quantity * quote.price;
+    s.averagePrice  = s.value / s.quantity; /* this could just also be calculated at the end */
+    return h;
+  }, buildEmptyHolding(asset));
 }
 
 
 /**
- * initial simplified handling (unsafe)
- * TODO: this duplicates the other part for now
- * TODO: this is copy pasted and not even remotely close to being optimized
- * @param assetId
+ Retrieve holding transactions based on the provided ticker.
+ * @param ticker
  */
-export async function getPortfolioAssetTransactions(assetId: string): Promise<AssetTransaction[]> {
-  const prices = await getPrices();
+export async function getHoldingTransactionsByTicker(ticker: string): Promise<HoldingTransaction[]> {
+  const asset = await fetchAssetByTicker(ticker);
+  const quote = await getAssetQuote(asset.ticker);
+  const transactions = await fetchTransactionsByAssetId(asset.id);
 
-  const getQuote = (symbol: string): number => {
-    return prices.find((price) => price.symbol === symbol.toUpperCase())
-      .quotes[0]
-      .price;
-  }
-
-  const asset = await fetchAssetByTicker(assetId);
-  const dbTransactions = await fetchTransactionsByAssetId(asset.id);
-
-  const transactions = dbTransactions.map((t) => {
-    delete t.accountId;
-    delete t.assetId;
-
-    return {
-      ...t,
-      asset: asset,
-      currentValue: t.quantity * getQuote(asset.ticker.toLowerCase()),
-    } as AssetTransaction;
-  });
-
-  return transactions;
+  return transactions.map((t) => ({
+    ...t, currentValue: t.quantity * quote.price,
+  }));
 }

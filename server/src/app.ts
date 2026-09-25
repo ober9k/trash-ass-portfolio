@@ -1,6 +1,6 @@
-import { getPortfolio, getPortfolioAssets, getPortfolioAssetTransactions, getPortfolioAssetSummary, getPortfolioSummary } from "@/services";
+import { seedTransactions } from "@/apis/helpers";
+import { getHoldingByTicker, getHoldingTransactionsByTicker, getPortfolio, getPortfolioAssets, getPortfolioSummary } from "@/services";
 import { buildPlaceholderMessage } from "@/utils";
-import type { Ticker } from "@shared/types/ticker";
 import cors from "cors";
 import express, { type Express, type Request, type Response } from "express";
 
@@ -62,26 +62,25 @@ app.post("/api/me/tokens", (req: Request, res: Response) => {
 
 /**
  * List all of current user's tokens.
- * TODO: improve naming and reduce duplication
  */
-app.get("/api/me/portfolio/assets/:assetId/summary", async (req: Request, res: Response) => {
-  const assetId = req.params.assetId as Ticker;
+app.get("/api/me/portfolio/holdings/:ticker", async (req: Request, res: Response) => {
+  /* validate tokenId/symbol */
+  const ticker = req.params.ticker as string;
 
   res.status(200).json(
-    await getPortfolioAssetSummary(assetId),
+    await getHoldingByTicker(ticker),
   );
 });
 
 /**
  * List all of current user's transactions by tokenId.
  */
-app.get("/api/me/portfolio/assets/:assetId/transactions", async (req: Request, res: Response) => {
-  const assetId = req.params.assetId as string;
-
+app.get("/api/me/portfolio/holdings/:ticker/transactions", async (req: Request, res: Response) => {
   /* validate tokenId/symbol */
+  const ticker = req.params.ticker as string;
 
   res.status(200).json(
-    await getPortfolioAssetTransactions(assetId),
+    await getHoldingTransactionsByTicker(ticker),
   );
 });
 
@@ -104,6 +103,12 @@ app.get("/api/me/tokens/:tokenId/transactions/:transactionId/transactions", (req
  */
 app.put("/api/me/tokens/:tokenId/transactions/:transactionId/transactions", (req: Request, res: Response) => {
   return res.json(buildPlaceholderMessage("UPDATE me.tokens().by(tokenId).transactions().byId(transactionId)"));
+});
+
+app.get("/api/me/seed", async (req: Request, res: Response) => {
+  res.status(200).json(
+    await seedTransactions(),
+  );
 });
 
 export default app;

@@ -1,3 +1,4 @@
+import { AltAsset } from "./asset";
 import { Ticker } from "./ticker";
 
 export type Portfolio = {

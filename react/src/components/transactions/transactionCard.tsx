@@ -1,16 +1,15 @@
 import AssetDisplay from "@/components/utils/assetDisplay.tsx";
 import CurrencyDisplay from "@/components/utils/currencyDisplay.tsx";
 import PropertyDisplay from "@/components/utils/propertyDisplay.tsx";
-import { type AssetTransaction } from "@shared/types/transaction.ts";
+import type { HoldingAsset, HoldingTransaction } from "@shared/types/holding.ts";
 
 type Props = {
-  transaction: AssetTransaction,
+  asset:       HoldingAsset
+  transaction: HoldingTransaction,
 };
 
 function TransactionCard(props: Props) {
-  const { transaction } = props;
-
-  console.log("transaction", transaction);
+  const { asset, transaction } = props;
 
   return (
     <>
@@ -24,13 +23,13 @@ function TransactionCard(props: Props) {
         </section>
         <section className={"flex justify-center p-1"}>
           <PropertyDisplay title={"Quantity"}>
-            <AssetDisplay asset={transaction.asset} quantity={transaction.quantity} />
+            <AssetDisplay asset={asset} quantity={transaction.quantity} />
           </PropertyDisplay>
           <PropertyDisplay title={"Buy Price"}>
             <CurrencyDisplay currentValue={transaction.price} />
           </PropertyDisplay>
           <PropertyDisplay title={"Total Cost"}>
-            <CurrencyDisplay currentValue={transaction.total} />
+            <CurrencyDisplay currentValue={transaction.value} />
           </PropertyDisplay>
         </section>
       </article>

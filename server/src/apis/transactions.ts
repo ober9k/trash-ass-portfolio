@@ -1,13 +1,13 @@
 import { firestore } from "@/firebase";
-import type { Transaction } from "@shared/types/transaction";
+import type { DbTransaction } from "@shared/types/dbTransaction";
 
-function toTransaction(doc): Transaction {
+function toTransaction(doc): DbTransaction {
   return {
     id:          doc.id,
     price:       doc.data().price,
     quantity:    doc.data().quantity,
     fee:         doc.data().fee,
-    total:       doc.data().total,
+    value:       doc.data().total,
     purchasedAt: doc.data().purchasedAt.toDate(),
   };
 }
@@ -16,7 +16,7 @@ function toTransaction(doc): Transaction {
  * Return all transactions.
  * Not recommended for use as the asset is not returned.
  */
-export async function fetchTransactions(): Promise<Transaction[]> {
+export async function fetchTransactions(): Promise<DbTransaction[]> {
   const ref = firestore.collection("transactions");
   const res = await ref.get();
   return res.docs.map(toTransaction);
@@ -26,7 +26,7 @@ export async function fetchTransactions(): Promise<Transaction[]> {
  * Return all linked transactions for the specified asset.
  * @param assetId
  */
-export async function fetchTransactionsByAssetId(assetId: string): Promise<Transaction[]> {
+export async function fetchTransactionsByAssetId(assetId: string): Promise<DbTransaction[]> {
   const ref = firestore.collection("transactions").where("assetId", "==", assetId);
   const res = await ref.get();
   return res.docs.map(toTransaction);

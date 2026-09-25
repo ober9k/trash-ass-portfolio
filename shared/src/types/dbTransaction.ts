@@ -22,22 +22,11 @@ export type AssetTransaction = {
   asset:       AltAsset,
 }
 
-export type Transaction = {
-  id:          string,
-  price:       number,
-  quantity:    number,
-  fee:         number,
-  total:       number,
-  purchasedAt: Date,
-}
-
 export type DbTransaction = {
   id:          string,
-  accountId:   string,
-  assetId:     string,
   price:       number,
   quantity:    number,
   fee:         number,
-  total:       number,
+  value:       number, /* as `total` in database */
   purchasedAt: Date,
 };
