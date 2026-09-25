@@ -27,7 +27,7 @@ export async function fetchTransactions(): Promise<DbTransaction[]> {
  * @param assetId
  */
 export async function fetchTransactionsByAssetId(assetId: string): Promise<DbTransaction[]> {
-  const ref = firestore.collection("transactions").where("assetId", "==", assetId);
+  const ref = firestore.collection("transactions").where("assetId", "==", assetId).orderBy("purchasedAt", "desc");
   const res = await ref.get();
   return res.docs.map(toTransaction);
 }
