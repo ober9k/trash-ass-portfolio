@@ -40,6 +40,7 @@ export async function fetchAssetByTicker(ticker: string): Promise<DbAsset> {
 
   return {
     id:     doc.id,
+    apiId:  doc.data().apiId,
     ticker: doc.data().ticker,
     name:   doc.data().name,
   };

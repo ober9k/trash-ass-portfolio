@@ -13,6 +13,7 @@ export type Holding = {
 
 export type Asset = {
   id:     string,
+  apiId:  number,
   ticker: Ticker,
   name:   string,
 };
