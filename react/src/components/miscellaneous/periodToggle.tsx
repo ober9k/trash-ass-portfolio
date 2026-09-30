@@ -1,10 +1,9 @@
 import styles from "@/components/miscellaneous/periodToggle.module.css";
+import { Period } from "@shared/types/period.ts";
 import { useState } from "react";
 
-export type Period = "1H" | "1D" | "1W" | "1M" | "1Y" | "All";
-
 const periods: Period[] = [
-  "1H", "1D", "1W", "1M", "1Y", "All",
+  Period.OneHour, Period.OneDay, Period.OneWeek, Period.OneMonth, Period.OneYear, Period.All,
 ];
 
 type Props = {
@@ -13,7 +12,7 @@ type Props = {
 
 function PeriodToggle(props: Props) {
   const { onToggle } = props;
-  const [ period, setPeriod ] = useState<Period>("All");
+  const [ period, setPeriod ] = useState<Period>(Period.All);
 
   const toggle = (p: Period) => {
     onToggle(p);
