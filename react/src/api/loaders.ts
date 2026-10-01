@@ -17,19 +17,18 @@ export async function rootBeforeLoader(): Promise<string> {
   return "rootBeforeLoader";
 }
 
-export async function portfolioLoader({ context }: any): Promise<PortfolioLoaderProps> {
+export async function portfolioLoader({ context, deps }: any): Promise<PortfolioLoaderProps> {
   return {
-    portfolio: await context.queryClient.query(buildPortfolioQueryOptions()),
-    holdings:  await context.queryClient.query(buildHoldingsQueryOptions()),
+    portfolio: await context.queryClient.query(buildPortfolioQueryOptions(deps)),
+    holdings:  await context.queryClient.query(buildHoldingsQueryOptions(deps)),
   };
 }
 
-export async function transactionsLoader({ context, params }: any): Promise<HoldingLoaderProps> {
+export async function transactionsLoader({ context, params, deps }: any): Promise<HoldingLoaderProps> {
   const ticker = params.tokenId.toUpperCase() as Ticker; /* add validation */
-
   return {
-    holding:      await context.queryClient.query(buildHoldingOptions(ticker)),
-    transactions: await context.queryClient.query(buildHoldingTransactionsOptions(ticker)),
+    holding:      await context.queryClient.query(buildHoldingOptions(ticker, deps)),
+    transactions: await context.queryClient.query(buildHoldingTransactionsOptions(ticker, deps)),
   };
 }
 

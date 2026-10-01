@@ -1,30 +1,35 @@
-import { fetchHoldingByTicker, fetchHoldings, fetchPortfolio, fetchHoldingTransactionsByTicker } from "@/api/queryFunctions.ts";
+import { fetchHoldingByTicker, fetchHoldings, fetchHoldingTransactionsByTicker, fetchPortfolio } from "@/api/queryFunctions.ts";
+import { Period } from "@shared/types/period";
 import type { Ticker } from "@shared/types/ticker.ts";
 
-export function buildPortfolioQueryOptions() {
+export type PeriodParams = {
+  period: Period,
+};
+
+export function buildPortfolioQueryOptions(params: PeriodParams) {
   return {
-    queryKey: ["me", "portfolio"],
+    queryKey: ["me", "portfolio", params],
     queryFn:  fetchPortfolio,
   };
 }
 
-export function buildHoldingsQueryOptions() {
+export function buildHoldingsQueryOptions(params: PeriodParams) {
   return {
-    queryKey: ["me", "portfolio", "holdings"],
+    queryKey: ["me", "portfolio", "holdings", params],
     queryFn:  fetchHoldings,
   }
 }
 
-export function buildHoldingOptions(ticker: Ticker) {
+export function buildHoldingOptions(ticker: Ticker, params: PeriodParams) {
   return {
-    queryKey: ["me", "portfolio", "holdings", ticker.toString()],
+    queryKey: ["me", "portfolio", "holdings", ticker.toString(), params],
     queryFn:  fetchHoldingByTicker
   };
 }
 
-export function buildHoldingTransactionsOptions(ticker: Ticker) {
+export function buildHoldingTransactionsOptions(ticker: Ticker, params: PeriodParams) {
   return {
-    queryKey: ["me", "portfolio", "holdings", ticker.toString(), "transactions"],
+    queryKey: ["me", "portfolio", "holdings", ticker.toString(), "transactions", params],
     queryFn:  fetchHoldingTransactionsByTicker,
   };
 }
