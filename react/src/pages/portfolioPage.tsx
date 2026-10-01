@@ -1,20 +1,24 @@
 import type { PortfolioLoaderProps } from "@/api/loaders.ts";
 import AssetCardList from "@/components/assets/assetCardList.tsx";
 import NavigationMenu from "@/components/layout/navigationMenu";
-import PeriodToggle, { type Period } from "@/components/miscellaneous/periodToggle.tsx";
+import PeriodToggle from "@/components/miscellaneous/periodToggle.tsx";
 import SummaryCard from "@/components/portfolio/summaryCard.tsx";
-import { getRouteApi, Link } from "@tanstack/react-router";
+import type { Period } from "@shared/types/period.ts";
+import { getRouteApi, Link, useNavigate } from "@tanstack/react-router";
 import { User } from "lucide-react";
 
 function PortfolioPage() {
   const { portfolio, holdings }: PortfolioLoaderProps = getRouteApi("/").useLoaderData();
+  const navigate = useNavigate();
 
   const rightItem = (
     <Link to={"/auth/sign-in"}><User size={20} /></Link>
   );
 
   const onToggle = (period: Period) => {
-    console.log(period);
+    navigate({
+      search: () => ({ period: period.toString() }),
+    });
   };
 
   return (
