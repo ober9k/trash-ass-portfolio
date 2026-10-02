@@ -7,7 +7,7 @@ export function buildPlaceholderMessage(message: string) {
 
 export function buildEmptyPortfolio(): Portfolio {
   return {
-    value:        0,
+    initialValue: 0,
     currentValue: 0,
     holdings:     0,
   };

@@ -1,7 +1,7 @@
 import { Ticker } from "./ticker";
 
 export type Portfolio = {
-  value:        number,
+  initialValue: number,
   currentValue: number,
   holdings:     number,
 }

@@ -15,7 +15,7 @@ function PortfolioCard(props: Props) {
   const isPortfolioNull = () => portfolio === null;
 
   const currentValue = portfolio?.currentValue ?? 0;
-  const initialValue = portfolio?.value ?? 0; /* TODO: rename to initial value */
+  const initialValue = portfolio?.initialValue ?? 0;
 
   return (
     <article className={styles.card}>
