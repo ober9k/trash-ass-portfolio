@@ -9,7 +9,7 @@ type Props = {
   holding: Holding,
 };
 
-function AssetCard(props: Props) {
+function HoldingCard(props: Props) {
   const { holding } = props;
   const { asset, summary } = holding;
 
@@ -42,4 +42,4 @@ function AssetCard(props: Props) {
   );
 }
 
-export default AssetCard;
+export default HoldingCard;

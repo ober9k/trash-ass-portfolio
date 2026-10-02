@@ -1,5 +1,5 @@
 import type { PortfolioLoaderProps } from "@/api/loaders.ts";
-import AssetCardList from "@/components/assets/assetCardList.tsx";
+import HoldingsList from "@/components/holdings/holdingsList.tsx";
 import NavigationMenu from "@/components/layout/navigationMenu";
 import PeriodToggle from "@/components/miscellaneous/periodToggle.tsx";
 import type { Period } from "@shared/types/period.ts";
@@ -28,7 +28,7 @@ function PortfolioPage() {
       </NavigationMenu>
       <PortfolioCard portfolio={portfolio} />
       <PeriodToggle onToggle={onToggle} />
-      <AssetCardList holdings={holdings} />
+      <HoldingsList holdings={holdings} />
     </>
   );
 }
