@@ -40,11 +40,10 @@ export async function transactionsLoader({ context, params, deps }: any): Promis
 }
 
 type PeriodSearch = {
-  search: Record<string, string>;
+  period?: Period,
 };
 
 export function handlePeriodSearch({ search }: PeriodSearch) {
-  console.log("handlePeriodSearch");
   return { period: search.period };
 }
 
@@ -53,7 +52,6 @@ function isValidPeriod(period: string): period is Period {
 }
 
 export function validatePeriodSearch(search: PeriodSearch) {
-  console.log("validatePeriodSearch");
   const { period } = search;
   const result = { period: "" };
 
@@ -61,7 +59,7 @@ export function validatePeriodSearch(search: PeriodSearch) {
     result.period = period;
   }
   else {
-    result.period = Period.All;
+    delete result.period;
   }
 
   return result;

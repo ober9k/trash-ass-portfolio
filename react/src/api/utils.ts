@@ -34,7 +34,9 @@ export function buildApiUrl(queryKey: QueryKey[]): string {
   url.pathname = ["api", ...pathParts].join("/");
 
   Object.entries(searchParts).forEach(([ entry, value ]) => {
-    url.searchParams.set(entry, value);
+    if (value) {
+      url.searchParams.set(entry, value);
+    }
   });
 
   return url.toString();

@@ -1,8 +1,9 @@
-import { fetchAssetByTicker, fetchAssetsByIds } from "@/apis/assets";
-import { getPriceByTicker, getPrices, getQuote } from "@/apis/prices";
-import { fetchTransactions, fetchTransactionsByAssetId } from "@/apis/transactions";
-import { buildEmptyHolding, buildEmptyPortfolio, getDistinctAssetIds } from "@/utils";
+import { fetchAssetByTicker } from "@/apis/assets";
+import { getHistoricPrices, getLatestPrices, getPrices, getQuote, type Price } from "@/apis/prices";
+import { fetchSummaries } from "@/apis/summaries";
+import { buildEmptyHolding, buildEmptyPortfolio } from "@/utils";
 import { Firestore } from "@google-cloud/firestore";
+import { Period } from "@shared/types/period";
 import type { Holding, Portfolio, Transaction } from "@shared/types/portfolio";
 
 Firestore.name; /* hack: leave in for types (for now) */
@@ -10,15 +11,39 @@ Firestore.name; /* hack: leave in for types (for now) */
 /**
  * Retrieve a basic summary of the portfolio.
  */
-export async function getPortfolio(): Promise<Portfolio> {
-  const holdings = await getHoldings();
+export async function getPortfolio(period: Period): Promise<Portfolio> {
+  const periodParam = (period) ? period : null;
 
-  return holdings.reduce((p, h) => {
-    p.value        += h.summary.value;
-    p.currentValue += h.summary.currentValue;
+  const validPeriods = [
+    Period.OneHour,
+    Period.OneDay,
+    Period.OneWeek,
+    Period.OneMonth,
+    Period.OneYear,
+  ].map((p) => p.toString());
+
+  const summaries = await fetchSummaries();
+  // const summaries = [];
+
+  if (summaries.length === 0) {
+    return buildEmptyPortfolio(); /* fix for handling later case */
+  }
+
+  const apiIds = summaries.map((s) => s.apiId);
+  const latestPrices = await getLatestPrices(apiIds);
+  const historicPrices = (validPeriods.includes(periodParam as Period))
+    ? await getHistoricPrices(apiIds, periodParam as Period)
+    : [];
+
+  return summaries.reduce((p, s) => {
+    const latestQuotedAsset = latestPrices.find((p) => p.apiId === s.apiId);
+    const historicQuotedAsset = historicPrices.find((p) => p.apiId === s.apiId);
+
+    p.currentValue += s.quantity * latestQuotedAsset.quote.price;
+    p.initialValue += historicQuotedAsset ? s.quantity * historicQuotedAsset.quote.price : s.value;
     p.holdings++;
     return p;
-  }, buildEmptyPortfolio())
+  }, buildEmptyPortfolio());
 }
 
 /**
