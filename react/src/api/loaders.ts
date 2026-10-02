@@ -4,8 +4,8 @@ import type { Holding, Portfolio, Transaction } from "@shared/types/portfolio.ts
 import type { Ticker } from "@shared/types/ticker.ts";
 
 export type PortfolioLoaderProps = {
-  portfolio: Portfolio,
-  holdings:  Holding[],
+  portfolio: Portfolio | null,
+  holdings:  Holding[] | null,
 };
 
 export type HoldingLoaderProps = {
@@ -18,10 +18,17 @@ export async function rootBeforeLoader(): Promise<string> {
 }
 
 export async function portfolioLoader({ context, deps }: any): Promise<PortfolioLoaderProps> {
-  return {
-    portfolio: await context.queryClient.query(buildPortfolioQueryOptions(deps)),
-    holdings:  await context.queryClient.query(buildHoldingsQueryOptions(deps)),
-  };
+  try {
+    const portfolio = await context.queryClient.query(buildPortfolioQueryOptions(deps));
+    const holdings =  await context.queryClient.query(buildHoldingsQueryOptions(deps));
+
+    return { portfolio, holdings };
+  }
+  catch (error) {
+    // catch and let components render failure
+    // this is just assuming any error (even if Axios)
+    return { portfolio: null, holdings: null };
+  }
 }
 
 export async function transactionsLoader({ context, params, deps }: any): Promise<HoldingLoaderProps> {
