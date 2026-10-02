@@ -10,13 +10,16 @@ type Props = {
 function SummaryCard(props: Props) {
   const { portfolio } = props;
 
+  const currentValue = portfolio?.currentValue ?? 0;
+  const initialValue = portfolio?.value ?? 0; /* TODO: rename to initial value */
+
   return (
     <>
       <article>
         <section className={"flex justify-center p-2"}>
           <PropertyDisplay title={"Market Value"}>
-            <CurrencyDisplay currentValue={portfolio.currentValue} />
-            <PercentDisplay currentValue={portfolio.currentValue} purchaseValue={portfolio.value} />
+            <CurrencyDisplay currentValue={currentValue} />
+            <PercentDisplay currentValue={currentValue} initialValue={initialValue} />
           </PropertyDisplay>
         </section>
       </article>

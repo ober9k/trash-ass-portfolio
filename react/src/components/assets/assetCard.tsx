@@ -34,7 +34,7 @@ function AssetCard(props: Props) {
         <section>
           <h4 className={"text-right text-sm font-bold"}>
             <CurrencyDisplay currentValue={summary.currentValue} />
-            <PercentDisplay currentValue={summary.currentValue} purchaseValue={summary.value} />
+            <PercentDisplay currentValue={summary.currentValue} initialValue={summary.value} />
           </h4>
         </section>
       </article>

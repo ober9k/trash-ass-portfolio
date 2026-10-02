@@ -23,7 +23,7 @@ function TransactionSummary(props: Props) {
         <section className={"flex justify-center p-1"}>
           <PropertyDisplay title={profitTitle}>
             <CurrencyDisplay currentValue={profitValue} />
-            <PercentDisplay currentValue={summary.currentValue} purchaseValue={summary.value} />
+            <PercentDisplay currentValue={summary.currentValue} initialValue={summary.value} />
           </PropertyDisplay>
         </section>
         <section className={"flex justify-center p-1"}>
