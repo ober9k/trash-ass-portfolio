@@ -12,7 +12,7 @@ function TransactionSummary(props: Props) {
   const { holding } = props;
   const { asset, summary } = holding;
 
-  const profitValue = summary.currentValue - summary.value;
+  const profitValue = summary.currentValue - summary.initialValue;
   const profitTitle = (profitValue > 0)
     ? "Total Profit"
     : "Total Loss";
@@ -23,7 +23,7 @@ function TransactionSummary(props: Props) {
         <section className={"flex justify-center p-1"}>
           <PropertyDisplay title={profitTitle}>
             <CurrencyDisplay currentValue={profitValue} />
-            <PercentDisplay currentValue={summary.currentValue} initialValue={summary.value} />
+            <PercentDisplay currentValue={summary.currentValue} initialValue={summary.initialValue} />
           </PropertyDisplay>
         </section>
         <section className={"flex justify-center p-1"}>
@@ -34,7 +34,7 @@ function TransactionSummary(props: Props) {
             <CurrencyDisplay currentValue={summary.currentValue} />
           </PropertyDisplay>
           <PropertyDisplay title={"Total Cost"}>
-            <CurrencyDisplay currentValue={summary.value} />
+            <CurrencyDisplay currentValue={summary.initialValue} />
           </PropertyDisplay>
         </section>
       </article>

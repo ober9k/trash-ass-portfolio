@@ -82,7 +82,7 @@ export async function getHoldings(period: Period): Promise<Holding[]> {
 
     const holding = buildEmptyHolding(a);
     holding.summary.currentValue = s.quantity * latestQuotedAsset.quote.price;
-    holding.summary.value = historicQuotedAsset ? s.quantity * historicQuotedAsset.quote.price : s.value;
+    holding.summary.initialValue = historicQuotedAsset ? s.quantity * historicQuotedAsset.quote.price : s.value;
     holding.summary.fee = s.fee;
     holding.summary.quantity = s.quantity;
 
@@ -110,9 +110,9 @@ export async function getHoldingByTicker(ticker: string): Promise<Holding> {
     const s = h.summary;
     s.quantity     += t.quantity;
     s.fee          += t.fee;
-    s.value        += t.value;
+    s.initialValue        += t.value;
     s.currentValue += t.quantity * (quote?.price ?? t.price);
-    s.averagePrice  = s.value / s.quantity; /* this could just also be calculated at the end */
+    s.averagePrice  = s.initialValue / s.quantity; /* this could just also be calculated at the end */
     return h;
   }, buildEmptyHolding(asset));
 }

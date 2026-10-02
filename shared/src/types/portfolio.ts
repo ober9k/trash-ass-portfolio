@@ -21,7 +21,7 @@ export type Asset = {
 export type Summary = {
   quantity:     number,
   fee:          number,
-  value:        number,
+  initialValue: number,
   currentValue: number,
   averagePrice: number,
 };
@@ -31,7 +31,7 @@ export type Transaction = {
   price:        number,
   quantity:     number,
   fee:          number,
-  value:        number, /* as `total` in database */
+  initialValue: number, /* as `total` in database */
   currentValue: number,
   purchasedAt:  Date,
 };
