@@ -35,8 +35,10 @@ app.get("/api/me/portfolio", async (req: Request, res: Response) => {
  * List all of current user's holdings.
  */
 app.get("/api/me/portfolio/holdings", async (req: Request, res: Response) => {
+  const period = req.query.period; // this needs to be validated
+
   res.status(200).json(
-    await getHoldings(),
+    await getHoldings(period as Period),
   );
 });
 

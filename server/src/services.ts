@@ -1,6 +1,7 @@
-import { fetchAssetByTicker } from "@/apis/assets";
-import { getHistoricPrices, getLatestPrices, getPrices, getQuote, type Price } from "@/apis/prices";
+import { fetchAssetByTicker, fetchAssetsByIds } from "@/apis/assets";
+import { getHistoricPrices, getLatestPrices, getPrices, getQuote } from "@/apis/prices";
 import { fetchSummaries } from "@/apis/summaries";
+import { fetchTransactionsByAssetId } from "@/apis/transactions";
 import { buildEmptyHolding, buildEmptyPortfolio } from "@/utils";
 import { Firestore } from "@google-cloud/firestore";
 import { Period } from "@shared/types/period";
@@ -49,26 +50,41 @@ export async function getPortfolio(period: Period): Promise<Portfolio> {
 /**
  * Retrieve all associated holdings.
  */
-export async function getHoldings(): Promise<Holding[]> {
-  const prices = await getPrices();
+export async function getHoldings(period: Period): Promise<Holding[]> {
+  const periodParam = (period) ? period : null;
 
-  const transactions = await fetchTransactions();
-  const assets = await fetchAssetsByIds(getDistinctAssetIds(transactions));
+  const validPeriods = [
+    Period.OneHour,
+    Period.OneDay,
+    Period.OneWeek,
+    Period.OneMonth,
+    Period.OneYear,
+  ].map((p) => p.toString());
+
+  const summaries = await fetchSummaries();
+  // const summaries = [];
+
+  const apiIds = summaries.map((s) => s.apiId);
+  const assetIds = summaries.map((s) => s.assetId);
+  const latestPrices = await getLatestPrices(apiIds);
+  const historicPrices = (validPeriods.includes(periodParam as Period))
+    ? await getHistoricPrices(apiIds, periodParam as Period)
+    : [];
+
+  const assets = await fetchAssetsByIds(assetIds);
   const holdings = [];
 
+  /* TODO: initial to check it works, need to tidy up */
   for (let a of assets) {
-    const filteredTransactions = transactions.filter((t) => t.assetId === a.id);
-    const { price } = getQuote(prices, a.ticker);
+    const s = summaries.find((t) => t.assetId === a.id);
+    const latestQuotedAsset = latestPrices.find((p) => p.apiId === a.apiId);
+    const historicQuotedAsset = historicPrices.find((p) => p.apiId === a.apiId);
 
-    const holding = filteredTransactions.reduce((h, t) => {
-      const s = h.summary;
-      s.quantity     += t.quantity;
-      s.fee          += t.fee;
-      s.value        += t.value;
-      s.currentValue += t.quantity * price;
-      s.averagePrice  = s.value / s.quantity; /* this could just also be calculated at the end */
-      return h;
-    }, buildEmptyHolding(a));
+    const holding = buildEmptyHolding(a);
+    holding.summary.currentValue = s.quantity * latestQuotedAsset.quote.price;
+    holding.summary.value = historicQuotedAsset ? s.quantity * historicQuotedAsset.quote.price : s.value;
+    holding.summary.fee = s.fee;
+    holding.summary.quantity = s.quantity;
 
     holdings.push(holding);
   }
@@ -95,7 +111,7 @@ export async function getHoldingByTicker(ticker: string): Promise<Holding> {
     s.quantity     += t.quantity;
     s.fee          += t.fee;
     s.value        += t.value;
-    s.currentValue += t.quantity * quote.price;
+    s.currentValue += t.quantity * (quote?.price ?? t.price);
     s.averagePrice  = s.value / s.quantity; /* this could just also be calculated at the end */
     return h;
   }, buildEmptyHolding(asset));
