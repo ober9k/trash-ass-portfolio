@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+.card {
+  @apply flex content-center flex-col flex-wrap gap-4;
+  @apply p-4;
+}
+
+.cardMessage {
+  @apply w-full;
+}
+
+.cardContent {
+  @apply w-full; /* TODO: width to be limited */
+}

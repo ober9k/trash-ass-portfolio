@@ -2,9 +2,9 @@ import type { PortfolioLoaderProps } from "@/api/loaders.ts";
 import AssetCardList from "@/components/assets/assetCardList.tsx";
 import NavigationMenu from "@/components/layout/navigationMenu";
 import PeriodToggle from "@/components/miscellaneous/periodToggle.tsx";
-import SummaryCard from "@/components/portfolio/summaryCard.tsx";
 import type { Period } from "@shared/types/period.ts";
 import { getRouteApi, Link, useNavigate } from "@tanstack/react-router";
+import PortfolioCard from "@/components/portfolio/portfolioCard.tsx";
 import { User } from "lucide-react";
 
 function PortfolioPage() {
@@ -26,7 +26,7 @@ function PortfolioPage() {
       <NavigationMenu rightItem={rightItem}>
         My Portfolio
       </NavigationMenu>
-      <SummaryCard portfolio={portfolio} />
+      <PortfolioCard portfolio={portfolio} />
       <PeriodToggle onToggle={onToggle} />
       <AssetCardList holdings={holdings} />
     </>
