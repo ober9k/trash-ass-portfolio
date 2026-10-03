@@ -1,5 +1,5 @@
-import { seedTransactions } from "@/apis/helpers";
 import { getHistoricPrices, getLatestPrices } from "@/apis/prices";
+import { seedRoutes } from "@/helpers/seedRoutes";
 import { getHoldingByTicker, getHoldings, getHoldingTransactionsByTicker, getPortfolio } from "@/services";
 import type { Currency } from "@shared/types/currency";
 import { Period } from "@shared/types/period";
@@ -66,10 +66,7 @@ app.get("/api/me/portfolio/holdings/:ticker/transactions", async (req: Request, 
   );
 });
 
-app.get("/api/me/seed", async (req: Request, res: Response) => {
-  res.status(200).json(
-    await seedTransactions(),
-  );
+app.use("/api/seed", seedRoutes);
 });
 
 export default app;
