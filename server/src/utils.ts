@@ -18,7 +18,7 @@ export function buildEmptyHolding(asset: Asset): Holding {
   const summary = {
     quantity:     0,
     fee:          0,
-    value:        0,
+    initialValue: 0,
     currentValue: 0,
     averagePrice: 0,
   };

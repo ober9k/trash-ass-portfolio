@@ -1,6 +1,6 @@
 import { fetchAssetByTicker, fetchAssetsByIds } from "@/apis/assets";
 import { getHistoricPrices, getLatestPrices, getPrices, getQuote } from "@/apis/prices";
-import { fetchSummaries } from "@/apis/summaries";
+import { fetchSummaries, fetchSummaryByAssetId } from "@/apis/summaries";
 import { fetchTransactionsByAssetId } from "@/apis/transactions";
 import { buildEmptyHolding, buildEmptyPortfolio } from "@/utils";
 import { Firestore } from "@google-cloud/firestore";
@@ -101,20 +101,20 @@ export async function getHoldings(period: Period): Promise<Holding[]> {
  * @param ticker
  */
 export async function getHoldingByTicker(ticker: string): Promise<Holding> {
-  const asset  = await fetchAssetByTicker(ticker);
-  const prices = await getPrices([asset.ticker])
-  const quote  = await getQuote(prices, asset.ticker);
-  const transactions = await fetchTransactionsByAssetId(asset.id);
+  const asset   = await fetchAssetByTicker(ticker);
+  const summary = await fetchSummaryByAssetId(asset.id);
+  console.log(summary);
+  const latestPrices = await getLatestPrices([asset.apiId]);
+  const latestQuotedAsset = latestPrices.find((p) => p.apiId === asset.apiId);
 
-  return transactions.reduce((h, t) => {
-    const s = h.summary;
-    s.quantity     += t.quantity;
-    s.fee          += t.fee;
-    s.initialValue        += t.value;
-    s.currentValue += t.quantity * (quote?.price ?? t.price);
-    s.averagePrice  = s.initialValue / s.quantity; /* this could just also be calculated at the end */
-    return h;
-  }, buildEmptyHolding(asset));
+  const holding = buildEmptyHolding(asset);
+  holding.summary.quantity = summary.quantity;
+  holding.summary.fee = summary.fee;
+  holding.summary.initialValue = summary.value;
+  holding.summary.currentValue = summary.quantity * latestQuotedAsset.quote.price;
+  holding.summary.averagePrice = summary.value / summary.quantity;
+
+  return holding;
 }
 
 
@@ -132,3 +132,4 @@ export async function getHoldingTransactionsByTicker(ticker: string): Promise<Tr
     ...t, currentValue: t.quantity * quote.price,
   }));
 }
+

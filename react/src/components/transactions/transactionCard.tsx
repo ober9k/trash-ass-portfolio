@@ -29,7 +29,7 @@ function TransactionCard(props: Props) {
             <CurrencyDisplay currentValue={transaction.price} />
           </PropertyDisplay>
           <PropertyDisplay title={"Total Cost"}>
-            <CurrencyDisplay currentValue={transaction.initialValue} />
+            <CurrencyDisplay currentValue={transaction.initialValue ?? transaction.value} />
           </PropertyDisplay>
         </section>
       </article>

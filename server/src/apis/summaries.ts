@@ -29,3 +29,27 @@ export async function fetchSummaries(): Promise<DbSummary[]> {
     throw new FirestoreError(parseInt(error.code), getErrorType(parseInt(error.code)), error.message );
   }
 }
+
+/**
+ * Return all linked transactions for the specified asset.
+ * @param assetId
+ */
+export async function fetchSummaryByAssetId(assetId: string): Promise<DbSummary> {
+  try {
+    const ref = firestore.collection("summaries").where("assetId", "==", assetId).limit(1);
+    const snapshot = await ref.get();
+
+    if (snapshot.empty) {
+      /* TODO: handle properly */
+      throw Error("Asset with given `assetId` not found.")
+    }
+
+    const [ doc ] = snapshot.docs;
+
+    return toSummary(doc);
+  }
+  catch (error) {
+    // just assume... don't care for now
+    throw new FirestoreError(parseInt(error.code), getErrorType(parseInt(error.code)), error.message );
+  }
+}
