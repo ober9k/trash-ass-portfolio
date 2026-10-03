@@ -1,16 +1,19 @@
 import { firestore } from "@/firebase";
-import { FirestoreError, getErrorType } from "@/models/firestoreError";
 import type { DbSummary } from "@shared/types/db/dbSummary";
+
+function getCollection() {
+  return firestore.collection("summaries");
+}
 
 function toSummary(doc): DbSummary {
   return {
-    id:        doc.id,
-    assetId:   doc.data().assetId, /* used for grouping */
-    apiId:     doc.data().apiId,
-    quantity:  doc.data().quantity,
-    fee:       doc.data().fee,
-    value:     doc.data().total,
-    updatedAt: doc.data().updatedAt.toDate(),
+    id:           doc.id,
+    assetId:      doc.data().assetId, /* used for grouping */
+    apiId:        doc.data().apiId,
+    quantity:     doc.data().quantity,
+    fee:          doc.data().fee,
+    initialValue: doc.data().total,
+    updatedAt:    doc.data().updatedAt.toDate(),
   };
 }
 
@@ -19,37 +22,26 @@ function toSummary(doc): DbSummary {
  * Not recommended for use as the asset is not returned.
  */
 export async function fetchSummaries(): Promise<DbSummary[]> {
-  try {
-    const ref = firestore.collection("summaries");
-    const res = await ref.get();
-    return res.docs.map(toSummary);
-  }
-  catch (error) {
-    // just assume... don't care for now
-    throw new FirestoreError(parseInt(error.code), getErrorType(parseInt(error.code)), error.message );
-  }
+  const ref = getCollection();
+  const res = await ref.get();
+  return res.docs.map(toSummary);
 }
 
-/**
- * Return all linked transactions for the specified asset.
- * @param assetId
- */
+async function fetchSummaryBy(field: string, value: string | number): Promise<DbSummary> {
+  const ref = getCollection().where(field, "==", value).limit(1);
+  const res = await ref.get();
+
+  if (res.empty) {
+    throw Error(`Summary with given \`${field}\` not found.`)
+  }
+
+  return res.docs.map(toSummary).pop();
+}
+
+export async function fetchSummaryByApiId(apiId: number): Promise<DbSummary> {
+  return await fetchSummaryBy("apiId", apiId);
+}
+
 export async function fetchSummaryByAssetId(assetId: string): Promise<DbSummary> {
-  try {
-    const ref = firestore.collection("summaries").where("assetId", "==", assetId).limit(1);
-    const snapshot = await ref.get();
-
-    if (snapshot.empty) {
-      /* TODO: handle properly */
-      throw Error("Asset with given `assetId` not found.")
-    }
-
-    const [ doc ] = snapshot.docs;
-
-    return toSummary(doc);
-  }
-  catch (error) {
-    // just assume... don't care for now
-    throw new FirestoreError(parseInt(error.code), getErrorType(parseInt(error.code)), error.message );
-  }
+  return await fetchSummaryBy("assetId", assetId);
 }

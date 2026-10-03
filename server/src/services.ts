@@ -1,6 +1,6 @@
 import { fetchAssetByTicker, fetchAssetsByIds } from "@/apis/assets";
 import { getHistoricPrices, getLatestPrices, getPrices, getQuote } from "@/apis/prices";
-import { fetchSummaries, fetchSummaryByAssetId } from "@/apis/summaries";
+import { fetchSummaries, fetchSummaryByApiId, fetchSummaryByAssetId } from "@/apis/summaries";
 import { fetchTransactionsByAssetId } from "@/apis/transactions";
 import { buildEmptyHolding, buildEmptyPortfolio } from "@/utils";
 import { Firestore } from "@google-cloud/firestore";
@@ -41,7 +41,7 @@ export async function getPortfolio(period: Period): Promise<Portfolio> {
     const historicQuotedAsset = historicPrices.find((p) => p.apiId === s.apiId);
 
     p.currentValue += s.quantity * latestQuotedAsset.quote.price;
-    p.initialValue += historicQuotedAsset ? s.quantity * historicQuotedAsset.quote.price : s.value;
+    p.initialValue += historicQuotedAsset ? s.quantity * historicQuotedAsset.quote.price : s.initialValue;
     p.holdings++;
     return p;
   }, buildEmptyPortfolio());
@@ -82,7 +82,7 @@ export async function getHoldings(period: Period): Promise<Holding[]> {
 
     const holding = buildEmptyHolding(a);
     holding.summary.currentValue = s.quantity * latestQuotedAsset.quote.price;
-    holding.summary.initialValue = historicQuotedAsset ? s.quantity * historicQuotedAsset.quote.price : s.value;
+    holding.summary.initialValue = historicQuotedAsset ? s.quantity * historicQuotedAsset.quote.price : s.initialValue;
     holding.summary.fee = s.fee;
     holding.summary.quantity = s.quantity;
 
@@ -103,16 +103,15 @@ export async function getHoldings(period: Period): Promise<Holding[]> {
 export async function getHoldingByTicker(ticker: string): Promise<Holding> {
   const asset   = await fetchAssetByTicker(ticker);
   const summary = await fetchSummaryByAssetId(asset.id);
-  console.log(summary);
   const latestPrices = await getLatestPrices([asset.apiId]);
   const latestQuotedAsset = latestPrices.find((p) => p.apiId === asset.apiId);
 
   const holding = buildEmptyHolding(asset);
   holding.summary.quantity = summary.quantity;
   holding.summary.fee = summary.fee;
-  holding.summary.initialValue = summary.value;
+  holding.summary.initialValue = summary.initialValue;
   holding.summary.currentValue = summary.quantity * latestQuotedAsset.quote.price;
-  holding.summary.averagePrice = summary.value / summary.quantity;
+  holding.summary.averagePrice = summary.initialValue / summary.quantity;
 
   return holding;
 }
