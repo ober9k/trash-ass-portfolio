@@ -1,6 +1,7 @@
 import { firestore } from "@/firebase";
 import { type DbAsset } from "@shared/types/db/dbAsset";
 import { Ticker } from "@shared/types/ticker";
+import { FieldPath } from "firebase-admin/firestore";
 
 function getCollection() {
   return firestore.collection("assets");
@@ -21,7 +22,7 @@ export async function fetchAssets(): Promise<DbAsset[]> {
   return res.docs.map(toAsset);
 }
 
-async function fetchAssetBy(field: string, value: string | number): Promise<DbAsset> {
+async function fetchAssetBy(field: string | FieldPath, value: string | number): Promise<DbAsset> {
   const ref = getCollection().where(field, "==", value).limit(1);
   const res = await ref.get();
 
@@ -32,14 +33,14 @@ async function fetchAssetBy(field: string, value: string | number): Promise<DbAs
   return res.docs.map(toAsset).pop();
 }
 
-async function fetchAssetsBy(field: string, values: string[] | number[]): Promise<DbAsset[]> {
-  const ref = getCollection().where(field, "in", values).limit(1);
+async function fetchAssetsBy(field: string | FieldPath, values: string[] | number[]): Promise<DbAsset[]> {
+  const ref = getCollection().where(field, "in", values);
   const res = await ref.get();
   return res.docs.map(toAsset);
 }
 
 export async function fetchAssetById(id: string): Promise<DbAsset> {
-  return await fetchAssetBy("id", id);
+  return await fetchAssetBy(FieldPath.documentId(), id);
 }
 
 export async function fetchAssetByApiId(apiId: number): Promise<DbAsset> {
@@ -51,7 +52,7 @@ export async function fetchAssetByTicker(ticker: string): Promise<DbAsset> {
 }
 
 export async function fetchAssetsByIds(ids: string[]): Promise<DbAsset[]> {
-  return await fetchAssetsBy("id", ids);
+  return await fetchAssetsBy(FieldPath.documentId(), ids);
 }
 
 export async function fetchAssetsByApiIds(apiIds: number[]): Promise<DbAsset[]> {
