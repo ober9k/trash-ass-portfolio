@@ -1,5 +1,5 @@
-import { Defaults } from "@/config/defaults.ts";
 import { calculatePercentGain } from "@/utils/mathUtils.ts";
+import { formatPercent } from "@/utils/numberUtils.ts";
 
 type Props = {
   currentValue: number,
@@ -8,7 +8,7 @@ type Props = {
 };
 
 function PercentDisplay(props: Props) {
-  const { currentValue, initialValue, precision = Defaults.PercentPrecision } = props;
+  const { currentValue, initialValue } = props;
 
   const gainValue = calculatePercentGain(currentValue, initialValue);
   const gainClass = (gainValue > 0)
@@ -18,8 +18,7 @@ function PercentDisplay(props: Props) {
   return (
     <>
       <span className={`mx-1 px-1 py-1 rounded ${gainClass} text-xs font-normal`}>
-        {gainValue > 0 && "+"}
-        {gainValue.toFixed(precision)}%
+        {formatPercent(gainValue)}
       </span>
     </>
   );

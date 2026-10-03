@@ -4,5 +4,5 @@
  * @param initialValue
  */
 export function calculatePercentGain(currentValue: number, initialValue: number): number {
-  return (initialValue > 0) ? ((currentValue - initialValue) / initialValue) * 100 : 0;
+  return (initialValue > 0) ? ((currentValue - initialValue) / initialValue) : 0;
 }
