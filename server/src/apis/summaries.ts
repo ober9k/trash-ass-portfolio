@@ -1,5 +1,6 @@
 import { firestore } from "@/firebase";
 import type { DbSummary } from "@shared/types/db/dbSummary";
+import { FieldValue } from "firebase-admin/firestore";
 
 function getCollection() {
   return firestore.collection("summaries");
@@ -12,7 +13,8 @@ function toSummary(doc): DbSummary {
     apiId:        doc.data().apiId,
     quantity:     doc.data().quantity,
     fee:          doc.data().fee,
-    initialValue: doc.data().total,
+    initialValue: doc.data().initialValue,
+    createdAt:    doc.data().createdAt.toDate(),
     updatedAt:    doc.data().updatedAt.toDate(),
   };
 }
@@ -44,4 +46,33 @@ export async function fetchSummaryByApiId(apiId: number): Promise<DbSummary> {
 
 export async function fetchSummaryByAssetId(assetId: string): Promise<DbSummary> {
   return await fetchSummaryBy("assetId", assetId);
+}
+
+export async function addSummary(data: any): Promise<DbSummary> {
+  const ref = getCollection();
+  const res = await ref.add({
+    assetId:      data.assetId,
+    apiId:        data.apiId,
+    quantity:     data.quantity,
+    fee:          data.fee,
+    initialValue: data.initialValue,
+    createdAt:    FieldValue.serverTimestamp(),
+    updatedAt:    FieldValue.serverTimestamp(),
+  });
+
+  return toSummary(await res.get());
+}
+
+export async function updateSummary(id: string, data: any): Promise<DbSummary> {
+  const ref = getCollection().doc(id);
+  await ref.set({
+    assetId:      data.assetId,
+    apiId:        data.apiId,
+    quantity:     data.quantity,
+    fee:          data.fee,
+    initialValue: data.initialValue,
+    updatedAt:    FieldValue.serverTimestamp(),
+  });
+
+  return toSummary(await ref.get());
 }

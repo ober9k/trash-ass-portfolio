@@ -5,5 +5,6 @@ export type DbSummary = {
   quantity:     number,
   fee:          number,
   initialValue: number, /* as `total` in database */
+  createdAt:    Date,
   updatedAt:    Date,
 };
