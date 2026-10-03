@@ -1,6 +1,10 @@
 import { firestore } from "@/firebase";
 import type { DbTransaction } from "@shared/types/db/dbTransaction";
 
+function getCollection() {
+  return firestore.collection("transactions");
+}
+
 function toTransaction(doc): DbTransaction {
   return {
     id:          doc.id,
@@ -16,9 +20,10 @@ function toTransaction(doc): DbTransaction {
 /**
  * Return all transactions.
  * Not recommended for use as the asset is not returned.
+ * @param limit
  */
-export async function fetchTransactions(): Promise<DbTransaction[]> {
-  const ref = firestore.collection("transactions");
+export async function fetchTransactions(limit: number = 10): Promise<DbTransaction[]> {
+  const ref = getCollection().orderBy("purchasedAt", "desc").limit(limit);
   const res = await ref.get();
   return res.docs.map(toTransaction);
 }
@@ -26,9 +31,10 @@ export async function fetchTransactions(): Promise<DbTransaction[]> {
 /**
  * Return all linked transactions for the specified asset.
  * @param assetId
+ * @param limit
  */
-export async function fetchTransactionsByAssetId(assetId: string): Promise<DbTransaction[]> {
-  const ref = firestore.collection("transactions").where("assetId", "==", assetId).orderBy("purchasedAt", "desc");
+export async function fetchTransactionsByAssetId(assetId: string, limit: number = 10): Promise<DbTransaction[]> {
+  const ref = getCollection().where("assetId", "==", assetId).orderBy("purchasedAt", "desc").limit(limit);
   const res = await ref.get();
   return res.docs.map(toTransaction);
 }
