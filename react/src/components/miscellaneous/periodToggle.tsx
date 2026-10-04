@@ -1,41 +1,40 @@
-import styles from "@/components/miscellaneous/periodToggle.module.css";
+import { Box, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { Period } from "@shared/types/period.ts";
-import { useState } from "react";
+import { useState, type MouseEvent } from "react";
 
-const periods: Period[] = [
-  Period.OneHour, Period.OneDay, Period.OneWeek, Period.OneMonth, Period.OneYear, Period.All,
-];
+const periods: string[] = [
+  Period.OneHour, 
+  Period.OneDay, 
+  Period.OneWeek, 
+  Period.OneMonth, 
+  Period.OneYear, 
+  Period.All,
+].map((p) => p.toString());
 
 type Props = {
-  onToggle: (Period) => void,
+  onToggle: (period: string) => void,
 }
 
 function PeriodToggle(props: Props) {
   const { onToggle } = props;
-  const [ period, setPeriod ] = useState<Period>(Period.All);
+  const [ period, setPeriod ] = useState<string>(Period.All.toString());
 
-  const toggle = (p: Period) => {
-    onToggle(p);
-    setPeriod(p);
-  };
-
-  const getToggleItemClass = (p: Period) => {
-    return p === period ? styles.activeToggleItem : styles.toggleItem;
+  const onChange = (event: MouseEvent<HTMLElement>, period: string) => {
+    setPeriod(period);
+    onToggle(period);
   };
 
   return (
     <>
-      <nav className={styles.toggle}>
-        <ol className={styles.toggleList}>
+      <Box component="nav" className="flex justify-center p-2">
+        <ToggleButtonGroup onChange={onChange} value={period} size="small" exclusive>
           {periods.map((p, key) => (
-            <li key={key}>
-              <span onClick={() => toggle(p)} className={getToggleItemClass(p)}>
-                {p}
-              </span>
-            </li>
+            <ToggleButton key={key} value={p.toString()} disabled={p === period} className="min-w-8 px-1 py-0">
+              {p}
+            </ToggleButton>
           ))}
-        </ol>
-      </nav>
+        </ToggleButtonGroup>
+      </Box>
     </>
   );
 }
