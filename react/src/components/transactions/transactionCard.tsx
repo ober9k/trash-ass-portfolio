@@ -2,6 +2,7 @@ import AssetDisplay from "@/components/utils/assetDisplay.tsx";
 import CurrencyDisplay from "@/components/utils/currencyDisplay.tsx";
 import PropertyDisplay from "@/components/utils/propertyDisplay.tsx";
 import type { Asset, Transaction } from "@shared/types/portfolio.ts";
+import { Link } from "@tanstack/react-router"
 
 type Props = {
   asset:       Asset
@@ -32,6 +33,9 @@ function TransactionCard(props: Props) {
             <CurrencyDisplay currentValue={transaction.initialValue ?? transaction.value} />
           </PropertyDisplay>
         </section>
+        <p className={"flex justify-center p-1"}>
+          View:&nbsp;<Link to="/transactions/x/$transactionId" params={{ transactionId: transaction.id }}>{transaction.id}</Link>
+        </p>
       </article>
     </>
   );

@@ -40,3 +40,7 @@ export async function fetchHoldingTransactionsByTicker({ queryKey }: { queryKey:
   return data as Transaction[];
 }
 
+export async function fetchTransaction({ queryKey }: { queryKey: readonly QueryKey[] }): Promise<Transaction> {
+  const { data } = await axios.get(buildApiUrl(queryKey));
+  return data as Transaction;
+}

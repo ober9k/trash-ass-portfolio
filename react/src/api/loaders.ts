@@ -1,6 +1,6 @@
-import { buildHoldingOptions, buildHoldingsQueryOptions, buildHoldingTransactionsOptions, buildPortfolioQueryOptions } from "@/api/queryOptions.ts";
+import { buildHoldingOptions, buildHoldingsQueryOptions, buildHoldingTransactionsOptions, buildPortfolioQueryOptions, buildTransactionOptions } from "@/api/queryOptions.ts";
 import { Period } from "@shared/types/period.ts";
-import type { Holding, Portfolio, Transaction } from "@shared/types/portfolio.ts";
+import type { Asset, Holding, Portfolio, Transaction } from "@shared/types/portfolio.ts";
 import type { Ticker } from "@shared/types/ticker.ts";
 
 export type PortfolioLoaderProps = {
@@ -11,6 +11,11 @@ export type PortfolioLoaderProps = {
 export type HoldingLoaderProps = {
   holding:      Holding,
   transactions: Transaction[],
+};
+
+export type TransactionLoaderProps = {
+  // asset:       Asset,
+  transaction: Transaction,
 };
 
 export async function rootBeforeLoader(): Promise<string> {
@@ -36,6 +41,12 @@ export async function transactionsLoader({ context, params, deps }: any): Promis
   return {
     holding:      await context.queryClient.query(buildHoldingOptions(ticker, deps)),
     transactions: await context.queryClient.query(buildHoldingTransactionsOptions(ticker, deps)),
+  };
+}
+
+export async function transactionLoader({ context, params }: any): Promise<TransactionLoaderProps> {
+  return {
+    transaction: await context.queryClient.query(buildTransactionOptions(params.transactionId)),
   };
 }
 
