@@ -2,7 +2,7 @@ import type { HoldingLoaderProps } from "@/api/loaders.ts";
 import AssetIcon from "@/components/assets/assetIcon.tsx";
 import NavigationMenu from "@/components/layout/navigationMenu";
 import PeriodToggle from "@/components/miscellaneous/periodToggle.tsx";
-import TransactionCard from "@/components/transactions/transactionCard.tsx";
+import TransactionsCard from "@/components/transactions/transactionsCard";
 import TransactionSummary from "@/components/transactions/transactionSummary.tsx";
 import type { Period } from "@shared/types/period.ts";
 import { getRouteApi, Link, useNavigate } from "@tanstack/react-router";
@@ -29,18 +29,17 @@ function TransactionsPage() {
 
   return (
     <>
+    <article style={{ backgroundColor: "#121212" }} className="h-dvh">
       <NavigationMenu leftItem={leftItem} rightItem={rightItem}>
         <AssetIcon asset={asset} size={"sm"} />
         {holding.asset.name}
       </NavigationMenu>
-      <div className={"p-2"}>
+      <article className="flex flex-col gap-4 p-2 m-2">
         <TransactionSummary holding={holding} />
         <PeriodToggle onToggle={onToggle} />
-        <h2 className={"px-4 uppercase text-sm"}>Transactions</h2>
-        {transactions.map((transaction, key) => (
-          <TransactionCard asset={asset} transaction={transaction} key={key} />
-        ))}
-      </div>
+        <TransactionsCard asset={asset} transactions={transactions} />
+      </article>
+    </article>
     </>
   );
 }

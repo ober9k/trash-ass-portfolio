@@ -13,7 +13,6 @@ export function formatCurrency(value: number, currency: string = Defaults.Curren
   return getNumberFormat(options).format(value);
 }
 
-
 export function formatPercent(value: number, precision: number = Defaults.PercentPrecision): string {
   const options = {
     style: "percent",
@@ -23,4 +22,13 @@ export function formatPercent(value: number, precision: number = Defaults.Percen
   };
 
   return getNumberFormat(options).format(value);
+}
+
+export function formatDate(date: Date): string {
+  const formatter = new Intl.DateTimeFormat(Defaults.Locale, {
+    dateStyle: "medium",
+    timeStyle: "short",
+  });
+
+  return formatter.format(date);
 }
