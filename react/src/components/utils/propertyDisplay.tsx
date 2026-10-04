@@ -1,3 +1,4 @@
+import { Box, Typography } from "@mui/material";
 import type { ReactNode } from "react";
 
 type Props = {
@@ -10,14 +11,18 @@ function PropertyDisplay(props: Props) {
 
   return (
     <>
-      <div className={"grow"}>
-        <h3 className={"py-1 text-xs text-center text-gray-600 font-medium uppercase"}>
+    <Box component="section" className="grow">
+      <Box className="pb-2">
+        <Typography variant="h4" component="h4" color="textSecondary" className="text-xs uppercase">
           {title}
-        </h3>
-        <h4 className={"text-center text-sm font-bold"}>
+        </Typography>
+      </Box>
+      <Box>
+        <Typography variant="h6" component="h6" className="text-lg">
           {children}
-        </h4>
-      </div>
+        </Typography>
+      </Box>
+    </Box>
     </>
   );
 }

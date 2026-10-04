@@ -3,7 +3,7 @@ import AssetIcon from "@/components/assets/assetIcon.tsx";
 import NavigationMenu from "@/components/layout/navigationMenu";
 import PeriodToggle from "@/components/miscellaneous/periodToggle.tsx";
 import TransactionsCard from "@/components/transactions/transactionsCard";
-import TransactionSummary from "@/components/transactions/transactionSummary.tsx";
+import SummaryCard from "@/components/transactions/summaryCard";
 import type { Period } from "@shared/types/period.ts";
 import { getRouteApi, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, Menu } from "lucide-react";
@@ -35,7 +35,7 @@ function TransactionsPage() {
         {holding.asset.name}
       </NavigationMenu>
       <article className="flex flex-col gap-4 p-2 m-2">
-        <TransactionSummary holding={holding} />
+        <SummaryCard holding={holding} />
         <PeriodToggle onToggle={onToggle} />
         <TransactionsCard asset={asset} transactions={transactions} />
       </article>
