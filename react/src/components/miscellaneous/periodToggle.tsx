@@ -1,4 +1,4 @@
-import { Box, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import { Box, Card, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { Period } from "@shared/types/period.ts";
 import { useState, type MouseEvent } from "react";
 
@@ -24,19 +24,19 @@ function PeriodToggle(props: Props) {
     onToggle(period);
   };
 
-  return (
-    <>
-      <Box component="nav" className="flex justify-center p-2">
+  return (<>
+    <Card>
+      <Box component="nav" className="flex justify-center p-4">
         <ToggleButtonGroup onChange={onChange} value={period} size="small" exclusive>
           {periods.map((p, key) => (
-            <ToggleButton key={key} value={p.toString()} disabled={p === period} className="min-w-8 px-1 py-0">
+            <ToggleButton key={key} value={p.toString()} disabled={p === period} className="min-w-8 px-2 py-1">
               {p}
             </ToggleButton>
           ))}
         </ToggleButtonGroup>
       </Box>
-    </>
-  );
+    </Card>
+  </>);
 }
 
 export default PeriodToggle;
