@@ -1,5 +1,5 @@
 import type { PortfolioLoaderProps } from "@/api/loaders.ts";
-import HoldingsList from "@/components/holdings/holdingsList.tsx";
+import HoldingsCard from "@/components/holdings/holdingsCard";
 import NavigationMenu from "@/components/layout/navigationMenu";
 import PeriodToggle from "@/components/miscellaneous/periodToggle.tsx";
 import PortfolioCard from "@/components/portfolio/portfolioCard.tsx";
@@ -27,14 +27,16 @@ function PortfolioPage() {
 
   return (
     <>
+    <article style={{ backgroundColor: "#121212" }}>
       <NavigationMenu rightItem={rightItem}>
         My Portfolio
       </NavigationMenu>
-      <article className="flex flex-col gap-2 p-2 m-2">
+      <article className="flex flex-col gap-4 p-2 m-2">
         <PortfolioCard portfolio={portfolio} />
         <PeriodToggle onToggle={onToggle} />
-        <HoldingsList holdings={holdings} />
+        <HoldingsCard holdings={holdings} />
       </article>
+    </article>
     </>
   );
 }
