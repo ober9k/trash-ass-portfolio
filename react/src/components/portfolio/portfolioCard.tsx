@@ -1,9 +1,8 @@
+import AltCardHeader from "@/components/miscellaneous/altCardHeader";
 import CurrencyDisplay from "@/components/utils/currencyDisplay.tsx";
-import PercentDisplay from "@/components/utils/percentDisplay.tsx";
-import PropertyDisplay from "@/components/utils/propertyDisplay.tsx";
-import { Alert } from "@mui/material";
+import GainDisplay from "@/components/utils/gainDisplay";
+import { Alert, Card, CardContent, Typography } from "@mui/material";
 import type { Portfolio } from "@shared/types/portfolio.ts";
-import styles from "@/components/portfolio/portfolioCard.module.css";
 
 type Props = {
   portfolio: Portfolio | null,
@@ -17,23 +16,25 @@ function PortfolioCard(props: Props) {
   const currentValue = portfolio?.currentValue ?? 0;
   const initialValue = portfolio?.initialValue ?? 0;
 
-  return (
-    <article className={styles.card}>
-      {isPortfolioNull() && (
-        <section className={styles.cardMessage}>
+  return (<>
+    <Card>
+      <AltCardHeader title="Main Portfolio" />
+      <CardContent>
+        {isPortfolioNull() ? (
           <Alert severity="warning">
             Unable to load portfolio summary.
           </Alert>
-        </section>
-      )}
-      <section className={styles.cardContent}>
-        <PropertyDisplay title={"Market Value"}>
-          <CurrencyDisplay currentValue={currentValue} />
-          <PercentDisplay currentValue={currentValue} initialValue={initialValue} />
-        </PropertyDisplay>
-      </section>
-    </article>
-  );
+        ) : (<>
+          <Typography variant="h4" component="h4" className="pb-4 text-4xl">
+            <CurrencyDisplay currentValue={currentValue} />
+          </Typography>
+          <Typography variant="h6" component="h6" className="text-sm">
+            <GainDisplay currentValue={currentValue} initialValue={initialValue} />
+          </Typography>
+        </>)}
+      </CardContent>
+    </Card>
+  </>);
 }
 
 export default PortfolioCard;

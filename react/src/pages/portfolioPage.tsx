@@ -30,9 +30,11 @@ function PortfolioPage() {
       <NavigationMenu rightItem={rightItem}>
         My Portfolio
       </NavigationMenu>
-      <PortfolioCard portfolio={portfolio} />
-      <PeriodToggle onToggle={onToggle} />
-      <HoldingsList holdings={holdings} />
+      <article className="flex flex-col gap-2 p-2 m-2">
+        <PortfolioCard portfolio={portfolio} />
+        <PeriodToggle onToggle={onToggle} />
+        <HoldingsList holdings={holdings} />
+      </article>
     </>
   );
 }

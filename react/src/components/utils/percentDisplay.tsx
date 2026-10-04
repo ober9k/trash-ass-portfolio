@@ -1,5 +1,6 @@
 import { calculatePercentGain } from "@/utils/mathUtils.ts";
 import { formatPercent } from "@/utils/numberUtils.ts";
+import { Box } from "@mui/material";
 
 type Props = {
   currentValue: number,
@@ -12,14 +13,14 @@ function PercentDisplay(props: Props) {
 
   const gainValue = calculatePercentGain(currentValue, initialValue);
   const gainClass = (gainValue > 0)
-    ? "bg-green-200 text-green-600"
-    : "bg-red-200 text-red-600";
+    ? "bg-green-200 text-green-500"
+    : "bg-red-200 text-red-500";
 
   return (
     <>
-      <span className={`mx-1 px-1 py-1 rounded ${gainClass} text-xs font-normal`}>
+      <Box component="span" className={`ml-1.5 px-1.5 py-0.5 rounded ${gainClass}`}>
         {formatPercent(gainValue)}
-      </span>
+      </Box>
     </>
   );
 }
