@@ -1,5 +1,6 @@
 import { firestore } from "@/firebase";
 import type { DbTransaction } from "@shared/types/db/dbTransaction";
+import { FieldValue } from "firebase-admin/firestore";
 
 function getCollection() {
   return firestore.collection("transactions");
@@ -37,4 +38,46 @@ export async function fetchTransactionsByAssetId(assetId: string, limit: number 
   const ref = getCollection().where("assetId", "==", assetId).orderBy("purchasedAt", "desc").limit(limit);
   const res = await ref.get();
   return res.docs.map(toTransaction);
+}
+
+export async function fetchTransactionById(transactionId: string): Promise<DbTransaction> {
+  const ref = getCollection().doc(transactionId);
+  const res = await ref.get();
+
+  if (!res.exists) {
+    throw new Error(`Transaction with ID ${transactionId} not found`);
+  }
+  
+  return toTransaction(res);
+}
+
+export async function addTransaction(data: any): Promise<DbTransaction> {
+  const ref = getCollection();
+  const res = await ref.add({
+    price:       data.price,
+    quantity:    data.quantity,
+    fee:         data.fee,
+    total:       data.value, /* fix conflict */
+    // purchasedAt: data.purchasedAt.toIsoString(),
+    purchasedAt: FieldValue.serverTimestamp(),
+    createdAt:   FieldValue.serverTimestamp(),
+    updatedAt:   FieldValue.serverTimestamp(),
+  });
+
+  return toTransaction(await res.get());
+}
+
+export async function updateTransactionById(id: string, data: any): Promise<DbTransaction> {
+  const ref = getCollection().doc(id);
+  await ref.set({
+    price:       data.price,
+    quantity:    data.quantity,
+    fee:         data.fee,
+    total:       data.value, /* fix conflict */
+    // purchasedAt: data.purchasedAt.toIsoString(),
+    purchasedAt: FieldValue.serverTimestamp(),
+    updatedAt:   FieldValue.serverTimestamp(),
+  }, { merge: true });
+
+  return toTransaction(await ref.get());
 }

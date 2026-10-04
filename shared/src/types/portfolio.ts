@@ -31,6 +31,7 @@ export type Transaction = {
   price:        number,
   quantity:     number,
   fee:          number,
+  value:        number, /* TODO: address inconsistency with `total` in database */
   initialValue: number, /* as `total` in database */
   currentValue: number,
   purchasedAt:  Date,

@@ -7,6 +7,7 @@ import type { Asset } from "@shared/types/portfolio";
 import cors from "cors";
 import express, { type Express, type Request, type Response } from "express";
 import { mapQuotedAsset } from "../utils/apiUtils";
+import { transactionsRoutes } from "./routes/transactionsRoutes";
 
 const app: Express = express();
 
@@ -19,6 +20,8 @@ app.use(cors({
   origin: allowedOrigins,
   credentials: true,
 }));
+
+app.use(express.json());
 
 /**
  * List current value of user's portfolio.
@@ -66,6 +69,7 @@ app.get("/api/me/portfolio/holdings/:ticker/transactions", async (req: Request, 
   );
 });
 
+app.use("/api/me/transactions", transactionsRoutes);
 app.use("/api/seed", seedRoutes);
 });
 
