@@ -1,5 +1,6 @@
 import { getHistoricPrices, getLatestPrices } from "@/apis/prices";
 import { seedRoutes } from "@/helpers/seedRoutes";
+import { meTransactionsRoutes } from "@/routes/meTransactionsRoutes";
 import { getHoldingByTicker, getHoldings, getHoldingTransactionsByTicker, getPortfolio } from "@/services";
 import type { Currency } from "@shared/types/currency";
 import { Period } from "@shared/types/period";
@@ -7,7 +8,6 @@ import type { Asset } from "@shared/types/portfolio";
 import cors from "cors";
 import express, { type Express, type Request, type Response } from "express";
 import { mapQuotedAsset } from "../utils/apiUtils";
-import { transactionsRoutes } from "./routes/transactionsRoutes";
 
 const app: Express = express();
 
@@ -69,7 +69,8 @@ app.get("/api/me/portfolio/holdings/:ticker/transactions", async (req: Request, 
   );
 });
 
-app.use("/api/me/transactions", transactionsRoutes);
+app.use("/api/assets", assetsRoutes);
+app.use("/api/me/transactions", meTransactionsRoutes);
 app.use("/api/seed", seedRoutes);
 
 export default app;

@@ -31,4 +31,4 @@ router.put("/:transactionId", [transactionIdValidationHandler(), transactionSche
   );
 });
 
-export { router as transactionsRoutes };
+export { router as meTransactionsRoutes };
