@@ -1,20 +1,16 @@
 import type { PortfolioLoaderProps } from "@/api/loaders.ts";
 import HoldingsCard from "@/components/holdings/holdingsCard";
-import NavigationMenu from "@/components/layout/navigationMenu";
+import NavigationBar from "@/components/layout/navigationBar.tsx";
 import PeriodToggle from "@/components/miscellaneous/periodToggle.tsx";
 import PortfolioCard from "@/components/portfolio/portfolioCard.tsx";
+import { Typography } from "@mui/material";
 import { Period } from "@shared/types/period.ts";
-import { getRouteApi, Link, useRouter } from "@tanstack/react-router";
-import { User } from "lucide-react";
+import { getRouteApi, useRouter } from "@tanstack/react-router";
 
 function PortfolioPage() {
   const { portfolio, holdings }: PortfolioLoaderProps = getRouteApi("/").useLoaderData();
   const { period } = getRouteApi("/").useSearch();
   const router = useRouter();
-
-  const rightItem = (
-    <Link to={"/auth/sign-in"}><User size={20} /></Link>
-  );
 
   const onToggle = (period: string) => {
     const search = (period !== Period.All.toString())
@@ -29,9 +25,11 @@ function PortfolioPage() {
   return (
     <>
     <article style={{ backgroundColor: "#121212" }}>
-      <NavigationMenu rightItem={rightItem}>
-        My Portfolio
-      </NavigationMenu>
+      <NavigationBar>
+        <Typography variant="h4" component="h4" className="text-lg">
+          My Portfolio
+        </Typography>
+      </NavigationBar>
       <article className="flex flex-col gap-4 p-2 m-2">
         <PortfolioCard portfolio={portfolio} />
         <PeriodToggle period={period} onToggle={onToggle} />

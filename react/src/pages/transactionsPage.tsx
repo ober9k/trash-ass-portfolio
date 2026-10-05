@@ -1,12 +1,13 @@
 import type { HoldingLoaderProps } from "@/api/loaders.ts";
 import AssetIcon from "@/components/assets/assetIcon.tsx";
-import NavigationMenu from "@/components/layout/navigationMenu";
+import NavigationBar from "@/components/layout/navigationBar.tsx";
 import PeriodToggle from "@/components/miscellaneous/periodToggle.tsx";
 import SummaryCard from "@/components/transactions/summaryCard";
 import TransactionsCard from "@/components/transactions/transactionsCard";
+import { Box, IconButton, Typography } from "@mui/material";
 import { Period } from "@shared/types/period.ts";
 import { getRouteApi, Link, useRouter } from "@tanstack/react-router";
-import { ArrowLeft, Menu } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 
 function TransactionsPage() {
   const { holding, transactions }: HoldingLoaderProps = getRouteApi("/transactions/$tokenId").useLoaderData();
@@ -14,12 +15,12 @@ function TransactionsPage() {
   const { period } = getRouteApi("/transactions/$tokenId").useSearch();
   const router = useRouter();
 
-  const leftItem = (
-    <Link to={"/"}><ArrowLeft size={20} /></Link>
-  );
-
-  const rightItem = (
-    <Link to={"/"}><Menu size={20} /></Link>
+  const leftSlot = (
+    <IconButton size="large" color="inherit" edge="start" aria-label="back">
+      <Link to={"/"}>
+        <ArrowLeft />
+      </Link>
+    </IconButton>
   );
 
   const onToggle = (period: string) => {
@@ -36,10 +37,14 @@ function TransactionsPage() {
   return (
     <>
     <article style={{ backgroundColor: "#121212" }} className="h-dvh">
-      <NavigationMenu leftItem={leftItem} rightItem={rightItem}>
-        <AssetIcon asset={asset} size={"sm"} />
-        {holding.asset.name}
-      </NavigationMenu>
+      <NavigationBar leftSlot={leftSlot}>
+        <Box className="mt-0.5 mr-1.5">
+          <AssetIcon asset={asset} size="sm" />
+        </Box>
+        <Typography variant="h4" component="h4" className="text-lg">
+          {holding.asset.name}
+        </Typography>
+      </NavigationBar>
       <article className="flex flex-col gap-4 p-2 m-2">
         <SummaryCard holding={holding} />
         <PeriodToggle period={period} onToggle={onToggle} />

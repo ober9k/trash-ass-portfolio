@@ -21,6 +21,7 @@ function PeriodToggle(props: Props) {
   const [ period, setPeriod ] = useState<string>(initialPeriod ?? Period.All.toString());
 
   const onChange = (event: MouseEvent<HTMLElement>, period: string) => {
+    event.preventDefault();
     setPeriod(period);
     onToggle(period);
   };

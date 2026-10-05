@@ -1,6 +1,7 @@
-import NavigationMenu from "@/components/layout/navigationMenu.tsx";
+import NavigationBar from "@/components/layout/navigationBar.tsx";
 import { auth, signInWithGooglePopup } from "@/firebase.ts";
 import useAuthContext from "@/hooks/useAuthContext.ts";
+import { IconButton, Typography } from "@mui/material";
 import { Link } from "@tanstack/react-router";
 import { signOut } from "firebase/auth";
 import { ArrowLeft } from "lucide-react";
@@ -27,15 +28,21 @@ function SignInPage() {
     }
   };
 
-  const leftItem = (
-    <Link to={"/"}><ArrowLeft size={20} /></Link>
+  const leftSlot = (
+    <IconButton size="large" color="inherit" edge="start" aria-label="back">
+      <Link to={"/"}>
+        <ArrowLeft />
+      </Link>
+    </IconButton>
   );
 
   return (
     <>
-      <NavigationMenu leftItem={leftItem}>
-        Sign In
-      </NavigationMenu>
+      <NavigationBar leftSlot={leftSlot}>
+        <Typography variant="h4" component="h4" className="text-lg">
+         Sign In
+        </Typography>
+      </NavigationBar>
       {user ? (
         <section className={"p-4"}>
           <div>

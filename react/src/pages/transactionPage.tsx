@@ -1,8 +1,11 @@
 import type { TransactionLoaderProps } from "@/api/loaders";
 import { buildUpdateTransactionFn } from "@/api/mutationFunctions";
+import NavigationBar from "@/components/layout/navigationBar.tsx";
+import { IconButton, Typography } from "@mui/material";
 import type { TransactionData } from "@shared/schemas/transactionSchema";
 import { useMutation } from "@tanstack/react-query";
-import { getRouteApi, useNavigate } from "@tanstack/react-router";
+import { getRouteApi, Link, useNavigate } from "@tanstack/react-router";
+import { ArrowLeft } from "lucide-react";
 import { useActionState } from "react";
 import { buildFormAction, type FormState } from "@/forms/transactions/actions";
 
@@ -32,6 +35,14 @@ function TransactionPage() {
   const { transaction }: TransactionLoaderProps = getRouteApi("/transactions/x/$transactionId").useLoaderData();
   const navigate = useNavigate();
 
+  const leftSlot = (
+    <IconButton size="large" color="inherit" edge="start" aria-label="go back">
+      <Link to={"/transactions/$tokenId"} params={{ tokenId: "ADA" /* TODO: temp value */ }}>
+        <ArrowLeft />
+      </Link>
+    </IconButton>
+  );
+
   const mutation = useMutation({
     mutationFn: buildUpdateTransactionFn(transaction.id),
     onSuccess: (data) => {
@@ -51,17 +62,22 @@ function TransactionPage() {
   return (
     <>
       <article>
+        <NavigationBar leftSlot={leftSlot}>
+          <Typography variant="h4" component="h4" className="text-lg">
+            Update Transaction
+          </Typography>
+        </NavigationBar>
         <form action={formAction} noValidate>
           <div className="p-4 m-4">
             <h1>Transaction Details</h1>
             <hr className="my-4" />
             <p>
-              <strong>ID:</strong> {transaction.id}<br/>
-              <strong>Price:</strong> {transaction.price}<br/>
-              <strong>Quantity:</strong> {transaction.quantity}<br/>
-              <strong>Fee:</strong> {transaction.fee}<br/>
-              <strong>Value:</strong> {transaction.value}<br/>
-              <strong>Purchased At:</strong> {transaction.purchasedAt.toString()}<br/>
+              <strong>ID:</strong> {transaction.id}<br />
+              <strong>Price:</strong> {transaction.price}<br />
+              <strong>Quantity:</strong> {transaction.quantity}<br />
+              <strong>Fee:</strong> {transaction.fee}<br />
+              <strong>Value:</strong> {transaction.value}<br />
+              <strong>Purchased At:</strong> {transaction.purchasedAt.toString()}<br />
             </p>
           </div>
           <div className="p-4 m-4">
