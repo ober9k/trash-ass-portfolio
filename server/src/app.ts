@@ -1,5 +1,6 @@
 import { getHistoricPrices, getLatestPrices } from "@/apis/prices";
 import { seedRoutes } from "@/helpers/seedRoutes";
+import { assetsRoutes } from "@/routes/assetsRoutes";
 import { meTransactionsRoutes } from "@/routes/meTransactionsRoutes";
 import { getHoldingByTicker, getHoldings, getHoldingTransactionsByTicker, getPortfolio } from "@/services";
 import type { Currency } from "@shared/types/currency";
