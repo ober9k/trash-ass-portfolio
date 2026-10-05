@@ -1,5 +1,6 @@
+import type { QueryKey } from "@tanstack/react-query";
+
 export type KeyValue = { [key: string]: any };
-export type QueryKey = (string | KeyValue)[];
 export type ParsedQueryKey = [string[], KeyValue];
 
 /**
@@ -7,7 +8,7 @@ export type ParsedQueryKey = [string[], KeyValue];
  * @param queryKey
  */
 function parseQueryKey(queryKey: QueryKey[]) {
-  const reducerFn = (a, c) => {
+  const reducerFn = (a: ParsedQueryKey, c: QueryKey) => {
     if (typeof c === "string") {
       a[0].push(c);
     }
@@ -26,18 +27,24 @@ const RootApiPort = "8080";              /* TODO: .env instead */
 /**
  * Build standardised URL for API usage.
  */
-export function buildApiUrl(queryKey: QueryKey[]): string {
-  const [ pathParts, searchParts ] = parseQueryKey(queryKey);
-
+export function buildApiUrl(parts: string[] = [], search: { [key: string]: string | number } = {}): string {
   const url = new URL(RootApiPath);
   url.port = RootApiPort;
-  url.pathname = ["api", ...pathParts].join("/");
+  url.pathname = ["api", ...parts].join("/");
 
-  Object.entries(searchParts).forEach(([ entry, value ]) => {
+  Object.entries(search).forEach(([key, value]) => {
     if (value) {
-      url.searchParams.set(entry, value);
+      url.searchParams.set(key, value.toString());
     }
   });
 
   return url.toString();
+}
+
+/**
+ * Build standardised URL for API usage from the QueryKey.
+ */
+export function buildApiUrlFromQueryKey(queryKey: QueryKey[]): string {
+  const [ parts, search ] = parseQueryKey(queryKey);
+  return buildApiUrl(parts, search);
 }
