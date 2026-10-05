@@ -1,16 +1,11 @@
-import { getValue, onFieldError, onFormError, onSuccess, onUnexpectedError, type AsFieldError } from "@/utils/formUtils";
-import { TransactionSchema, type TransactionData } from "@shared/schemas/transactionSchema";
+import type { FormState } from "@/types/formState.ts";
+import { getValue, onFieldError, onFormError, onSuccess, onUnexpectedError } from "@/utils/formUtils";
+import { type TransactionData, TransactionSchema } from "@shared/schemas/transactionSchema";
 import axios from "axios";
 import { z } from "zod";
 
-export type FormState = {
-  formErrors:  string[],
-  fieldValues: TransactionData,
-  fieldErrors: Partial<AsFieldError<TransactionData>>,
-};
-
 export const buildFormAction = (mutation) => {
-  return async (formState: FormState, formData: FormData) => {
+  return async (formState: FormState<TransactionData>, formData: FormData) => {
 
     const fieldValues = {
       price:    parseFloat(getValue(formData, "price")),
@@ -20,13 +15,7 @@ export const buildFormAction = (mutation) => {
     };
 
     try {
-      const data: TransactionData = {
-        price:    fieldValues.price,
-        quantity: fieldValues.quantity,
-        fee:      fieldValues.fee,
-        value:    fieldValues.value,
-      };
-
+      const data: TransactionData = { ... fieldValues };
       TransactionSchema.parse(data);
       await mutation.mutateAsync(data);
     }

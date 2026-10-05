@@ -60,10 +60,3 @@ export function getCheckboxValue(formData: FormData, key: string): boolean {
     ? formData.get(key) === "on"
     : false;
 }
-
-/**
- * Cast a field value type to be a field error type.
- */
-export type AsFieldError<T> ={
-  [K in keyof T]?: string[];
-};

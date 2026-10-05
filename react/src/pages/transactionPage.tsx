@@ -1,35 +1,13 @@
 import type { TransactionLoaderProps } from "@/api/loaders";
 import { buildUpdateTransactionFn } from "@/api/mutationFunctions";
 import NavigationBar from "@/components/layout/navigationBar.tsx";
+import { buildFormAction } from "@/forms/transactions/actions";
+import { buildInitialState } from "@/forms/transactions/form.ts";
 import { IconButton, Typography } from "@mui/material";
-import type { TransactionData } from "@shared/schemas/transactionSchema";
 import { useMutation } from "@tanstack/react-query";
 import { getRouteApi, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 import { useActionState } from "react";
-import { buildFormAction, type FormState } from "@/forms/transactions/actions";
-
-/**
- * Prepare based off loaded season if provided.
- */
-export function buildInitialState(transaction?: TransactionData): FormState {
-  const fieldValues = (transaction)
-    ? {
-      price:    transaction.price,
-      quantity: transaction.quantity,
-      fee:      transaction.fee,
-      value:    transaction.value,
-    } : {
-      price:    0,
-      quantity: 0,
-      fee:      0,
-      value:    0,
-    }
-
-  return {
-    fieldValues, fieldErrors: {}, formErrors: []
-  };
-}
 
 function TransactionPage() {
   const { asset, transaction }: TransactionLoaderProps = getRouteApi("/transactions/x/$transactionId").useLoaderData();
