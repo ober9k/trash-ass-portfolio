@@ -1,4 +1,4 @@
-import { fetchHoldingByTicker, fetchHoldings, fetchHoldingTransactionsByTicker, fetchPortfolio, fetchTransaction } from "@/api/queryFunctions.ts";
+import { fetchAsset, fetchHoldingByTicker, fetchHoldings, fetchHoldingTransactionsByTicker, fetchPortfolio, fetchTransaction } from "@/api/queryFunctions.ts";
 import { Period } from "@shared/types/period";
 import type { Ticker } from "@shared/types/ticker.ts";
 
@@ -38,6 +38,13 @@ export function buildTransactionOptions(transactionId: string) {
   return {
     queryKey: ["me", "transactions", transactionId],
     queryFn:  fetchTransaction,
+  };
+}
+
+export function buildAssetQueryOptions(assetId: string) {
+  return {
+    queryKey: ["assets", assetId],
+    queryFn:  fetchAsset,
   };
 }
 

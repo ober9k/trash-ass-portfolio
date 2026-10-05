@@ -1,6 +1,6 @@
 import { buildApiUrlFromQueryKey } from "@/api/utils.ts";
 import { getInitialAuthState } from "@/firebase.ts";
-import type { Holding, Transaction, Portfolio } from "@shared/types/portfolio.ts";
+import type { Holding, Transaction, Portfolio, Asset } from "@shared/types/portfolio.ts";
 import type { QueryKey } from "@tanstack/react-query";
 import axios from "axios";
 
@@ -43,4 +43,9 @@ export async function fetchHoldingTransactionsByTicker({ queryKey }: { queryKey:
 export async function fetchTransaction({ queryKey }: { queryKey: QueryKey[] }): Promise<Transaction> {
   const { data } = await axios.get(buildApiUrlFromQueryKey(queryKey));
   return data as Transaction;
+}
+
+export async function fetchAsset({ queryKey }: { queryKey: QueryKey[] }): Promise<Asset> {
+  const { data } = await axios.get(buildApiUrlFromQueryKey(queryKey));
+  return data as Asset;
 }

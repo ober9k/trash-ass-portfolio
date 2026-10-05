@@ -32,12 +32,12 @@ export function buildInitialState(transaction?: TransactionData): FormState {
 }
 
 function TransactionPage() {
-  const { transaction }: TransactionLoaderProps = getRouteApi("/transactions/x/$transactionId").useLoaderData();
+  const { asset, transaction }: TransactionLoaderProps = getRouteApi("/transactions/x/$transactionId").useLoaderData();
   const navigate = useNavigate();
 
   const leftSlot = (
     <IconButton size="large" color="inherit" edge="start" aria-label="go back">
-      <Link to={"/transactions/$tokenId"} params={{ tokenId: "ADA" /* TODO: temp value */ }}>
+      <Link to={"/transactions/$tokenId"} params={{ tokenId: asset.ticker }}>
         <ArrowLeft />
       </Link>
     </IconButton>
