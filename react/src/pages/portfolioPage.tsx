@@ -3,13 +3,14 @@ import HoldingsCard from "@/components/holdings/holdingsCard";
 import NavigationBar from "@/components/layout/navigationBar.tsx";
 import PeriodToggle from "@/components/miscellaneous/periodToggle.tsx";
 import PortfolioCard from "@/components/portfolio/portfolioCard.tsx";
+import { Urls } from "@/config/urls.ts";
 import { Typography } from "@mui/material";
 import { Period } from "@shared/types/period.ts";
 import { getRouteApi, useRouter } from "@tanstack/react-router";
 
 function PortfolioPage() {
-  const { portfolio, holdings }: PortfolioLoaderProps = getRouteApi("/").useLoaderData();
-  const { period } = getRouteApi("/").useSearch();
+  const { portfolio, holdings }: PortfolioLoaderProps = getRouteApi(Urls.Portfolio).useLoaderData();
+  const { period } = getRouteApi(Urls.Portfolio).useSearch();
   const router = useRouter();
 
   const onToggle = (period: string) => {
@@ -17,7 +18,7 @@ function PortfolioPage() {
       ? { period } : { period: undefined }; /* clear it for all */
 
     router.navigate({
-      to: "/",
+      to: Urls.Portfolio,
       search: () => ({ ...search })
     });
   };

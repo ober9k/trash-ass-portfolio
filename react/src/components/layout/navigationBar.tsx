@@ -1,3 +1,4 @@
+import { Urls } from "@/config/urls.ts";
 import { AppBar, Box, IconButton, Toolbar } from "@mui/material";
 import { Link } from "@tanstack/react-router";
 import { MenuIcon, User } from "lucide-react";
@@ -14,7 +15,7 @@ function LeftSlot() {
 function RightSlot() {
   return (<>
     <IconButton size="large" color="inherit" edge="end" aria-label="user">
-      <Link to="/auth/sign-in">
+      <Link to={Urls.AuthSignIn}>
         <User />
       </Link>
     </IconButton>

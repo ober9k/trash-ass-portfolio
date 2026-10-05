@@ -1,6 +1,7 @@
 import AssetIcon from "@/components/assets/assetIcon.tsx";
 import AssetDisplay from "@/components/utils/assetDisplay.tsx";
 import CurrencyDisplay from "@/components/utils/currencyDisplay.tsx";
+import { Urls } from "@/config/urls.ts";
 import { Box, Divider, Typography } from "@mui/material";
 import type { Holding } from "@shared/types/portfolio.ts";
 import { Link } from "@tanstack/react-router";
@@ -22,7 +23,7 @@ function HoldingItem(props: Props) {
         </Box>
         <Box component="section" className="grow">
           <Typography variant="h4" component="h4" className="pb-2 text-xl">
-            <Link to={"/transactions/$tokenId"} params={{ tokenId: asset.ticker.toLowerCase() }}>
+            <Link to={Urls.Holding} params={{ holdingId: asset.ticker.toLowerCase() }}>
               {asset.name}
             </Link>
           </Typography>

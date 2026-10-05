@@ -1,4 +1,5 @@
 import NavigationBar from "@/components/layout/navigationBar.tsx";
+import { Urls } from "@/config/urls.ts";
 import { auth, signInWithGooglePopup } from "@/firebase.ts";
 import useAuthContext from "@/hooks/useAuthContext.ts";
 import { IconButton, Typography } from "@mui/material";
@@ -30,7 +31,7 @@ function SignInPage() {
 
   const leftSlot = (
     <IconButton size="large" color="inherit" edge="start" aria-label="back">
-      <Link to={"/"}>
+      <Link to={Urls.Portfolio}>
         <ArrowLeft />
       </Link>
     </IconButton>

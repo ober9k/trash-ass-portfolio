@@ -1,4 +1,5 @@
 import { portfolioLoader, rootBeforeLoader, transactionLoader, transactionsLoader } from "@/api/loaders.ts";
+import { Urls } from "@/config/urls.ts";
 import DefaultLayout from "@/layouts/defaultLayout.tsx";
 import SignInPage from "@/pages/auth/signInPage.tsx";
 import HoldingPage from "@/pages/holdings/holdingPage.tsx";
@@ -14,33 +15,33 @@ export const rootRoute = createRootRoute({
 
 const portfolioRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/',
+  path: Urls.Portfolio,
   component: PortfolioPage,
   loader: portfolioLoader,
   validateSearch: PeriodSearchSchema,
   loaderDeps: ({ search: { period } }) => ({ period }),
 });
 
-const transactionsRoute = createRoute({
+const holdingRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/transactions/$tokenId',
+  path: Urls.Holding,
   component: HoldingPage,
   loader: transactionsLoader,
   validateSearch: PeriodSearchSchema,
   loaderDeps: ({ search: { period } }) => ({ period }),
 });
 
-const signInRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/auth/sign-in',
-  component: SignInPage,
-});
-
 const transactionRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/transactions/x/$transactionId',
+  path: Urls.Transaction,
   component: TransactionPage,
   loader: transactionLoader,
 });
 
-export const routeTree = rootRoute.addChildren([portfolioRoute, transactionsRoute, signInRoute, transactionRoute]);
+const signInRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: Urls.AuthSignIn,
+  component: SignInPage,
+});
+
+export const routeTree = rootRoute.addChildren([portfolioRoute, holdingRoute, signInRoute, transactionRoute]);

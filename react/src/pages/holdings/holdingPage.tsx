@@ -4,20 +4,21 @@ import NavigationBar from "@/components/layout/navigationBar.tsx";
 import PeriodToggle from "@/components/miscellaneous/periodToggle.tsx";
 import SummaryCard from "@/components/transactions/summaryCard";
 import TransactionsCard from "@/components/transactions/transactionsCard";
+import { Urls } from "@/config/urls.ts";
 import { Box, IconButton, Typography } from "@mui/material";
 import { Period } from "@shared/types/period.ts";
 import { getRouteApi, Link, useRouter } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 
 function HoldingPage() {
-  const { holding, transactions }: HoldingLoaderProps = getRouteApi("/transactions/$tokenId").useLoaderData();
+  const { holding, transactions }: HoldingLoaderProps = getRouteApi(Urls.Holding).useLoaderData();
   const { asset } = holding;
-  const { period } = getRouteApi("/transactions/$tokenId").useSearch();
+  const { period } = getRouteApi(Urls.Holding).useSearch();
   const router = useRouter();
 
   const leftSlot = (
     <IconButton size="large" color="inherit" edge="start" aria-label="back">
-      <Link to={"/"}>
+      <Link to={Urls.Portfolio}>
         <ArrowLeft />
       </Link>
     </IconButton>
@@ -28,8 +29,8 @@ function HoldingPage() {
       ? { period } : { period: undefined }; /* clear it for all */
 
     router.navigate({
-      to: "/transactions/$tokenId",
-      params: { tokenId: holding.asset.ticker },
+      to: Urls.Holding,
+      params: { holdingId: holding.asset.ticker.toLowerCase() },
       search: () => ({ ...search })
     });
   };

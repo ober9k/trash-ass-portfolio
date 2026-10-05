@@ -1,6 +1,7 @@
 import AssetIcon from "@/components/assets/assetIcon";
 import AssetDisplay from "@/components/utils/assetDisplay.tsx";
 import CurrencyDisplay from "@/components/utils/currencyDisplay.tsx";
+import { Urls } from "@/config/urls.ts";
 import { formatDate } from "@/utils/numberUtils";
 import { Box, Divider, Typography } from "@mui/material";
 import type { Asset, Transaction } from "@shared/types/portfolio.ts";
@@ -22,7 +23,7 @@ function TransactionItem(props: Props) {
         </Box>
         <Box component="section" className="grow">
           <Typography variant="h4" component="h4" className="pb-2 text-xl">
-            <Link to="/transactions/x/$transactionId" params={{ transactionId: transaction.id }}>
+            <Link to={Urls.Transaction} params={{ holdingId: asset.ticker.toLowerCase(), transactionId: transaction.id }}>
               BUY
             </Link>
           </Typography>

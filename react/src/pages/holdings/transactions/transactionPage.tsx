@@ -1,21 +1,22 @@
 import type { TransactionLoaderProps } from "@/api/loaders";
 import { buildUpdateTransactionFn } from "@/api/mutationFunctions";
 import NavigationBar from "@/components/layout/navigationBar.tsx";
+import { Urls } from "@/config/urls.ts";
 import { buildFormAction } from "@/forms/transactions/actions";
 import { buildInitialState } from "@/forms/transactions/form.ts";
 import { IconButton, Typography } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
-import { getRouteApi, Link, useNavigate } from "@tanstack/react-router";
+import { getRouteApi, Link, useRouter } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 import { useActionState } from "react";
 
 function TransactionPage() {
-  const { asset, transaction }: TransactionLoaderProps = getRouteApi("/transactions/x/$transactionId").useLoaderData();
-  const navigate = useNavigate();
+  const { asset, transaction }: TransactionLoaderProps = getRouteApi(Urls.Transaction).useLoaderData();
+  const router = useRouter();
 
   const leftSlot = (
     <IconButton size="large" color="inherit" edge="start" aria-label="go back">
-      <Link to={"/transactions/$tokenId"} params={{ tokenId: asset.ticker }}>
+      <Link to={Urls.Holding} params={{ holdingId: asset.ticker.toLowerCase() }}>
         <ArrowLeft />
       </Link>
     </IconButton>
@@ -34,7 +35,7 @@ function TransactionPage() {
   const [ formState, formAction, isPending ] = useActionState(buildFormAction(mutation), buildInitialState(transaction));
 
   const onCancel = () => {
-    navigate({ to: "/" }); /* TODO: fix type handling for optional period value */
+    router.navigate({ to: Urls.Portfolio });
   };
 
   return (
