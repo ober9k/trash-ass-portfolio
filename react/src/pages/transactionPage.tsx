@@ -45,7 +45,7 @@ function TransactionPage() {
   const [ formState, formAction, isPending ] = useActionState(buildFormAction(mutation), buildInitialState(transaction));
 
   const onCancel = () => {
-    navigate({ to: "/", search: { period: "" } }); /* TODO: fix type handling for optional period value */
+    navigate({ to: "/" }); /* TODO: fix type handling for optional period value */
   };
 
   return (

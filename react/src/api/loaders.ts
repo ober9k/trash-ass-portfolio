@@ -1,5 +1,4 @@
 import { buildHoldingOptions, buildHoldingsQueryOptions, buildHoldingTransactionsOptions, buildPortfolioQueryOptions, buildTransactionOptions } from "@/api/queryOptions.ts";
-import { Period } from "@shared/types/period.ts";
 import type { Asset, Holding, Portfolio, Transaction } from "@shared/types/portfolio.ts";
 import type { Ticker } from "@shared/types/ticker.ts";
 
@@ -48,30 +47,4 @@ export async function transactionLoader({ context, params }: any): Promise<Trans
   return {
     transaction: await context.queryClient.query(buildTransactionOptions(params.transactionId)),
   };
-}
-
-type PeriodSearch = {
-  period?: Period,
-};
-
-export function handlePeriodSearch({ search }: PeriodSearch) {
-  return { period: search.period };
-}
-
-function isValidPeriod(period: string): period is Period {
-  return (Object.values(Period) as string[]).includes(period);
-}
-
-export function validatePeriodSearch(search: PeriodSearch) {
-  const { period } = search;
-  const result = { period: "" };
-
-  if (typeof period === "string" && isValidPeriod(period)) {
-    result.period = period;
-  }
-  else {
-    delete result.period;
-  }
-
-  return result;
 }

@@ -9,18 +9,19 @@ import { User } from "lucide-react";
 
 function PortfolioPage() {
   const { portfolio, holdings }: PortfolioLoaderProps = getRouteApi("/").useLoaderData();
+  const { period } = getRouteApi("/").useSearch();
   const router = useRouter();
 
   const rightItem = (
     <Link to={"/auth/sign-in"}><User size={20} /></Link>
   );
 
-  const onToggle = (period: Period) => {
-    const search = (period !== Period.All)
-      ? { period: period.toString() }
-      : {}; /* clear it for all */
+  const onToggle = (period: string) => {
+    const search = (period !== Period.All.toString())
+      ? { period } : { period: undefined }; /* clear it for all */
 
     router.navigate({
+      to: "/",
       search: () => ({ ...search })
     });
   };
@@ -33,7 +34,7 @@ function PortfolioPage() {
       </NavigationMenu>
       <article className="flex flex-col gap-4 p-2 m-2">
         <PortfolioCard portfolio={portfolio} />
-        <PeriodToggle onToggle={onToggle} />
+        <PeriodToggle period={period} onToggle={onToggle} />
         <HoldingsCard holdings={holdings} />
       </article>
     </article>

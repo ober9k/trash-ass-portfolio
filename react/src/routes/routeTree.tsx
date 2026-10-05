@@ -1,10 +1,10 @@
-import { handlePeriodSearch, portfolioLoader, rootBeforeLoader, transactionLoader, transactionsLoader, validatePeriodSearch } from "@/api/loaders.ts";
+import { portfolioLoader, rootBeforeLoader, transactionLoader, transactionsLoader } from "@/api/loaders.ts";
 import DefaultLayout from "@/layouts/defaultLayout.tsx";
 import SignInPage from "@/pages/auth/signInPage.tsx";
 import PortfolioPage from "@/pages/portfolioPage.tsx";
 import TransactionPage from "@/pages/transactionPage";
 import TransactionsPage from "@/pages/transactionsPage.tsx";
-import { Period } from "@shared/types/period";
+import { PeriodSearchSchema } from "@shared/schemas/search/periodSearchSchema.ts";
 import { createRootRoute, createRoute, } from "@tanstack/react-router";
 
 export const rootRoute = createRootRoute({
@@ -12,17 +12,13 @@ export const rootRoute = createRootRoute({
   beforeLoad: rootBeforeLoader,
 });
 
-const periodOptions = {
-  validateSearch: validatePeriodSearch,
-  loaderDeps: handlePeriodSearch,
-};
-
 const portfolioRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/',
   component: PortfolioPage,
   loader: portfolioLoader,
-  ...periodOptions,
+  validateSearch: PeriodSearchSchema,
+  loaderDeps: ({ search: { period } }) => ({ period }),
 });
 
 const transactionsRoute = createRoute({
@@ -30,7 +26,8 @@ const transactionsRoute = createRoute({
   path: '/transactions/$tokenId',
   component: TransactionsPage,
   loader: transactionsLoader,
-  ...periodOptions,
+  validateSearch: PeriodSearchSchema,
+  loaderDeps: ({ search: { period } }) => ({ period }),
 });
 
 const signInRoute = createRoute({

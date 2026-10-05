@@ -12,12 +12,13 @@ const periods: string[] = [
 ].map((p) => p.toString());
 
 type Props = {
+  period?: string,
   onToggle: (period: string) => void,
 }
 
 function PeriodToggle(props: Props) {
-  const { onToggle } = props;
-  const [ period, setPeriod ] = useState<string>(Period.All.toString());
+  const { period: initialPeriod, onToggle } = props;
+  const [ period, setPeriod ] = useState<string>(initialPeriod ?? Period.All.toString());
 
   const onChange = (event: MouseEvent<HTMLElement>, period: string) => {
     setPeriod(period);
