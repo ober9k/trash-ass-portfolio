@@ -2,7 +2,7 @@ type Props = {
   name?:  string,
 };
 
-function HelloDisplay(props) {
+function HelloDisplay(props: Props) {
   const { name = "World" } = props;
 
   return (
