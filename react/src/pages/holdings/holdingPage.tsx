@@ -9,7 +9,7 @@ import { Period } from "@shared/types/period.ts";
 import { getRouteApi, Link, useRouter } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 
-function TransactionsPage() {
+function HoldingPage() {
   const { holding, transactions }: HoldingLoaderProps = getRouteApi("/transactions/$tokenId").useLoaderData();
   const { asset } = holding;
   const { period } = getRouteApi("/transactions/$tokenId").useSearch();
@@ -55,4 +55,4 @@ function TransactionsPage() {
   );
 }
 
-export default TransactionsPage;
+export default HoldingPage;
