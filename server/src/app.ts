@@ -71,6 +71,5 @@ app.get("/api/me/portfolio/holdings/:ticker/transactions", async (req: Request, 
 
 app.use("/api/me/transactions", transactionsRoutes);
 app.use("/api/seed", seedRoutes);
-});
 
 export default app;
