@@ -1,10 +1,13 @@
 import type { TransactionLoaderProps } from "@/api/loaders";
 import { buildUpdateTransactionFn } from "@/api/mutationFunctions";
+import FormTextField, { type FormTextFieldState } from "@/components/forms/formTextField.tsx";
 import NavigationBar from "@/components/layout/navigationBar.tsx";
+import AltCardHeader from "@/components/miscellaneous/altCardHeader.tsx";
 import { Urls } from "@/config/urls.ts";
 import { buildFormAction } from "@/forms/transactions/actions";
 import { buildInitialState } from "@/forms/transactions/form.ts";
-import { IconButton, Typography } from "@mui/material";
+import { Box, Card, CardActions, CardContent, Divider, IconButton, Typography } from "@mui/material";
+import Button from '@mui/material/Button';
 import { useMutation } from "@tanstack/react-query";
 import { getRouteApi, Link, useRouter } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
@@ -35,64 +38,73 @@ function TransactionPage() {
   const [ formState, formAction, isPending ] = useActionState(buildFormAction(mutation), buildInitialState(transaction));
 
   const onCancel = () => {
-    router.navigate({ to: Urls.Portfolio });
+    router.navigate({ to: Urls.Holding, params: { holdingId: asset.ticker.toLowerCase() } });
+  };
+
+  const { formErrors, fieldValues, fieldErrors } = formState;
+
+  const priceFieldState: FormTextFieldState = {
+    name:     "price",
+    type:     "text",
+    label:    "Price",
+    required: true,
+    value:    fieldValues.price.toString(),
+    errors:   fieldErrors.price || [],
+  };
+
+  const quantityFieldState: FormTextFieldState = {
+    name:     "quantity",
+    type:     "text",
+    label:    "Quantity",
+    required: true,
+    value:    fieldValues.quantity.toString(),
+    errors:   fieldErrors.quantity || [],
+  };
+
+  const feeFieldState: FormTextFieldState = {
+    name:     "fee",
+    type:     "text",
+    label:    "Fee",
+    required: true,
+    value:    fieldValues.fee.toString(),
+    errors:   fieldErrors.fee || [],
+  };
+
+  const valueFieldState: FormTextFieldState = {
+    name:     "value",
+    type:     "text",
+    label:    "Value",
+    required: true,
+    value:    fieldValues.value.toString(),
+    errors:   fieldErrors.value || [],
   };
 
   return (
     <>
-      <article>
+      <article style={{ backgroundColor: "#121212" }} className="h-dvh">
         <NavigationBar leftSlot={leftSlot}>
           <Typography variant="h4" component="h4" className="text-lg">
             Update Transaction
           </Typography>
         </NavigationBar>
-        <form action={formAction} noValidate>
-          <div className="p-4 m-4">
-            <h1>Transaction Details</h1>
-            <hr className="my-4" />
-            <p>
-              <strong>ID:</strong> {transaction.id}<br />
-              <strong>Price:</strong> {transaction.price}<br />
-              <strong>Quantity:</strong> {transaction.quantity}<br />
-              <strong>Fee:</strong> {transaction.fee}<br />
-              <strong>Value:</strong> {transaction.value}<br />
-              <strong>Purchased At:</strong> {transaction.purchasedAt.toString()}<br />
-            </p>
-          </div>
-          <div className="p-4 m-4">
-            <h1>Update Transaction</h1>
-            <hr className="my-4" />
-            <p>
-              <label htmlFor="price" className="font-medium block">Price:</label>
-              <input type="text" id="price" name="price" defaultValue={formState.fieldValues.price} required className="my-1 p-1 border w-full" />
-              {formState.fieldErrors.price && <span className="text-red-500">{formState.fieldErrors.price}</span>}
-            </p>
-            <p>
-              <label htmlFor="quantity" className="font-medium block">Quantity:</label>
-              <input type="text" id="quantity" name="quantity" defaultValue={formState.fieldValues.quantity} required className="my-1 p-1 border w-full" />
-              {formState.fieldErrors.quantity && <span className="text-red-500">{formState.fieldErrors.quantity}</span>}
-            </p>
-            <p>
-              <label htmlFor="fee" className="font-medium block">Fee:</label>
-              <input type="text" id="fee" name="fee" defaultValue={formState.fieldValues.fee} required className="my-1 p-1 border w-full" />
-              {formState.fieldErrors.fee && <span className="text-red-500">{formState.fieldErrors.fee}</span>}
-            </p>
-            <p>
-              <label htmlFor="value" className="font-medium block">Value:</label>
-              <input type="text" id="value" name="value" defaultValue={formState.fieldValues.value} required className="my-1 p-1 border w-full" />
-              {formState.fieldErrors.value && <span className="text-red-500">{formState.fieldErrors.value}</span>}
-            </p>
-            <hr className="my-4" />
-            <p className="flex flex-row gap-2">
-              <button type="button" disabled={isPending} className="my-1 p-1 border" onClick={onCancel}>
-                Cancel
-              </button>
-              <button type="submit" disabled={isPending} className="my-1 p-1 border">
-                Update
-              </button>
-            </p>
-          </div>
-        </form>
+        <article className="flex flex-col gap-4 p-2 m-2">
+          <Box component="form" action={formAction} noValidate>
+            <Card>
+              <AltCardHeader title={"Transaction Details"} />
+              <CardContent className="flex flex-col gap-4">
+                <FormTextField fieldState={priceFieldState} />
+                <FormTextField fieldState={quantityFieldState} />
+                <FormTextField fieldState={feeFieldState} />
+                <FormTextField fieldState={valueFieldState} />
+              </CardContent>
+              <Divider />
+              <CardActions className="flex flex-row gap-2 justify-center p-4">
+                <Button type="button" disabled={isPending} onClick={onCancel} size="small" variant="outlined">Cancel</Button>
+                <Button type="submit" disabled={isPending} size="small" variant="contained">Update</Button>
+              </CardActions>
+            </Card>
+          </Box>
+        </article>
       </article>
     </>
   );
