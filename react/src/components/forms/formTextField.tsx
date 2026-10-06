@@ -1,5 +1,5 @@
 import FormErrors from "@/components/forms/formErrors.tsx";
-import { FormControl, TextField } from "@mui/material";
+import { FormControl, FormControlLabel, FormLabel, TextField } from "@mui/material";
 
 export type FormTextFieldState = {
   name:      string,
@@ -19,7 +19,8 @@ function FormTextField(props: Props) {
 
   return (<>
     <FormControl fullWidth={true}>
-      <TextField id={name} name={name} type={type} label={label} required={required} defaultValue={value} size="small" variant="outlined" />
+      <FormLabel id={name + "-label"} htmlFor={name} required={required} className="p-3">{label}</FormLabel>
+      <TextField id={name} name={name} type={type} required={required} defaultValue={value} />
       <FormErrors errors={errors} />
     </FormControl>
   </>)

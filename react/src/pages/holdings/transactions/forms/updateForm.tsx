@@ -1,3 +1,5 @@
+import FormRadioField from "@/components/forms/formRadioField.tsx";
+import type { FormRadioFieldState } from "@/components/forms/formRadioField.tsx";
 import FormTextField, { type FormTextFieldState } from "@/components/forms/formTextField.tsx";
 import AltCardHeader from "@/components/miscellaneous/altCardHeader.tsx";
 import type { FormState } from "@/types/formState.ts";
@@ -15,6 +17,18 @@ type Props = {
 function UpdateForm(props: Props) {
   const { formState, formAction, isPending, onCancel } = props;
   const { formErrors, fieldValues, fieldErrors } = formState;
+
+  const transactionTypeFieldState: FormRadioFieldState = {
+    name:     "transactionType",
+    label:    "Transaction Type",
+    required: true,
+    value:    "option1",
+    options:  [
+      { label: "Option1", value: "option1" },
+      { label: "Option2", value: "option2" },
+    ],
+    errors:   fieldErrors.price || [],
+  };
 
   const priceFieldState: FormTextFieldState = {
     name:     "price",
@@ -56,14 +70,15 @@ function UpdateForm(props: Props) {
     <Box component="form" action={formAction} noValidate>
       <Card>
         <AltCardHeader title={"Transaction Details"} />
-        <Divider className={"p-2 mb-2"} />
-        <CardContent className="flex flex-col gap-8">
+        <Divider className={"py-2"} />
+        <CardContent className="flex flex-col gap-3">
+          <FormRadioField fieldState={transactionTypeFieldState} />
           <FormTextField fieldState={priceFieldState} />
           <FormTextField fieldState={quantityFieldState} />
           <FormTextField fieldState={feeFieldState} />
           <FormTextField fieldState={valueFieldState} />
         </CardContent>
-        <Divider />
+        <Divider className={"py-2"} />
         <CardActions className="flex flex-row gap-2 justify-center p-4">
           <Button type="button" disabled={isPending} onClick={onCancel} size="small" variant="outlined">Cancel</Button>
           <Button type="submit" disabled={isPending} size="small" variant="contained">Update</Button>
