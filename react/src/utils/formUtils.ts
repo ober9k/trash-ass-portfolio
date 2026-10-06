@@ -40,13 +40,54 @@ export function onUnexpectedError(fieldValues: any) {
 }
 
 /**
- * Helpers for using formData from useActionState.
- * @param formData 
- * @param key 
- * @returns 
+ * Helper for handling string values from `formData`.
  */
 export function getValue(formData: FormData, key: string): string | undefined {
-  return formData.get(key)?.toString() ?? undefined; /* TODO: revisit strict/null checks for formData */
+  return formData.get(key)?.toString(); /* TODO: revisit strict/null checks for formData */
+}
+
+/**
+ * Helper for handling int values from `formData`.
+ * TODO: reduce duplication
+ */
+export function getIntValue(formData: FormData, key: string): number | undefined {
+  if (formData.has(key)) {
+    const value = formData.get(key);
+
+    if (value === "" || typeof value !== "string") {
+      return undefined;
+    }
+
+    const parsed = parseInt(value);
+
+    return (!Number.isNaN(parsed))
+      ? parsed
+      : undefined;
+  }
+
+  return undefined;
+}
+
+/**
+ * Helper for handling float values from `formData`.
+ * TODO: reduce duplication
+ */
+export function getFloatValue(formData: FormData, key: string): number | undefined {
+  if (formData.has(key)) {
+    const value = formData.get(key);
+
+    if (value === "" || typeof value !== "string") {
+      return undefined;
+    }
+
+    const parsed = parseFloat(value);
+
+    return (!Number.isNaN(parsed))
+      ? parsed
+      : undefined;
+  }
+
+  return undefined;
 }
 
 /**
