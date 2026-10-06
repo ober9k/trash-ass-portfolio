@@ -59,7 +59,6 @@ export async function addTransaction(data: any): Promise<DbTransaction> {
     fee:         data.fee,
     total:       data.value, /* fix conflict */
     // purchasedAt: data.purchasedAt.toIsoString(),
-    purchasedAt: FieldValue.serverTimestamp(),
     createdAt:   FieldValue.serverTimestamp(),
     updatedAt:   FieldValue.serverTimestamp(),
   });
@@ -75,7 +74,6 @@ export async function updateTransactionById(id: string, data: any): Promise<DbTr
     fee:         data.fee,
     total:       data.value, /* fix conflict */
     // purchasedAt: data.purchasedAt.toIsoString(),
-    purchasedAt: FieldValue.serverTimestamp(),
     updatedAt:   FieldValue.serverTimestamp(),
   }, { merge: true });
 
