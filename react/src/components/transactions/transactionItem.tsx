@@ -24,7 +24,7 @@ function TransactionItem(props: Props) {
         <Box component="section" className="grow">
           <Typography variant="h4" component="h4" className="pb-2 text-xl">
             <Link to={Urls.Transaction} params={{ holdingId: asset.ticker.toLowerCase(), transactionId: transaction.id }}>
-              BUY
+              {transaction.type ? transaction.type.toUpperCase() : "BUY"}
             </Link>
           </Typography>
           <Typography variant="h6" component="h6" className="text-sm">

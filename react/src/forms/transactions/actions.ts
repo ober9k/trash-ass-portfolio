@@ -8,6 +8,7 @@ export const buildFormAction = (mutation) => {
   return async (formState: FormState<TransactionData>, formData: FormData) => {
 
     const fieldValues = {
+      type:     getValue(formData, "type"),
       price:    parseFloat(getValue(formData, "price")),
       quantity: parseFloat(getValue(formData, "quantity")),
       fee:      parseFloat(getValue(formData, "fee")),

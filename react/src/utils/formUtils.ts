@@ -45,8 +45,8 @@ export function onUnexpectedError(fieldValues: any) {
  * @param key 
  * @returns 
  */
-export function getValue(formData: FormData, key: string): string {
-  return formData.get(key)!.toString(); /* TODO: revisit strict/null checks for formData */
+export function getValue(formData: FormData, key: string): string | undefined {
+  return formData.get(key)?.toString() ?? undefined; /* TODO: revisit strict/null checks for formData */
 }
 
 /**

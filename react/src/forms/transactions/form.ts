@@ -7,11 +7,13 @@ import type { TransactionData } from "@shared/schemas/transactionSchema.ts";
 export function buildInitialState(transaction?: TransactionData): FormState<TransactionData> {
   const fieldValues = (transaction)
     ? {
+      type:     transaction.type,
       price:    transaction.price,
       quantity: transaction.quantity,
       fee:      transaction.fee,
       value:    transaction.value,
     } : {
+      type:     undefined,
       price:    0,
       quantity: 0,
       fee:      0,

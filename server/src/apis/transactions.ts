@@ -10,6 +10,7 @@ function toTransaction(doc): DbTransaction {
   return {
     id:          doc.id,
     assetId:     doc.data().assetId, /* used for grouping */
+    type:        doc.data().type ?? undefined,
     price:       doc.data().price,
     quantity:    doc.data().quantity,
     fee:         doc.data().fee,
@@ -54,6 +55,7 @@ export async function fetchTransactionById(transactionId: string): Promise<DbTra
 export async function addTransaction(data: any): Promise<DbTransaction> {
   const ref = getCollection();
   const res = await ref.add({
+    type:        data.type,
     price:       data.price,
     quantity:    data.quantity,
     fee:         data.fee,
@@ -69,6 +71,7 @@ export async function addTransaction(data: any): Promise<DbTransaction> {
 export async function updateTransactionById(id: string, data: any): Promise<DbTransaction> {
   const ref = getCollection().doc(id);
   await ref.set({
+    type:        data.type,
     price:       data.price,
     quantity:    data.quantity,
     fee:         data.fee,

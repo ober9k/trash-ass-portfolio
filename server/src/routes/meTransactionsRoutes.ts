@@ -24,10 +24,10 @@ router.get("/:transactionId", [transactionIdValidationHandler()], async (req: Re
  */
 router.put("/:transactionId", [transactionIdValidationHandler(), transactionSchemaValidationHandler()], async (req: Request, res: Response) => {
   const transactionId = req.params["transactionId"] as string;
-  const { price, quantity, fee, value } = req.body;
+  const { type, price, quantity, fee, value } = req.body;
 
   return res.status(StatusCodes.OK).json(
-    await updateTransactionById(transactionId, { price, quantity, fee, value }),
+    await updateTransactionById(transactionId, { type, price, quantity, fee, value }),
   );
 });
 

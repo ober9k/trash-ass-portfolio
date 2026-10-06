@@ -28,6 +28,7 @@ export type Summary = {
 
 export type Transaction = {
   id:           string,
+  type:         string | undefined, /* TODO: pending enforced value */
   price:        number,
   quantity:     number,
   fee:          number,

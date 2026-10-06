@@ -1,5 +1,5 @@
-import FormRadioField from "@/components/forms/formRadioField.tsx";
 import type { FormRadioFieldState } from "@/components/forms/formRadioField.tsx";
+import FormRadioField from "@/components/forms/formRadioField.tsx";
 import FormTextField, { type FormTextFieldState } from "@/components/forms/formTextField.tsx";
 import AltCardHeader from "@/components/miscellaneous/altCardHeader.tsx";
 import type { FormState } from "@/types/formState.ts";
@@ -18,16 +18,18 @@ function UpdateForm(props: Props) {
   const { formState, formAction, isPending, onCancel } = props;
   const { formErrors, fieldValues, fieldErrors } = formState;
 
-  const transactionTypeFieldState: FormRadioFieldState = {
-    name:     "transactionType",
-    label:    "Transaction Type",
+  const typeFieldState: FormRadioFieldState = {
+    name:     "type",
+    label:    "Type",
     required: true,
-    value:    "option1",
+    value:    fieldValues.type ? fieldValues.type.toString() : undefined,
     options:  [
-      { label: "Option1", value: "option1" },
-      { label: "Option2", value: "option2" },
+      { label: "Buy",      value: "buy" },
+      { label: "Sell",     value: "sell" },
+      { label: "Yield",    value: "yield" },
+      { label: "Transfer", value: "transfer" },
     ],
-    errors:   fieldErrors.price || [],
+    errors:   fieldErrors.type || [],
   };
 
   const priceFieldState: FormTextFieldState = {
@@ -72,7 +74,7 @@ function UpdateForm(props: Props) {
         <AltCardHeader title={"Transaction Details"} />
         <Divider className={"py-2"} />
         <CardContent className="flex flex-col gap-3">
-          <FormRadioField fieldState={transactionTypeFieldState} />
+          <FormRadioField fieldState={typeFieldState} />
           <FormTextField fieldState={priceFieldState} />
           <FormTextField fieldState={quantityFieldState} />
           <FormTextField fieldState={feeFieldState} />

@@ -1,14 +1,7 @@
-export const TransactionType = {
-  Buy:      "buy",
-  Sell:     "sell",
-  Transfer: "transfer",
-}
-
-export type TransactionType = typeof TransactionType[keyof typeof TransactionType];
-
 export type DbTransaction = {
   id:          string,
   assetId:     string,
+  type:        string | undefined, /* TODO: enforce value (optional value for now) */
   price:       number,
   quantity:    number,
   fee:         number,
