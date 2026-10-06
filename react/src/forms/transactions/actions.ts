@@ -1,5 +1,5 @@
 import type { FormState } from "@/types/formState.ts";
-import { getValue, onFieldError, onFormError, onSuccess, onUnexpectedError } from "@/utils/formUtils";
+import { getFloatValue, getValue, onFieldError, onFormError, onSuccess, onUnexpectedError } from "@/utils/formUtils";
 import { type TransactionData, TransactionSchema } from "@shared/schemas/transactionSchema";
 import axios from "axios";
 import { z } from "zod";
@@ -9,11 +9,13 @@ export const buildFormAction = (mutation) => {
 
     const fieldValues = {
       type:     getValue(formData, "type"),
-      price:    parseFloat(getValue(formData, "price")),
-      quantity: parseFloat(getValue(formData, "quantity")),
-      fee:      parseFloat(getValue(formData, "fee")),
-      value:    parseFloat(getValue(formData, "value")),
+      price:    getFloatValue(formData, "price"),
+      quantity: getFloatValue(formData, "quantity"),
+      fee:      getFloatValue(formData, "fee"),
+      value:    getFloatValue(formData, "value"),
     };
+
+    console.log("fieldValues", getFloatValue(formData, "price"));
 
     try {
       const data: TransactionData = { ... fieldValues };

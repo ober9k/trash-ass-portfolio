@@ -22,7 +22,7 @@ function UpdateForm(props: Props) {
     name:     "type",
     label:    "Type",
     required: true,
-    value:    fieldValues.type ? fieldValues.type.toString() : undefined,
+    value:    fieldValues.type?.toString(),
     options:  [
       { label: "Buy",      value: "buy" },
       { label: "Sell",     value: "sell" },
@@ -37,7 +37,7 @@ function UpdateForm(props: Props) {
     type:     "text",
     label:    "Price",
     required: true,
-    value:    fieldValues.price.toString(),
+    value:    fieldValues.price?.toString(),
     errors:   fieldErrors.price || [],
   };
 
@@ -46,7 +46,7 @@ function UpdateForm(props: Props) {
     type:     "text",
     label:    "Quantity",
     required: true,
-    value:    fieldValues.quantity.toString(),
+    value:    fieldValues.quantity?.toString(),
     errors:   fieldErrors.quantity || [],
   };
 
@@ -55,7 +55,7 @@ function UpdateForm(props: Props) {
     type:     "text",
     label:    "Fee",
     required: true,
-    value:    fieldValues.fee.toString(),
+    value:    fieldValues.fee?.toString(),
     errors:   fieldErrors.fee || [],
   };
 
@@ -64,7 +64,7 @@ function UpdateForm(props: Props) {
     type:     "text",
     label:    "Value",
     required: true,
-    value:    fieldValues.value.toString(),
+    value:    fieldValues.value?.toString(),
     errors:   fieldErrors.value || [],
   };
 
