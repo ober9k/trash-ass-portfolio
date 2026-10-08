@@ -5,10 +5,10 @@ import PeriodToggle from "@/components/miscellaneous/periodToggle.tsx";
 import SummaryCard from "@/components/transactions/summaryCard";
 import TransactionsCard from "@/components/transactions/transactionsCard";
 import { Urls } from "@/config/urls.ts";
-import { Box, IconButton, Typography } from "@mui/material";
+import { Box, Fab, IconButton, Typography } from "@mui/material";
 import { Period } from "@shared/types/period.ts";
 import { getRouteApi, Link, useRouter } from "@tanstack/react-router";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, PlusIcon } from "lucide-react";
 
 function HoldingPage() {
   const { holding, transactions }: HoldingLoaderProps = getRouteApi(Urls.Holding).useLoaderData();
@@ -51,6 +51,11 @@ function HoldingPage() {
         <PeriodToggle period={period} onToggle={onToggle} />
         <TransactionsCard asset={asset} transactions={transactions} />
       </article>
+      <Fab color="primary" aria-label="add" className="fixed right-8 bottom-8">
+        <Link to={Urls.TransactionAdd} params={{ holdingId: asset.ticker.toLowerCase() /* TODO: change to assetId */ }}>
+          <PlusIcon />
+        </Link>
+      </Fab>
     </article>
     </>
   );
