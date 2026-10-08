@@ -30,7 +30,7 @@ function HoldingPage() {
 
     router.navigate({
       to: Urls.Holding,
-      params: { holdingId: holding.asset.ticker.toLowerCase() },
+      params: { holdingId: holding.asset.id },
       search: () => ({ ...search })
     });
   };
@@ -52,7 +52,7 @@ function HoldingPage() {
         <TransactionsCard asset={asset} transactions={transactions} />
       </article>
       <Fab color="primary" aria-label="add" className="fixed right-8 bottom-8">
-        <Link to={Urls.TransactionAdd} params={{ holdingId: asset.ticker.toLowerCase() /* TODO: change to assetId */ }}>
+        <Link to={Urls.TransactionAdd} params={{ holdingId: asset.id }}>
           <PlusIcon />
         </Link>
       </Fab>

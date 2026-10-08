@@ -17,7 +17,7 @@ function TransactionAddPage() {
 
   const leftSlot = (
     <IconButton size="large" color="inherit" edge="start" aria-label="go back">
-      <Link to={Urls.Holding} params={{ holdingId: asset.ticker.toLowerCase() }}>
+      <Link to={Urls.Holding} params={{ holdingId: asset.id }}>
         <ArrowLeft />
       </Link>
     </IconButton>
@@ -36,7 +36,7 @@ function TransactionAddPage() {
   const [ formState, formAction, isPending ] = useActionState(buildFormAction(mutation), buildInitialState());
 
   const onCancel = () => {
-    router.navigate({ to: Urls.Holding, params: { holdingId: asset.ticker.toLowerCase() } });
+    router.navigate({ to: Urls.Holding, params: { holdingId: asset.id } });
   };
 
   return (

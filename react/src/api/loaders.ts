@@ -48,8 +48,10 @@ export async function transactionsLoader({ context, params, deps }: any): Promis
 }
 
 export async function transactionAddLoader({ context, params }: any): Promise<TransactionAddLoaderProps> {
+  const holdingId = params.holdingId;
+
   return {
-    asset: await context.queryClient.query(buildAssetByTickerQueryOptions(params.holdingId)),
+    asset: await context.queryClient.query(buildAssetQueryOptions(holdingId)),
   };
 }
 
