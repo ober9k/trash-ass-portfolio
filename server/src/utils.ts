@@ -1,5 +1,6 @@
+import type { DbAsset } from "@shared/types/db/dbAsset";
+import type { DbSummary } from "@shared/types/db/dbSummary";
 import type { DbTransaction } from "@shared/types/db/dbTransaction";
-import { Period } from "@shared/types/period";
 import type { Asset, Holding, Portfolio } from "@shared/types/portfolio";
 
 export function buildPlaceholderMessage(message: string) {
@@ -14,13 +15,17 @@ export function buildEmptyPortfolio(): Portfolio {
   };
 }
 
-export function buildEmptyHolding(asset: Asset): Holding {
+export function buildBaseHoldingFromAssetAndSummary(dbAsset: DbAsset, dbSummary: DbSummary): Holding {
+  const asset = {
+    ...dbAsset,
+  };
+
   const summary = {
-    quantity:     0,
-    fee:          0,
-    initialValue: 0,
-    currentValue: 0,
-    averagePrice: 0,
+    quantity:     dbSummary.quantity,
+    fee:          dbSummary.fee,
+    initialValue: dbSummary.initialValue,
+    currentValue: dbSummary.initialValue,
+    averagePrice: dbSummary.quantity / dbSummary.initialValue,
   };
 
   return { asset, summary };

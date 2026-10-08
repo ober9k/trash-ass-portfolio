@@ -1,8 +1,7 @@
-import { fetchAssetById } from "@/apis/assets";
-import { getSummaryByAccountIdAndAssetId as fetchHoldingByAccountIdAndAssetId } from "@/apis/summaries";
 import { fetchTransactionsByAccountIdAndAssetId } from "@/apis/transactions";
 import { holdingIdValidationHandler } from "@/middlewares/validators/idValidators";
-import { Router, type Request, type Response } from "express";
+import { getHoldingByAccountIdAndAssetId } from "@/services";
+import { type Request, type Response, Router } from "express";
 import { StatusCodes } from "http-status-codes";
 
 const router = Router();
@@ -13,15 +12,12 @@ router.get("/:holdingId", [holdingIdValidationHandler()], async (req: Request, r
   const accountId = ""; /* TODO: provide `accountId` */
   const assetId = req.params["holdingId"] as string; /* mapped to `assetId` */
 
-  const asset = await fetchAssetById(assetId);
-  const summary = await fetchHoldingByAccountIdAndAssetId(accountId, assetId);
-
-  return res.status(StatusCodes.OK).json({
-    asset, summary
-  });
+  return res.status(StatusCodes.OK).json(
+    await getHoldingByAccountIdAndAssetId(accountId, assetId)
+  );
 });
 
-router.get("/:holdingId/transactions", async (req: Request, res: Response) => {
+router.get("/:holdingId/transactions", [holdingIdValidationHandler()], async (req: Request, res: Response) => {
   const accountId = ""; /* TODO: provide `accountId` */
   const assetId = req.params["holdingId"] as string; /* mapped to `assetId` */
 

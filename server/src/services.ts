@@ -1,8 +1,8 @@
-import { fetchAssetByTicker, fetchAssetsByIds } from "@/apis/assets";
+import { fetchAssetById, fetchAssetByTicker, fetchAssetsByIds } from "@/apis/assets";
 import { getHistoricPrices, getLatestPrices, getPrices, getQuote } from "@/apis/prices";
-import { fetchSummaries, fetchSummaryByApiId, fetchSummaryByAssetId } from "@/apis/summaries";
+import { fetchSummaries, fetchSummaryByAssetId } from "@/apis/summaries";
 import { fetchTransactionsByAssetId } from "@/apis/transactions";
-import { buildEmptyHolding, buildEmptyPortfolio } from "@/utils";
+import { buildBaseHoldingFromAssetAndSummary, buildEmptyPortfolio } from "@/utils";
 import { Firestore } from "@google-cloud/firestore";
 import { Period } from "@shared/types/period";
 import type { Holding, Portfolio, Transaction } from "@shared/types/portfolio";
@@ -80,11 +80,9 @@ export async function getHoldings(period: Period): Promise<Holding[]> {
     const latestQuotedAsset = latestPrices.find((p) => p.apiId === a.apiId);
     const historicQuotedAsset = historicPrices.find((p) => p.apiId === a.apiId);
 
-    const holding = buildEmptyHolding(a);
-    holding.summary.currentValue = s.quantity * latestQuotedAsset.quote.price;
+    const holding = buildBaseHoldingFromAssetAndSummary(a, s);
     holding.summary.initialValue = historicQuotedAsset ? s.quantity * historicQuotedAsset.quote.price : s.initialValue;
-    holding.summary.fee = s.fee;
-    holding.summary.quantity = s.quantity;
+    holding.summary.currentValue = s.quantity * latestQuotedAsset.quote.price;
 
     holdings.push(holding);
   }
@@ -98,20 +96,15 @@ export async function getHoldings(period: Period): Promise<Holding[]> {
 
 /**
  * Retrieve holding asset/summary based on the provided ticker.
- * @param ticker
  */
-export async function getHoldingByTicker(ticker: string): Promise<Holding> {
-  const asset   = await fetchAssetByTicker(ticker);
+export async function getHoldingByAccountIdAndAssetId(accountId: string, assetId: string): Promise<Holding> {
+  const asset   = await fetchAssetById(assetId);
   const summary = await fetchSummaryByAssetId(asset.id);
   const latestPrices = await getLatestPrices([asset.apiId]);
   const latestQuotedAsset = latestPrices.find((p) => p.apiId === asset.apiId);
 
-  const holding = buildEmptyHolding(asset);
-  holding.summary.quantity = summary.quantity;
-  holding.summary.fee = summary.fee;
-  holding.summary.initialValue = summary.initialValue;
+  const holding = buildBaseHoldingFromAssetAndSummary(asset, summary);
   holding.summary.currentValue = summary.quantity * latestQuotedAsset.quote.price;
-  holding.summary.averagePrice = summary.initialValue / summary.quantity;
 
   return holding;
 }

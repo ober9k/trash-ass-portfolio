@@ -2,17 +2,13 @@ import { getHistoricPrices, getLatestPrices } from "@/apis/prices";
 import { seedRoutes } from "@/helpers/seedRoutes";
 import { assetsRoutes } from "@/routes/assetsRoutes";
 import { meTransactionsRoutes } from "@/routes/meTransactionsRoutes";
-import { getHoldingByTicker, getHoldings, getHoldingTransactionsByTicker, getPortfolio } from "@/services";
-import type { Currency } from "@shared/types/currency";
+import { getHoldings, getPortfolio } from "@/services";
 import { Period } from "@shared/types/period";
-import type { Asset } from "@shared/types/portfolio";
 import cors from "cors";
 import express, { type Express, type Request, type Response } from "express";
-import { mapQuotedAsset } from "../utils/apiUtils";
 import { StatusCodes } from "http-status-codes";
-import { addTransaction } from "./apis/transactions";
-import { transactionSchemaValidationHandler } from "./middlewares/validators/schemaValidators";
 import { fetchAssetByTicker } from "./apis/assets";
+import { transactionSchemaValidationHandler } from "./middlewares/validators/schemaValidators";
 import { holdingsRoutes } from "./routes/holdingsRoutes";
 
 const app: Express = express();
@@ -48,18 +44,6 @@ app.get("/api/me/portfolio/holdings", async (req: Request, res: Response) => {
 
   res.status(200).json(
     await getHoldings(period as Period),
-  );
-});
-
-/**
- * List all of current user's holdings by ticker.
- */
-app.get("/api/me/portfolio/holdings/:ticker", async (req: Request, res: Response) => {
-  /* validate tokenId/symbol */
-  const ticker = req.params.ticker as string;
-
-  res.status(200).json(
-    await getHoldingByTicker(ticker),
   );
 });
 

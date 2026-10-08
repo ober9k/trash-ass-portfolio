@@ -77,7 +77,7 @@ export async function updateSummary(id: string, data: any): Promise<DbSummary> {
   return toSummary(await ref.get());
 }
 
-export async function getSummaryByAccountIdAndAssetId(accountId: string, assetId: string): Promise<DbSummary> {
+export async function fetchSummaryByAccountIdAndAssetId(accountId: string, assetId: string): Promise<DbSummary> {
   const ref = getCollection()
     // .where("accountId", "==", accountId)
     .where("assetId", "==", assetId)
