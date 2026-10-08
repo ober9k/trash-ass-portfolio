@@ -2,6 +2,7 @@ import { portfolioLoader, rootBeforeLoader, transactionAddLoader, transactionsLo
 import { Urls } from "@/config/urls.ts";
 import DefaultLayout from "@/layouts/defaultLayout.tsx";
 import SignInPage from "@/pages/auth/signInPage.tsx";
+import NotFoundPage from "@/pages/errors/notFoundPage.tsx";
 import HoldingPage from "@/pages/holdings/holdingPage.tsx";
 import TransactionAddPage from "@/pages/holdings/transactions/transactionAddPage";
 import TransactionUpdatePage from "@/pages/holdings/transactions/transactionUpdatePage";
@@ -12,6 +13,7 @@ import { createRootRoute, createRoute, } from "@tanstack/react-router";
 export const rootRoute = createRootRoute({
   component: DefaultLayout,
   beforeLoad: rootBeforeLoader,
+  notFoundComponent: NotFoundPage,
 });
 
 const portfolioRoute = createRoute({
