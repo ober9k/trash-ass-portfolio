@@ -25,18 +25,18 @@ function PortfolioPage() {
 
   return (
     <>
-    <article style={{ backgroundColor: "#121212" }}>
-      <NavigationBar>
-        <Typography variant="h4" component="h4" className="text-lg">
-          My Portfolio
-        </Typography>
-      </NavigationBar>
-      <article className="flex flex-col gap-4 p-2 m-2">
-        <PortfolioCard portfolio={portfolio} />
-        <PeriodToggle period={period} onToggle={onToggle} />
-        <HoldingsCard holdings={holdings} />
+      <article className="h-full min-h-screen bg-[#121212] pb-1">
+        <NavigationBar>
+          <Typography variant="h4" component="h4" className="text-lg">
+            My Portfolio
+          </Typography>
+        </NavigationBar>
+        <article className="flex flex-col gap-4 p-2 m-2">
+          <PortfolioCard portfolio={portfolio} />
+          <PeriodToggle period={period} onToggle={onToggle} />
+          <HoldingsCard holdings={holdings} />
+        </article>
       </article>
-    </article>
     </>
   );
 }

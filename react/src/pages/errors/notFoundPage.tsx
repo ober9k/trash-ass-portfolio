@@ -17,7 +17,7 @@ function NotFoundPage() {
 
   return (
     <>
-      <article className="h-screen bg-[#121212]">
+      <article className="h-full min-h-screen bg-[#121212] pb-1">
         <NavigationBar leftSlot={leftSlot}>
           <Typography variant="h4" component="h4" className="text-lg">
             Error

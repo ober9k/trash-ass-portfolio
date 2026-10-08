@@ -37,7 +37,7 @@ function HoldingPage() {
 
   return (
     <>
-    <article style={{ backgroundColor: "#121212" }} className="h-dvh">
+    <article className="h-full min-h-screen bg-[#121212] pb-1">
       <NavigationBar leftSlot={leftSlot}>
         <Box className="mt-0.5 mr-1.5">
           <AssetIcon asset={asset} size="sm" />

@@ -41,7 +41,7 @@ function TransactionUpdatePage() {
 
   return (
     <>
-      <article style={{ backgroundColor: "#121212" }} className="h-dvh">
+      <article className="h-full min-h-screen bg-[#121212] pb-1">
         <NavigationBar leftSlot={leftSlot}>
           <Typography variant="h4" component="h4" className="text-lg">
             Update Transaction
