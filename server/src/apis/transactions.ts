@@ -55,12 +55,15 @@ export async function fetchTransactionById(transactionId: string): Promise<DbTra
 export async function addTransaction(data: any): Promise<DbTransaction> {
   const ref = getCollection();
   const res = await ref.add({
+    accountId:   data.accountId,
+    assetId:     data.assetId,
     type:        data.type,
     price:       data.price,
     quantity:    data.quantity,
     fee:         data.fee,
     total:       data.value, /* fix conflict */
     // purchasedAt: data.purchasedAt.toIsoString(),
+    purchasedAt: FieldValue.serverTimestamp(),
     createdAt:   FieldValue.serverTimestamp(),
     updatedAt:   FieldValue.serverTimestamp(),
   });

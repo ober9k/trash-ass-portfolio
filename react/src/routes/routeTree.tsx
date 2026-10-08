@@ -1,9 +1,10 @@
-import { portfolioLoader, rootBeforeLoader, transactionLoader, transactionsLoader } from "@/api/loaders.ts";
+import { portfolioLoader, rootBeforeLoader, transactionAddLoader, transactionsLoader, transactionUpdateLoader } from "@/api/loaders.ts";
 import { Urls } from "@/config/urls.ts";
 import DefaultLayout from "@/layouts/defaultLayout.tsx";
 import SignInPage from "@/pages/auth/signInPage.tsx";
 import HoldingPage from "@/pages/holdings/holdingPage.tsx";
-import TransactionPage from "@/pages/holdings/transactions/transactionPage";
+import TransactionAddPage from "@/pages/holdings/transactions/transactionAddPage";
+import TransactionUpdatePage from "@/pages/holdings/transactions/transactionUpdatePage";
 import PortfolioPage from "@/pages/portfolioPage.tsx";
 import { PeriodSearchSchema } from "@shared/schemas/search/periodSearchSchema.ts";
 import { createRootRoute, createRoute, } from "@tanstack/react-router";
@@ -31,11 +32,18 @@ const holdingRoute = createRoute({
   loaderDeps: ({ search: { period } }) => ({ period }),
 });
 
-const transactionRoute = createRoute({
+const transactionAddRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: Urls.Transaction,
-  component: TransactionPage,
-  loader: transactionLoader,
+  path: Urls.TransactionAdd,
+  component: TransactionAddPage,
+  loader: transactionAddLoader,
+})
+
+const transactionUpdateRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: Urls.TransactionUpdate,
+  component: TransactionUpdatePage,
+  loader: transactionUpdateLoader,
 });
 
 const signInRoute = createRoute({
@@ -44,4 +52,4 @@ const signInRoute = createRoute({
   component: SignInPage,
 });
 
-export const routeTree = rootRoute.addChildren([portfolioRoute, holdingRoute, signInRoute, transactionRoute]);
+export const routeTree = rootRoute.addChildren([portfolioRoute, holdingRoute, signInRoute, transactionAddRoute, transactionUpdateRoute]);

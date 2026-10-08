@@ -1,4 +1,4 @@
-import { buildAssetQueryOptions, buildHoldingOptions, buildHoldingsQueryOptions, buildHoldingTransactionsOptions, buildPortfolioQueryOptions, buildTransactionOptions } from "@/api/queryOptions.ts";
+import { buildAssetByTickerQueryOptions, buildAssetQueryOptions, buildHoldingOptions, buildHoldingsQueryOptions, buildHoldingTransactionsOptions, buildPortfolioQueryOptions, buildTransactionOptions } from "@/api/queryOptions.ts";
 import type { Asset, Holding, Portfolio, Transaction } from "@shared/types/portfolio.ts";
 import type { Ticker } from "@shared/types/ticker.ts";
 
@@ -12,7 +12,11 @@ export type HoldingLoaderProps = {
   transactions: Transaction[],
 };
 
-export type TransactionLoaderProps = {
+export type TransactionAddLoaderProps = {
+  asset: Asset,
+};
+
+export type TransactionUpdateLoaderProps = {
   asset:       Asset,
   transaction: Transaction,
 };
@@ -43,7 +47,13 @@ export async function transactionsLoader({ context, params, deps }: any): Promis
   };
 }
 
-export async function transactionLoader({ context, params }: any): Promise<TransactionLoaderProps> {
+export async function transactionAddLoader({ context, params }: any): Promise<TransactionAddLoaderProps> {
+  return {
+    asset: await context.queryClient.query(buildAssetByTickerQueryOptions(params.holdingId)),
+  };
+}
+
+export async function transactionUpdateLoader({ context, params }: any): Promise<TransactionUpdateLoaderProps> {
   const transaction = await context.queryClient.query(buildTransactionOptions(params.transactionId));
 
   return {

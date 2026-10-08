@@ -13,7 +13,7 @@ export function buildInitialState(transaction?: TransactionData): FormState<Tran
       fee:      transaction.fee,
       value:    transaction.value,
     } : {
-      type:     undefined,
+      type:     "",
       price:    0,
       quantity: 0,
       fee:      0,

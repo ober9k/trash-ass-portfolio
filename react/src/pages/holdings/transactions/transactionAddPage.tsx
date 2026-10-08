@@ -1,5 +1,5 @@
-import type { TransactionLoaderProps } from "@/api/loaders";
-import { buildUpdateTransactionFn } from "@/api/mutationFunctions";
+import type { TransactionAddLoaderProps } from "@/api/loaders";
+import { buildAddTransactionFn } from "@/api/mutationFunctions";
 import NavigationBar from "@/components/layout/navigationBar.tsx";
 import { Urls } from "@/config/urls.ts";
 import { buildFormAction } from "@/forms/transactions/actions";
@@ -11,8 +11,8 @@ import { getRouteApi, Link, useRouter } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 import { useActionState } from "react";
 
-function TransactionPage() {
-  const { asset, transaction }: TransactionLoaderProps = getRouteApi(Urls.Transaction).useLoaderData();
+function TransactionAddPage() {
+  const { asset }: TransactionAddLoaderProps = getRouteApi(Urls.TransactionAdd).useLoaderData();
   const router = useRouter();
 
   const leftSlot = (
@@ -24,7 +24,7 @@ function TransactionPage() {
   );
 
   const mutation = useMutation({
-    mutationFn: buildUpdateTransactionFn(transaction.id),
+    mutationFn: buildAddTransactionFn(asset.ticker),
     onSuccess: (data) => {
       console.log("success", data);
     },
@@ -33,7 +33,7 @@ function TransactionPage() {
     }
   });
 
-  const [ formState, formAction, isPending ] = useActionState(buildFormAction(mutation), buildInitialState(transaction));
+  const [ formState, formAction, isPending ] = useActionState(buildFormAction(mutation), buildInitialState());
 
   const onCancel = () => {
     router.navigate({ to: Urls.Holding, params: { holdingId: asset.ticker.toLowerCase() } });
@@ -44,7 +44,7 @@ function TransactionPage() {
       <article style={{ backgroundColor: "#121212" }} className="h-dvh">
         <NavigationBar leftSlot={leftSlot}>
           <Typography variant="h4" component="h4" className="text-lg">
-            Update Transaction
+            Add Transaction
           </Typography>
         </NavigationBar>
         <article className="flex flex-col gap-4 p-2 m-2">
@@ -55,4 +55,4 @@ function TransactionPage() {
   );
 }
 
-export default TransactionPage;
+export default TransactionAddPage;

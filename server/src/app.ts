@@ -9,6 +9,10 @@ import type { Asset } from "@shared/types/portfolio";
 import cors from "cors";
 import express, { type Express, type Request, type Response } from "express";
 import { mapQuotedAsset } from "../utils/apiUtils";
+import { StatusCodes } from "http-status-codes";
+import { addTransaction } from "./apis/transactions";
+import { transactionSchemaValidationHandler } from "./middlewares/validators/schemaValidators";
+import { fetchAssetByTicker } from "./apis/assets";
 
 const app: Express = express();
 
@@ -67,6 +71,22 @@ app.get("/api/me/portfolio/holdings/:ticker/transactions", async (req: Request, 
 
   res.status(200).json(
     await getHoldingTransactionsByTicker(ticker),
+  );
+});
+
+app.post("/api/me/portfolio/holdings/:ticker/transactions", [transactionSchemaValidationHandler()], async (req: Request, res: Response) => {
+  const { type, price, quantity, fee, value } = req.body;
+  const ticker = req.params["ticker"] as string;
+
+  const asset = await fetchAssetByTicker(ticker.toUpperCase());
+  const accountId = "axRTt0eEZDgznMzU1Mawr6fYsjq2"; // ober9k
+  const assetId = asset.id;
+
+  console.log("asset", asset);
+  console.log("data", {accountId, assetId, type, price, quantity, fee, value});
+
+  return res.status(StatusCodes.OK).json(
+    {},
   );
 });
 

@@ -48,3 +48,10 @@ export function buildAssetQueryOptions(assetId: string) {
   };
 }
 
+export function buildAssetByTickerQueryOptions(ticker: string) {
+  return {
+    queryKey: ["assets", "tickers", ticker],
+    queryFn:  fetchAsset,
+  };
+}
+

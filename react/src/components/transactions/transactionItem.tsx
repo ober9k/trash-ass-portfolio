@@ -23,7 +23,7 @@ function TransactionItem(props: Props) {
         </Box>
         <Box component="section" className="grow">
           <Typography variant="h4" component="h4" className="pb-2 text-xl">
-            <Link to={Urls.Transaction} params={{ holdingId: asset.ticker.toLowerCase(), transactionId: transaction.id }}>
+            <Link to={Urls.TransactionUpdate} params={{ holdingId: asset.ticker.toLowerCase(), transactionId: transaction.id }}>
               {transaction.type ? transaction.type.toUpperCase() : "BUY"}
             </Link>
           </Typography>
