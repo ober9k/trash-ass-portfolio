@@ -76,3 +76,19 @@ export async function updateSummary(id: string, data: any): Promise<DbSummary> {
 
   return toSummary(await ref.get());
 }
+
+export async function getSummaryByAccountIdAndAssetId(accountId: string, assetId: string): Promise<DbSummary> {
+  const ref = getCollection()
+    // .where("accountId", "==", accountId)
+    .where("assetId", "==", assetId)
+    .limit(1);
+
+  const res = await ref.get();
+
+  if (res.empty) {
+    throw Error("Summary with given `accountId` and `assetId` not found.");
+  }
+
+  return res.docs.map(toSummary).pop();
+  
+}

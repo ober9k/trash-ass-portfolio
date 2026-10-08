@@ -41,6 +41,16 @@ export async function fetchTransactionsByAssetId(assetId: string, limit: number 
   return res.docs.map(toTransaction);
 }
 
+export async function fetchTransactionsByAccountIdAndAssetId(accountId: string, assetId: string, limit: number = 10): Promise<DbTransaction[]> {
+  const ref = getCollection()
+    // .where("accountId", "==", accountId)
+    .where("assetId", "==", assetId)
+    .orderBy("purchasedAt", "desc")
+    .limit(limit);
+  const res = await ref.get();
+  return res.docs.map(toTransaction);
+}
+
 export async function fetchTransactionById(transactionId: string): Promise<DbTransaction> {
   const ref = getCollection().doc(transactionId);
   const res = await ref.get();

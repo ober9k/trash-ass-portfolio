@@ -23,7 +23,7 @@ function HoldingItem(props: Props) {
         </Box>
         <Box component="section" className="grow">
           <Typography variant="h4" component="h4" className="pb-2 text-xl">
-            <Link to={Urls.Holding} params={{ holdingId: asset.ticker.toLowerCase() }}>
+            <Link to={Urls.Holding} params={{ holdingId: asset.id }}>
               {asset.name}
             </Link>
           </Typography>

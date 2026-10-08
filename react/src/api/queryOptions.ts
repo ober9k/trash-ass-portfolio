@@ -1,6 +1,5 @@
-import { fetchAsset, fetchHoldingByTicker, fetchHoldings, fetchHoldingTransactionsByTicker, fetchPortfolio, fetchTransaction } from "@/api/queryFunctions.ts";
+import { fetchAsset, fetchHoldingByHoldingId, fetchHoldings, fetchHoldingTransactionsByTicker as fetchHoldingTransactionsByHoldingId, fetchPortfolio, fetchTransaction } from "@/api/queryFunctions.ts";
 import { Period } from "@shared/types/period";
-import type { Ticker } from "@shared/types/ticker.ts";
 
 export type PeriodParams = {
   period: Period,
@@ -20,17 +19,17 @@ export function buildHoldingsQueryOptions(params: PeriodParams) {
   }
 }
 
-export function buildHoldingOptions(ticker: Ticker, params: PeriodParams) {
+export function buildHoldingOptions(holdingId: string, params: PeriodParams) {
   return {
-    queryKey: ["me", "portfolio", "holdings", ticker.toString(), params],
-    queryFn:  fetchHoldingByTicker
+    queryKey: ["me", "holdings", holdingId, params],
+    queryFn:  fetchHoldingByHoldingId
   };
 }
 
-export function buildHoldingTransactionsOptions(ticker: Ticker, params: PeriodParams) {
+export function buildHoldingTransactionsOptions(holdingId: string, params: PeriodParams) {
   return {
-    queryKey: ["me", "portfolio", "holdings", ticker.toString(), "transactions", params],
-    queryFn:  fetchHoldingTransactionsByTicker,
+    queryKey: ["me", "holdings", holdingId, "transactions", params],
+    queryFn:  fetchHoldingTransactionsByHoldingId,
   };
 }
 

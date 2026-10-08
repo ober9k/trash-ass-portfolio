@@ -4,6 +4,10 @@ export function assetIdValidationHandler() {
   return idValidationHandler("assetId");
 }
 
+export function holdingIdValidationHandler() {
+  return idValidationHandler("holdingId");
+}
+
 export function transactionIdValidationHandler() {
   return idValidationHandler("transactionId");
 }

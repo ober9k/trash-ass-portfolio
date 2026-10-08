@@ -30,7 +30,7 @@ export async function fetchHoldings({ queryKey }: { queryKey: QueryKey[] }): Pro
   return data as Holding[];
 }
 
-export async function fetchHoldingByTicker({ queryKey }: { queryKey: QueryKey[] }): Promise<Holding> {
+export async function fetchHoldingByHoldingId({ queryKey }: { queryKey: QueryKey[] }): Promise<Holding> {
   const { data } = await axios.get(buildApiUrlFromQueryKey(queryKey));
   return data as Holding;
 }

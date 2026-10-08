@@ -40,7 +40,7 @@ export async function portfolioLoader({ context, deps }: any): Promise<Portfolio
 }
 
 export async function transactionsLoader({ context, params, deps }: any): Promise<HoldingLoaderProps> {
-  const holdingId = params.holdingId.toUpperCase() as Ticker; /* add validation */
+  const holdingId = params.holdingId; /* add validation */
   return {
     holding:      await context.queryClient.query(buildHoldingOptions(holdingId, deps)),
     transactions: await context.queryClient.query(buildHoldingTransactionsOptions(holdingId, deps)),

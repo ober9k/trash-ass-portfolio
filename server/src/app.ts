@@ -13,6 +13,7 @@ import { StatusCodes } from "http-status-codes";
 import { addTransaction } from "./apis/transactions";
 import { transactionSchemaValidationHandler } from "./middlewares/validators/schemaValidators";
 import { fetchAssetByTicker } from "./apis/assets";
+import { holdingsRoutes } from "./routes/holdingsRoutes";
 
 const app: Express = express();
 
@@ -62,18 +63,6 @@ app.get("/api/me/portfolio/holdings/:ticker", async (req: Request, res: Response
   );
 });
 
-/**
- * List all of current user's transactions by tokenId.
- */
-app.get("/api/me/portfolio/holdings/:ticker/transactions", async (req: Request, res: Response) => {
-  /* validate tokenId/symbol */
-  const ticker = req.params.ticker as string;
-
-  res.status(200).json(
-    await getHoldingTransactionsByTicker(ticker),
-  );
-});
-
 app.post("/api/me/portfolio/holdings/:ticker/transactions", [transactionSchemaValidationHandler()], async (req: Request, res: Response) => {
   const { type, price, quantity, fee, value } = req.body;
   const ticker = req.params["ticker"] as string;
@@ -91,6 +80,7 @@ app.post("/api/me/portfolio/holdings/:ticker/transactions", [transactionSchemaVa
 });
 
 app.use("/api/assets", assetsRoutes);
+app.use("/api/me/holdings", holdingsRoutes);
 app.use("/api/me/transactions", meTransactionsRoutes);
 app.use("/api/seed", seedRoutes);
 
