@@ -1,6 +1,6 @@
 import { firestore } from "@/firebase";
 import type { DbTransaction } from "@shared/types/db/dbTransaction";
-import { FieldValue } from "firebase-admin/firestore";
+import { AggregateField, FieldValue } from "firebase-admin/firestore";
 
 function getCollection() {
   return firestore.collection("transactions");
@@ -94,4 +94,18 @@ export async function updateTransactionById(id: string, data: any): Promise<DbTr
   }, { merge: true });
 
   return toTransaction(await ref.get());
+}
+
+export async function aggregateTransactionsByAccountIdAndAssetId(accountId: string, assetId: string): Promise<{ quantity: number, fee: number, total: number }> {
+  const ref = getCollection()
+    .where("accountId", "==", accountId)
+    .where("assetId", "==", assetId);
+
+  const res = await ref.aggregate({
+    quantity:     AggregateField.sum("quantity"),
+    fee:          AggregateField.sum("fee"),
+    initialValue: AggregateField.sum("total"),
+  });
+
+  return (await res.get()).data();
 }

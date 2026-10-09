@@ -77,6 +77,35 @@ export async function updateSummary(id: string, data: any): Promise<DbSummary> {
   return toSummary(await ref.get());
 }
 
+export async function updateSummaryData(id: string, data: any): Promise<DbSummary> {
+  console.log(id, data);
+
+  const ref = getCollection().doc(id);
+  await ref.set({
+    quantity:     data.quantity,
+    fee:          data.fee,
+    initialValue: data.initialValue,
+    updatedAt:    FieldValue.serverTimestamp(),
+  }, { merge: true });
+
+  return toSummary(await ref.get());
+}
+
+export async function fetchSummaryIdByAccountIdAndAssetId(accountId: string, assetId: string): Promise<string> {
+  const ref = getCollection()
+    // .where("accountId", "==", accountId)
+    .where("assetId", "==", assetId)
+    .limit(1);
+
+  const res = await ref.get();
+
+  if (res.empty) {
+    throw Error("Summary with given `accountId` and `assetId` not found.");
+  }
+
+  return res.docs.map((doc) => doc.id).pop();
+}
+
 export async function fetchSummaryByAccountIdAndAssetId(accountId: string, assetId: string): Promise<DbSummary> {
   const ref = getCollection()
     // .where("accountId", "==", accountId)
