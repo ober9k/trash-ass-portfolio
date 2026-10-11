@@ -10,7 +10,7 @@ import { ArrowLeft } from "lucide-react";
 function SignInPage() {
   const { user, logout } = useAuthContext();
 
-  const loginWithGoogle = async () => {
+  const signInWithGoogle = async () => {
     try {
       await signInWithGooglePopup()
     }
@@ -19,7 +19,7 @@ function SignInPage() {
     }
   };
 
-  const logoutUser = async () => {
+  const signOutUser = async () => {
     try {
       await signOut(auth);
       logout();
@@ -49,13 +49,13 @@ function SignInPage() {
           <div>
             <h3>Welcome, {user.displayName}</h3>
             <p>Email: {user.email}</p>
-            <button onClick={logoutUser}>Sign out</button>
+            <button onClick={signOutUser}>Sign out</button>
           </div>
         </section>
       ) : (
         <section className={"p-4"}>
           <h3>Welcome, Guest</h3>
-          <button onClick={loginWithGoogle}>Sign in with Google</button>
+          <button onClick={signInWithGoogle}>Sign in with Google</button>
         </section>
       )}
     </>

@@ -1,7 +1,9 @@
 import { portfolioLoader, rootBeforeLoader, transactionAddLoader, transactionsLoader, transactionUpdateLoader } from "@/api/loaders.ts";
 import { Urls } from "@/config/urls.ts";
 import DefaultLayout from "@/layouts/defaultLayout.tsx";
+import ProfilePage from "@/pages/auth/profilePage";
 import SignInPage from "@/pages/auth/signInPage.tsx";
+import SignOutPage from "@/pages/auth/signOutPage";
 import NotFoundPage from "@/pages/errors/notFoundPage.tsx";
 import HoldingPage from "@/pages/holdings/holdingPage.tsx";
 import TransactionAddPage from "@/pages/holdings/transactions/transactionAddPage";
@@ -48,10 +50,31 @@ const transactionUpdateRoute = createRoute({
   loader: transactionUpdateLoader,
 });
 
+
+const profilePage = createRoute({
+  getParentRoute: () => rootRoute,
+  path: Urls.AuthProfile,
+  component: ProfilePage,
+});
+
 const signInRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: Urls.AuthSignIn,
   component: SignInPage,
 });
 
-export const routeTree = rootRoute.addChildren([portfolioRoute, holdingRoute, signInRoute, transactionAddRoute, transactionUpdateRoute]);
+const signOutRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: Urls.AuthSignOut,
+  component: SignOutPage,
+});
+
+export const routeTree = rootRoute.addChildren([
+  portfolioRoute, 
+  holdingRoute, 
+  transactionAddRoute, 
+  transactionUpdateRoute,
+  profilePage,
+  signInRoute,
+  signOutRoute,
+]);
