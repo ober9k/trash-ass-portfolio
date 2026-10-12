@@ -1,7 +1,9 @@
 import { firestore } from "@/firebase";
+import HttpException from "@/models/httpException";
 import { type DbAsset } from "@shared/types/db/dbAsset";
 import { Ticker } from "@shared/types/ticker";
 import { FieldPath } from "firebase-admin/firestore";
+import { StatusCodes } from "http-status-codes";
 
 function getCollection() {
   return firestore.collection("assets");
@@ -27,7 +29,7 @@ async function fetchAssetBy(field: string | FieldPath, value: string | number): 
   const res = await ref.get();
 
   if (res.empty) {
-    throw Error(`Asset with given \`${field}\` not found.`)
+    throw new HttpException(StatusCodes.NOT_FOUND, "Not Found", "Asset for given \`${field}\` not found.");
   }
 
   return res.docs.map(toAsset).pop();

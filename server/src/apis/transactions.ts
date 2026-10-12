@@ -1,6 +1,8 @@
 import { firestore } from "@/firebase";
+import HttpException from "@/models/httpException";
 import type { DbTransaction } from "@shared/types/db/dbTransaction";
 import { AggregateField, FieldValue } from "firebase-admin/firestore";
+import { StatusCodes } from "http-status-codes";
 
 function getCollection() {
   return firestore.collection("transactions");
@@ -56,7 +58,7 @@ export async function fetchTransactionById(transactionId: string): Promise<DbTra
   const res = await ref.get();
 
   if (!res.exists) {
-    throw new Error(`Transaction with ID ${transactionId} not found`);
+    throw new HttpException(StatusCodes.NOT_FOUND, "Not Found", "Transaction for given `transactionId` not found.");
   }
   
   return toTransaction(res);

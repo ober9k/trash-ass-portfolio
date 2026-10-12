@@ -1,6 +1,8 @@
 import { firestore } from "@/firebase";
+import HttpException from "@/models/httpException";
 import type { DbSummary } from "@shared/types/db/dbSummary";
 import { FieldValue } from "firebase-admin/firestore";
+import { StatusCodes } from "http-status-codes";
 
 function getCollection() {
   return firestore.collection("summaries");
@@ -34,7 +36,7 @@ async function fetchSummaryBy(field: string, value: string | number): Promise<Db
   const res = await ref.get();
 
   if (res.empty) {
-    throw Error(`Summary with given \`${field}\` not found.`)
+    throw new HttpException(StatusCodes.NOT_FOUND, "Not Found", "Summary for given \`${field}\` not found.");
   }
 
   return res.docs.map(toSummary).pop();
@@ -91,21 +93,6 @@ export async function updateSummaryData(id: string, data: any): Promise<DbSummar
   return toSummary(await ref.get());
 }
 
-export async function fetchSummaryIdByAccountIdAndAssetId(accountId: string, assetId: string): Promise<string> {
-  const ref = getCollection()
-    // .where("accountId", "==", accountId)
-    .where("assetId", "==", assetId)
-    .limit(1);
-
-  const res = await ref.get();
-
-  if (res.empty) {
-    throw Error("Summary with given `accountId` and `assetId` not found.");
-  }
-
-  return res.docs.map((doc) => doc.id).pop();
-}
-
 export async function fetchSummaryByAccountIdAndAssetId(accountId: string, assetId: string): Promise<DbSummary> {
   const ref = getCollection()
     // .where("accountId", "==", accountId)
@@ -115,9 +102,23 @@ export async function fetchSummaryByAccountIdAndAssetId(accountId: string, asset
   const res = await ref.get();
 
   if (res.empty) {
-    throw Error("Summary with given `accountId` and `assetId` not found.");
+    throw new HttpException(StatusCodes.NOT_FOUND, "Not Found", "Summary for given `accountId` and `assetId` not found.");
   }
 
   return res.docs.map(toSummary).pop();
-  
+}
+
+export async function fetchSummaryIdByAccountIdAndAssetId(accountId: string, assetId: string): Promise<string> {
+  const ref = getCollection()
+    // .where("accountId", "==", accountId)
+    .where("assetId", "==", assetId)
+    .limit(1);
+
+  const res = await ref.get();
+
+  if (res.empty) {
+    throw new HttpException(StatusCodes.NOT_FOUND, "Not Found", "Summary ID for given `accountId` and `assetId` not found.");
+  }
+
+  return res.docs.map((doc) => doc.id).pop();
 }

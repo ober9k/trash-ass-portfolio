@@ -1,5 +1,6 @@
 import { getHistoricPrices, getLatestPrices } from "@/apis/prices";
 import { seedRoutes } from "@/helpers/seedRoutes";
+import { errorHandler } from "@/middlewares/errorHandler";
 import { assetsRoutes } from "@/routes/assetsRoutes";
 import { meTransactionsRoutes } from "@/routes/meTransactionsRoutes";
 import { getHoldings, getPortfolio } from "@/services";
@@ -67,5 +68,8 @@ app.use("/api/assets", assetsRoutes);
 app.use("/api/me/holdings", holdingsRoutes);
 app.use("/api/me/transactions", meTransactionsRoutes);
 app.use("/api/seed", seedRoutes);
+
+/* init error handler (last) */
+app.use(errorHandler);
 
 export default app;
