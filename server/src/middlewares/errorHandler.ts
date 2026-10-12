@@ -18,9 +18,10 @@ export function errorHandler(
 
     // work with the custom handler
     switch (err.code) {
+      case StatusCodes.UNAUTHORIZED:
       case StatusCodes.NOT_FOUND:
         return res
-          .status(StatusCodes.NOT_FOUND)
+          .status(err.code)
           .json({ code, message });
       default:
         return res
