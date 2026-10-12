@@ -1,10 +1,12 @@
 import NavigationBar from "@/components/layout/navigationBar";
 import { Urls } from "@/config/urls";
+import useAuthContext from "@/hooks/useAuthContext";
 import { Card, CardContent, IconButton, Typography } from "@mui/material";
 import { Link } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 
 function ProfilePage() {
+  const { user } = useAuthContext();
 
   const leftSlot = (
     <IconButton size="large" color="inherit" edge="start" aria-label="back">
@@ -24,7 +26,9 @@ function ProfilePage() {
       <article className="flex flex-col gap-4 p-2 m-2">
         <Card>
           <CardContent>
-            Profile Page.
+            <img src={user.photoURL} /><br/>
+            <Typography>{user.displayName}</Typography>
+            <Typography>{user.email}</Typography>
           </CardContent>
         </Card>
       </article>

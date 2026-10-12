@@ -1,8 +1,8 @@
-import { Urls } from "@/config/urls.ts";
-import { AppBar, Box, IconButton, Toolbar } from "@mui/material";
+import { Urls } from "@/config/urls";
+import { AppBar, Box, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography } from "@mui/material";
 import { Link } from "@tanstack/react-router";
 import { MenuIcon, User } from "lucide-react";
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 
 function LeftSlot() {
   return (<>
@@ -12,13 +12,60 @@ function LeftSlot() {
   </>);
 }
 
+const settings = [{
+  label: "Profile",
+  url:   Urls.AuthProfile,
+}, {
+  label: "Sign In",
+  url:   Urls.AuthSignIn,
+}, {
+  label: "Sign Out",
+  url:   Urls.AuthSignOut,
+}];
+
 function RightSlot() {
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+
+  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
   return (<>
-    <IconButton size="large" color="inherit" edge="end" aria-label="user">
-      <Link to={Urls.AuthSignIn}>
-        <User />
-      </Link>
-    </IconButton>
+    <Box sx={{ flexGrow: 0 }}>
+      <Tooltip title="Open Menu">
+        <IconButton onClick={handleOpenUserMenu} size="large" color="inherit" edge="end" aria-label="user">
+          <User />
+        </IconButton>
+      </Tooltip>
+      <Menu
+        id="menu-appbar"
+        anchorEl={anchorElUser}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        keepMounted
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        open={Boolean(anchorElUser)}
+        onClose={handleCloseUserMenu}
+        className="-mt-1"
+      >
+        {settings.map(({ label, url }, key) => (
+          <MenuItem key={key} onClick={handleCloseUserMenu}>
+            <Typography className="w-full min-w-24 text-sm">
+              <Link to={url}>{label}</Link>
+            </Typography>
+          </MenuItem>
+        ))}
+      </Menu>
+    </Box>
   </>);
 }
 
@@ -43,22 +90,7 @@ function NavigationBar(props: Props) {
         </Toolbar>
       </AppBar>
     </Box>
-    
-      {/* <nav className={"flex gap-2 p-1 bg-gray-200 border-b border-gray-300"}>
-        <div className={"p-2.5 text-md min-w-10"}>
-          {leftItem}
-        </div>
-        <div className={"flex-grow py-2 px-4 font-medium"}>
-          <h1 className={"flex justify-center items-center gap-2"}>
-            {children}
-          </h1>
-        </div>
-        <div className={"p-2.5 text-md min-w-10"}>
-          {rightItem}
-        </div>
-      </nav> */}
-    </>
-  );
+  </>);
 }
 
 export default NavigationBar;
