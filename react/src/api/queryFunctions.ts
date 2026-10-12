@@ -31,12 +31,12 @@ export async function fetchHoldings({ queryKey }: { queryKey: QueryKey[] }): Pro
 }
 
 export async function fetchHoldingByHoldingId({ queryKey }: { queryKey: QueryKey[] }): Promise<Holding> {
-  const { data } = await axios.get(buildApiUrlFromQueryKey(queryKey));
+  const { data } = await axios.get(buildApiUrlFromQueryKey(queryKey), await getAuthConfig());
   return data as Holding;
 }
 
 export async function fetchHoldingTransactionsByTicker({ queryKey }: { queryKey: QueryKey[] }): Promise<Transaction[]> {
-  const { data } = await axios.get(buildApiUrlFromQueryKey(queryKey));
+  const { data } = await axios.get(buildApiUrlFromQueryKey(queryKey), await getAuthConfig());
   return data as Transaction[];
 }
 

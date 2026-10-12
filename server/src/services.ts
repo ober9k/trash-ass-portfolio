@@ -1,6 +1,6 @@
 import { fetchAssetById, fetchAssetByTicker, fetchAssetsByIds } from "@/apis/assets";
 import { getHistoricPrices, getLatestPrices, getPrices, getQuote } from "@/apis/prices";
-import { fetchSummaries, fetchSummaryByAssetId } from "@/apis/summaries";
+import { fetchSummaries, fetchSummaryByAccountIdAndAssetId } from "@/apis/summaries";
 import { fetchTransactionsByAssetId } from "@/apis/transactions";
 import { buildBaseHoldingFromAssetAndSummary, buildEmptyPortfolio } from "@/utils";
 import { Firestore } from "@google-cloud/firestore";
@@ -99,7 +99,7 @@ export async function getHoldings(period: Period): Promise<Holding[]> {
  */
 export async function getHoldingByAccountIdAndAssetId(accountId: string, assetId: string): Promise<Holding> {
   const asset   = await fetchAssetById(assetId);
-  const summary = await fetchSummaryByAssetId(asset.id);
+  const summary = await fetchSummaryByAccountIdAndAssetId(accountId, assetId);
   const latestPrices = await getLatestPrices([asset.apiId]);
   const latestQuotedAsset = latestPrices.find((p) => p.apiId === asset.apiId);
 
@@ -108,7 +108,6 @@ export async function getHoldingByAccountIdAndAssetId(accountId: string, assetId
 
   return holding;
 }
-
 
 /**
  Retrieve holding transactions based on the provided ticker.
@@ -124,4 +123,3 @@ export async function getHoldingTransactionsByTicker(ticker: string): Promise<Tr
     ...t, currentValue: t.quantity * quote.price,
   }));
 }
-

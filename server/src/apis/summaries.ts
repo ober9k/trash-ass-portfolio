@@ -95,7 +95,7 @@ export async function updateSummaryData(id: string, data: any): Promise<DbSummar
 
 export async function fetchSummaryByAccountIdAndAssetId(accountId: string, assetId: string): Promise<DbSummary> {
   const ref = getCollection()
-    // .where("accountId", "==", accountId)
+    .where("accountId", "==", accountId)
     .where("assetId", "==", assetId)
     .limit(1);
 
@@ -110,7 +110,7 @@ export async function fetchSummaryByAccountIdAndAssetId(accountId: string, asset
 
 export async function fetchSummaryIdByAccountIdAndAssetId(accountId: string, assetId: string): Promise<string> {
   const ref = getCollection()
-    // .where("accountId", "==", accountId)
+    .where("accountId", "==", accountId)
     .where("assetId", "==", assetId)
     .limit(1);
 

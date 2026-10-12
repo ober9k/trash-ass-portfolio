@@ -45,7 +45,7 @@ export async function fetchTransactionsByAssetId(assetId: string, limit: number 
 
 export async function fetchTransactionsByAccountIdAndAssetId(accountId: string, assetId: string, limit: number = 10): Promise<DbTransaction[]> {
   const ref = getCollection()
-    // .where("accountId", "==", accountId)
+    .where("accountId", "==", accountId)
     .where("assetId", "==", assetId)
     .orderBy("purchasedAt", "desc")
     .limit(limit);
