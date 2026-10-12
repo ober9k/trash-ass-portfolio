@@ -1,8 +1,10 @@
 import adaUrl from "@/assets/icons/ada.png";
 import atomUrl from "@/assets/icons/atom.png";
 import axsUrl from "@/assets/icons/axs.png";
+import btcUrl from "@/assets/icons/btc.png";
 import dogeUrl from "@/assets/icons/doge.png";
 import dotUrl from "@/assets/icons/dot.png";
+import ethUrl from "@/assets/icons/eth.png";
 import hypeUrl from "@/assets/icons/hype.png";
 import neoUrl from "@/assets/icons/neo.png";
 import pepeUrl from "@/assets/icons/pepe.png";
@@ -24,8 +26,10 @@ export function getIconUrl(ticker: Ticker): string {
     case Ticker.ADA:  return adaUrl as string;
     case Ticker.ATOM: return atomUrl as string;
     case Ticker.AXS:  return axsUrl as string;
+    case Ticker.BTC:  return btcUrl as string;
     case Ticker.DOGE: return dogeUrl as string;
     case Ticker.DOT:  return dotUrl as string;
+    case Ticker.ETH:  return ethUrl as string;
     case Ticker.HYPE: return hypeUrl as string;
     case Ticker.NEO:  return neoUrl as string;
     case Ticker.PEPE: return pepeUrl as string;
