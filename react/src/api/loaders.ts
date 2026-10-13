@@ -1,6 +1,5 @@
-import { buildAssetByTickerQueryOptions, buildAssetQueryOptions, buildHoldingOptions, buildHoldingsQueryOptions, buildHoldingTransactionsOptions, buildPortfolioQueryOptions, buildTransactionOptions } from "@/api/queryOptions.ts";
+import { buildAssetQueryOptions, buildHoldingOptions, buildHoldingsQueryOptions, buildHoldingTransactionsOptions, buildPortfolioQueryOptions, buildTransactionOptions } from "@/api/queryOptions.ts";
 import type { Asset, Holding, Portfolio, Transaction } from "@shared/types/portfolio.ts";
-import type { Ticker } from "@shared/types/ticker.ts";
 
 export type PortfolioLoaderProps = {
   portfolio: Portfolio | null,
