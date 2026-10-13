@@ -24,7 +24,7 @@ function TransactionAddPage() {
   );
 
   const mutation = useMutation({
-    mutationFn: buildAddTransactionFn(asset.ticker),
+    mutationFn: buildAddTransactionFn(asset.id),
     onSuccess: (data) => {
       console.log("success", data);
     },

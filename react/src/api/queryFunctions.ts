@@ -41,7 +41,7 @@ export async function fetchHoldingTransactionsByTicker({ queryKey }: { queryKey:
 }
 
 export async function fetchTransaction({ queryKey }: { queryKey: QueryKey[] }): Promise<Transaction> {
-  const { data } = await axios.get(buildApiUrlFromQueryKey(queryKey));
+  const { data } = await axios.get(buildApiUrlFromQueryKey(queryKey), await getAuthConfig());
   return data as Transaction;
 }
 

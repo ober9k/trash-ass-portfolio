@@ -24,7 +24,7 @@ function TransactionUpdatePage() {
   );
 
   const mutation = useMutation({
-    mutationFn: buildUpdateTransactionFn(transaction.id),
+    mutationFn: buildUpdateTransactionFn(asset.id, transaction.id),
     onSuccess: (data) => {
       console.log("success", data);
     },

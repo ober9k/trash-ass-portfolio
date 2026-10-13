@@ -39,26 +39,21 @@ export async function portfolioLoader({ context, deps }: any): Promise<Portfolio
 }
 
 export async function transactionsLoader({ context, params, deps }: any): Promise<HoldingLoaderProps> {
-  const holdingId = params.holdingId; /* add validation */
   return {
-    holding:      await context.queryClient.query(buildHoldingOptions(holdingId, deps)),
-    transactions: await context.queryClient.query(buildHoldingTransactionsOptions(holdingId, deps)),
+    holding:      await context.queryClient.query(buildHoldingOptions(params.holdingId, deps)),
+    transactions: await context.queryClient.query(buildHoldingTransactionsOptions(params.holdingId, deps)),
   };
 }
 
 export async function transactionAddLoader({ context, params }: any): Promise<TransactionAddLoaderProps> {
-  const holdingId = params.holdingId;
-
   return {
-    asset: await context.queryClient.query(buildAssetQueryOptions(holdingId)),
+    asset: await context.queryClient.query(buildAssetQueryOptions(params.holdingId)),
   };
 }
 
 export async function transactionUpdateLoader({ context, params }: any): Promise<TransactionUpdateLoaderProps> {
-  const transaction = await context.queryClient.query(buildTransactionOptions(params.transactionId));
-
   return {
-    asset:       await context.queryClient.query(buildAssetQueryOptions(transaction.assetId)),
-    transaction: transaction,
+    asset:       await context.queryClient.query(buildAssetQueryOptions(params.holdingId)),
+    transaction: await context.queryClient.query(buildTransactionOptions(params.holdingId, params.transactionId)),
   };
 }
