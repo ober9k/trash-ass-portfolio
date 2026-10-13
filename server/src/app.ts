@@ -1,9 +1,11 @@
 import { getHistoricPrices, getLatestPrices } from "@/apis/prices";
+import { fetchSummaryIdByAccountIdAndAssetId, updateSummaryData } from "@/apis/summaries";
+import { addTransaction, aggregateTransactionsByAccountIdAndAssetId } from "@/apis/transactions";
 import { seedRoutes } from "@/helpers/seedRoutes";
 import { errorHandler } from "@/middlewares/errorHandler";
 import { assetsRoutes } from "@/routes/assetsRoutes";
-import { meTransactionsRoutes } from "@/routes/meTransactionsRoutes";
-import { getHoldings, getPortfolio } from "@/services";
+import { portfolioRoutes } from "@/routes/portfolioRoutes";
+import { transactionsRoutes } from "@/routes/transactionsRoutes";
 import { Period } from "@shared/types/period";
 import cors from "cors";
 import express, { type Express, type Request, type Response } from "express";
@@ -26,28 +28,6 @@ app.use(cors({
 
 app.use(express.json());
 
-/**
- * List current value of user's portfolio.
- */
-app.get("/api/me/portfolio", async (req: Request, res: Response) => {
-  const period = req.query.period; // this needs to be validated
-
-  res.status(200).json(
-    await getPortfolio(period as Period),
-  );
-});
-
-/**
- * List all of current user's holdings.
- */
-app.get("/api/me/portfolio/holdings", async (req: Request, res: Response) => {
-  const period = req.query.period; // this needs to be validated
-
-  res.status(200).json(
-    await getHoldings(period as Period),
-  );
-});
-
 app.post("/api/me/portfolio/holdings/:ticker/transactions", [transactionSchemaValidationHandler()], async (req: Request, res: Response) => {
   const { type, price, quantity, fee, value } = req.body;
   const ticker = req.params["ticker"] as string;
@@ -65,8 +45,9 @@ app.post("/api/me/portfolio/holdings/:ticker/transactions", [transactionSchemaVa
 });
 
 app.use("/api/assets", assetsRoutes);
+app.use("/api/me/portfolio", portfolioRoutes);
 app.use("/api/me/holdings", holdingsRoutes);
-app.use("/api/me/transactions", meTransactionsRoutes);
+app.use("/api/me/transactions", transactionsRoutes);
 app.use("/api/seed", seedRoutes);
 
 /* init error handler (last) */
