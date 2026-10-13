@@ -2,8 +2,7 @@ import { getTimePeriodInterval } from "@/utils";
 import { Currency } from "@shared/types/currency";
 import { Period } from "@shared/types/period";
 import { allTickers, Ticker } from "@shared/types/ticker";
-import type { QuotedAsset } from "../../utils/apiUtils";
-import { mapQuotedAsset } from "../../utils/apiUtils";
+import { type QuotedAsset, mapQuotedAsset } from "@/utils/apiUtils";
 
 export type Price = {
   id:     number,
