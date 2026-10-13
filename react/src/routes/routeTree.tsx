@@ -4,6 +4,7 @@ import DefaultLayout from "@/layouts/defaultLayout.tsx";
 import ProfilePage from "@/pages/auth/profilePage";
 import SignInPage from "@/pages/auth/signInPage.tsx";
 import SignOutPage from "@/pages/auth/signOutPage";
+import HoldingErrorFoundPage from "@/pages/errors/holdings/holdingErrorPage.tsx";
 import NotFoundPage from "@/pages/errors/notFoundPage.tsx";
 import HoldingPage from "@/pages/holdings/holdingPage.tsx";
 import TransactionAddPage from "@/pages/holdings/transactions/transactionAddPage";
@@ -34,6 +35,7 @@ const holdingRoute = createRoute({
   loader: transactionsLoader,
   validateSearch: PeriodSearchSchema,
   loaderDeps: ({ search: { period } }) => ({ period }),
+  errorComponent: HoldingErrorFoundPage,
 });
 
 const transactionAddRoute = createRoute({
