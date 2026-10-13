@@ -3,10 +3,12 @@ import NavigationBar from "@/components/layout/navigationBar.tsx";
 import { auth, signInWithGooglePopup } from "@/firebase.ts";
 import useAuthContext from "@/hooks/useAuthContext.ts";
 import { Typography } from "@mui/material";
+import { useQueryClient } from "@tanstack/react-query";
 import { signOut } from "firebase/auth";
 
 function SignInPage() {
   const { user, logout } = useAuthContext();
+  const queryClient = useQueryClient();
 
   const signInWithGoogle = async () => {
     try {
@@ -21,6 +23,7 @@ function SignInPage() {
     try {
       await signOut(auth);
       logout();
+      queryClient.clear();
     }
     catch (error) {
       console.error("Sign-out error", error);
