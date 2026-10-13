@@ -1,11 +1,9 @@
+import HomeButton from "@/components/layout/navigation/homeBackButton.tsx";
 import NavigationBar from "@/components/layout/navigationBar.tsx";
-import { Urls } from "@/config/urls.ts";
 import { auth, signInWithGooglePopup } from "@/firebase.ts";
 import useAuthContext from "@/hooks/useAuthContext.ts";
-import { IconButton, Typography } from "@mui/material";
-import { Link } from "@tanstack/react-router";
+import { Typography } from "@mui/material";
 import { signOut } from "firebase/auth";
-import { ArrowLeft } from "lucide-react";
 
 function SignInPage() {
   const { user, logout } = useAuthContext();
@@ -29,17 +27,9 @@ function SignInPage() {
     }
   };
 
-  const leftSlot = (
-    <IconButton size="large" color="inherit" edge="start" aria-label="back">
-      <Link to={Urls.Portfolio}>
-        <ArrowLeft />
-      </Link>
-    </IconButton>
-  );
-
   return (
     <>
-      <NavigationBar leftSlot={leftSlot}>
+      <NavigationBar leftSlot={<HomeButton />}>
         <Typography variant="h4" component="h4" className="text-lg">
          Sign In
         </Typography>

@@ -1,28 +1,21 @@
 import type { HoldingLoaderProps } from "@/api/loaders.ts";
 import AssetIcon from "@/components/assets/assetIcon.tsx";
+import HomeButton from "@/components/layout/navigation/homeBackButton.tsx";
 import NavigationBar from "@/components/layout/navigationBar.tsx";
 import PeriodToggle from "@/components/miscellaneous/periodToggle.tsx";
 import SummaryCard from "@/components/transactions/summaryCard";
 import TransactionsCard from "@/components/transactions/transactionsCard";
 import { Urls } from "@/config/urls.ts";
-import { Box, Fab, IconButton, Typography } from "@mui/material";
+import { Box, Fab, Typography } from "@mui/material";
 import { Period } from "@shared/types/period.ts";
 import { getRouteApi, Link, useRouter } from "@tanstack/react-router";
-import { ArrowLeft, PlusIcon } from "lucide-react";
+import { PlusIcon } from "lucide-react";
 
 function HoldingPage() {
   const { holding, transactions }: HoldingLoaderProps = getRouteApi(Urls.Holding).useLoaderData();
   const { asset } = holding;
   const { period } = getRouteApi(Urls.Holding).useSearch();
   const router = useRouter();
-
-  const leftSlot = (
-    <IconButton size="large" color="inherit" edge="start" aria-label="back">
-      <Link to={Urls.Portfolio}>
-        <ArrowLeft />
-      </Link>
-    </IconButton>
-  );
 
   const onToggle = (period: string) => {
     const search = (period !== Period.All.toString())
@@ -38,7 +31,7 @@ function HoldingPage() {
   return (
     <>
     <article className="h-full min-h-screen bg-[#121212] pb-1">
-      <NavigationBar leftSlot={leftSlot}>
+      <NavigationBar leftSlot={<HomeButton />}>
         <Box className="mt-0.5 mr-1.5">
           <AssetIcon asset={asset} size="sm" />
         </Box>
