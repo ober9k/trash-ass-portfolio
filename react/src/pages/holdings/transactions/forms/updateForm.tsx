@@ -1,13 +1,17 @@
+import AssetIcon from "@/components/assets/assetIcon.tsx";
 import type { FormRadioFieldState } from "@/components/forms/formRadioField.tsx";
 import FormRadioField from "@/components/forms/formRadioField.tsx";
 import FormTextField, { type FormTextFieldState } from "@/components/forms/formTextField.tsx";
 import AltCardHeader from "@/components/miscellaneous/altCardHeader.tsx";
+import FormAssetField from "@/pages/holdings/transactions/forms/formAssetField.tsx";
 import type { FormState } from "@/types/formState.ts";
-import { Box, Card, CardActions, CardContent, Divider } from "@mui/material";
+import { Box, Card, CardActions, CardContent, Divider, FormControl, FormLabel, TextField } from "@mui/material";
 import Button from "@mui/material/Button";
 import type { TransactionData } from "@shared/schemas/transactionSchema.ts";
+import type { Asset } from "@shared/types/portfolio.ts";
 
 type Props = {
+  asset:      Asset,
   formState:  FormState<TransactionData>,
   formAction: (payload: FormData) => void,
   isPending:  boolean,
@@ -15,7 +19,7 @@ type Props = {
 };
 
 function UpdateForm(props: Props) {
-  const { formState, formAction, isPending, onCancel } = props;
+  const { asset, formState, formAction, isPending, onCancel } = props;
   const { formErrors, fieldValues, fieldErrors } = formState;
 
   const typeFieldState: FormRadioFieldState = {
@@ -74,6 +78,7 @@ function UpdateForm(props: Props) {
         <AltCardHeader title={"Transaction Details"} />
         <Divider className={"py-2"} />
         <CardContent className="flex flex-col gap-3">
+          <FormAssetField asset={asset} />
           <FormRadioField fieldState={typeFieldState} />
           <FormTextField fieldState={priceFieldState} />
           <FormTextField fieldState={quantityFieldState} />
