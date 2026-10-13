@@ -9,11 +9,13 @@ import { IconButton, Typography } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import { getRouteApi, Link, useRouter } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
+import { useSnackbar } from "notistack";
 import { useActionState } from "react";
 
 function TransactionUpdatePage() {
   const { asset, transaction }: TransactionUpdateLoaderProps = getRouteApi(Urls.TransactionUpdate).useLoaderData();
   const router = useRouter();
+  const { enqueueSnackbar } = useSnackbar();
 
   const leftSlot = (
     <IconButton size="large" color="inherit" edge="start" aria-label="go back">
@@ -26,10 +28,12 @@ function TransactionUpdatePage() {
   const mutation = useMutation({
     mutationFn: buildUpdateTransactionFn(asset.id, transaction.id),
     onSuccess: (data) => {
-      console.log("success", data);
+      router.navigate({ to: Urls.Holding, params: { holdingId: asset.id } });
+      enqueueSnackbar("Transaction successfully updated.", { variant: "success", anchorOrigin: { vertical: "top", horizontal: "right" } });
+      // console.log("success", data);
     },
     onError: (error) => {
-      console.error("error", error);
+      // console.error("error", error);
     }
   });
 
