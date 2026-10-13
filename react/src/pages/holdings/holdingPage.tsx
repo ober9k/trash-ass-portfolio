@@ -1,6 +1,6 @@
 import type { HoldingLoaderProps } from "@/api/loaders.ts";
 import AssetIcon from "@/components/assets/assetIcon.tsx";
-import HomeButton from "@/components/layout/navigation/homeBackButton.tsx";
+import HomeBackButton from "@/components/layout/navigation/homeBackButton.tsx";
 import NavigationBar from "@/components/layout/navigationBar.tsx";
 import PeriodToggle from "@/components/miscellaneous/periodToggle.tsx";
 import SummaryCard from "@/components/transactions/summaryCard";
@@ -31,7 +31,7 @@ function HoldingPage() {
   return (
     <>
     <article className="h-full min-h-screen bg-[#121212] pb-1">
-      <NavigationBar leftSlot={<HomeButton />}>
+      <NavigationBar leftSlot={HomeBackButton}>
         <Box className="mt-0.5 mr-1.5">
           <AssetIcon asset={asset} size="sm" />
         </Box>

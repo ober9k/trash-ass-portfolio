@@ -1,4 +1,4 @@
-import HomeButton from "@/components/layout/navigation/homeBackButton.tsx";
+import HomeBackButton from "@/components/layout/navigation/homeBackButton.tsx";
 import NavigationBar from "@/components/layout/navigationBar.tsx";
 import { auth, signInWithGooglePopup } from "@/firebase.ts";
 import useAuthContext from "@/hooks/useAuthContext.ts";
@@ -29,7 +29,7 @@ function SignInPage() {
 
   return (
     <>
-      <NavigationBar leftSlot={<HomeButton />}>
+      <NavigationBar leftSlot={HomeBackButton}>
         <Typography variant="h4" component="h4" className="text-lg">
          Sign In
         </Typography>

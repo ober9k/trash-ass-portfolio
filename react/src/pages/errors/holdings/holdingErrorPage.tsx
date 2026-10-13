@@ -1,13 +1,13 @@
-import HomeButton from "@/components/layout/navigation/homeBackButton.tsx";
+import HomeBackButton from "@/components/layout/navigation/homeBackButton.tsx";
 import NavigationBar from "@/components/layout/navigationBar.tsx";
 import AltCardHeader from "@/components/miscellaneous/altCardHeader.tsx";
 import { Card, CardContent, Typography } from "@mui/material";
 
-function HoldingErrorFoundPage({ error, reset }) {
+function HoldingErrorPage({ error, reset }) {
   return (
     <>
       <article className="h-full min-h-screen bg-[#121212] pb-1">
-        <NavigationBar leftSlot={<HomeButton />}>
+        <NavigationBar leftSlot={HomeBackButton}>
           <Typography variant="h4" component="h4" className="text-lg">
             Error
           </Typography>
@@ -25,4 +25,4 @@ function HoldingErrorFoundPage({ error, reset }) {
   );
 }
 
-export default HoldingErrorFoundPage;
+export default HoldingErrorPage;

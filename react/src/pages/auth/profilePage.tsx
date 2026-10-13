@@ -1,4 +1,4 @@
-import HomeButton from "@/components/layout/navigation/homeBackButton.tsx";
+import HomeBackButton from "@/components/layout/navigation/homeBackButton.tsx";
 import NavigationBar from "@/components/layout/navigationBar";
 import useAuthContext from "@/hooks/useAuthContext";
 import { Card, CardContent, Typography } from "@mui/material";
@@ -9,7 +9,7 @@ function ProfilePage() {
 
   return (<>
     <article className="h-full min-h-screen bg-[#121212] pb-1">
-      <NavigationBar leftSlot={<HomeButton />}>
+      <NavigationBar leftSlot={HomeBackButton}>
         <Typography variant="h4" component="h4" className="text-lg">
           Profile
         </Typography>
