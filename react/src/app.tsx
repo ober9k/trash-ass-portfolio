@@ -6,6 +6,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 import axios from "axios";
+import { SnackbarProvider } from "notistack";
 
 /* pass with all requests */
 axios.defaults.withCredentials = true;
@@ -25,7 +26,9 @@ function App() {
     <AuthProvider>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={darkTheme}>
-          <RouterProvider router={router} />
+          <SnackbarProvider maxSnack={3}>
+            <RouterProvider router={router} />
+          </SnackbarProvider>
         </ThemeProvider>
       </QueryClientProvider>
     </AuthProvider>

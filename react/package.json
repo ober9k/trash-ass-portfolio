@@ -23,6 +23,7 @@
     "axios": "^1.20.0",
     "firebase": "^12.19.0",
     "lucide-react": "^1.47.0",
+    "notistack": "^3.0.2",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "tailwindcss": "^4.3.3",
