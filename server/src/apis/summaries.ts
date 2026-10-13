@@ -31,6 +31,14 @@ export async function fetchSummaries(): Promise<DbSummary[]> {
   return res.docs.map(toSummary);
 }
 
+export async function fetchSummariesByAccountId(accountId: string): Promise<DbSummary[]> {
+  const ref = getCollection()
+    .where("accountId", "==", accountId);
+
+  const res = await ref.get();
+  return res.docs.map(toSummary);
+}
+
 async function fetchSummaryBy(field: string, value: string | number): Promise<DbSummary> {
   const ref = getCollection().where(field, "==", value).limit(1);
   const res = await ref.get();

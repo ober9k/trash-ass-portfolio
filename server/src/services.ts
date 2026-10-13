@@ -1,6 +1,6 @@
 import { fetchAssetById, fetchAssetByTicker, fetchAssetsByIds } from "@/apis/assets";
 import { getHistoricPrices, getLatestPrices, getPrices, getQuote } from "@/apis/prices";
-import { fetchSummaries, fetchSummaryByAccountIdAndAssetId } from "@/apis/summaries";
+import { fetchSummaries, fetchSummariesByAccountId, fetchSummaryByAccountIdAndAssetId } from "@/apis/summaries";
 import { fetchTransactionsByAssetId } from "@/apis/transactions";
 import { buildBaseHoldingFromAssetAndSummary, buildEmptyPortfolio } from "@/utils";
 import { Firestore } from "@google-cloud/firestore";
@@ -12,7 +12,7 @@ Firestore.name; /* hack: leave in for types (for now) */
 /**
  * Retrieve a basic summary of the portfolio.
  */
-export async function getPortfolio(period: Period): Promise<Portfolio> {
+export async function getPortfolioByAccountId(accountId: string, period: Period): Promise<Portfolio> {
   const periodParam = (period) ? period : null;
 
   const validPeriods = [
@@ -23,7 +23,7 @@ export async function getPortfolio(period: Period): Promise<Portfolio> {
     Period.OneYear,
   ].map((p) => p.toString());
 
-  const summaries = await fetchSummaries();
+  const summaries = await fetchSummariesByAccountId(accountId);
   // const summaries = [];
 
   if (summaries.length === 0) {
@@ -50,7 +50,7 @@ export async function getPortfolio(period: Period): Promise<Portfolio> {
 /**
  * Retrieve all associated holdings.
  */
-export async function getHoldings(period: Period): Promise<Holding[]> {
+export async function getHoldingsByAccountId(accountId: string, period: Period): Promise<Holding[]> {
   const periodParam = (period) ? period : null;
 
   const validPeriods = [
@@ -61,7 +61,7 @@ export async function getHoldings(period: Period): Promise<Holding[]> {
     Period.OneYear,
   ].map((p) => p.toString());
 
-  const summaries = await fetchSummaries();
+  const summaries = await fetchSummariesByAccountId(accountId);
   // const summaries = [];
 
   const apiIds = summaries.map((s) => s.apiId);

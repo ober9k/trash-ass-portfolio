@@ -21,12 +21,12 @@ export async function getAuthConfig() {
 }
 
 export async function fetchPortfolio({ queryKey }: { queryKey: QueryKey[] }): Promise<Portfolio> {
-  const { data } = await axios.get(buildApiUrlFromQueryKey(queryKey));
+  const { data } = await axios.get(buildApiUrlFromQueryKey(queryKey), await getAuthConfig());
   return data as Portfolio;
 }
 
 export async function fetchHoldings({ queryKey }: { queryKey: QueryKey[] }): Promise<Holding[]> {
-  const { data } = await axios.get(buildApiUrlFromQueryKey(queryKey));
+  const { data } = await axios.get(buildApiUrlFromQueryKey(queryKey), await getAuthConfig());
   return data as Holding[];
 }
 
