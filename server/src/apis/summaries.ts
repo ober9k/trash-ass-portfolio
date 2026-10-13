@@ -1,3 +1,4 @@
+import { aggregateTransactionsByAccountIdAndAssetId } from "@/apis/transactions";
 import { firestore } from "@/firebase";
 import HttpException from "@/models/httpException";
 import type { DbSummary } from "@shared/types/db/dbSummary";
@@ -99,6 +100,13 @@ export async function updateSummaryData(id: string, data: any): Promise<DbSummar
   }, { merge: true });
 
   return toSummary(await ref.get());
+}
+
+export async function refreshSummaryData(accountId: string, assetId: string): Promise<DbSummary> {
+  const id = await fetchSummaryIdByAccountIdAndAssetId(accountId, assetId);
+  const data = await aggregateTransactionsByAccountIdAndAssetId(accountId, assetId);
+
+  return await updateSummaryData(id, { ...data })
 }
 
 export async function fetchSummaryByAccountIdAndAssetId(accountId: string, assetId: string): Promise<DbSummary> {
