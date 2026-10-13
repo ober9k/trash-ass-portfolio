@@ -1,9 +1,10 @@
 import { Ticker } from "./ticker";
 
 export type Portfolio = {
-  initialValue: number,
-  currentValue: number,
-  holdings:     number,
+  initialValue:  number,
+  adjustedValue: number,
+  currentValue:  number,
+  holdings:      number,
 }
 
 export type Holding = {
@@ -19,21 +20,23 @@ export type Asset = {
 };
 
 export type Summary = {
-  quantity:     number,
-  fee:          number,
-  initialValue: number,
-  currentValue: number,
-  averagePrice: number,
+  quantity:      number,
+  fee:           number,
+  initialValue:  number,
+  adjustedValue: number,
+  currentValue:  number,
+  averagePrice:  number,
 };
 
 export type Transaction = {
-  id:           string,
-  type:         string | undefined, /* TODO: pending enforced value */
-  price:        number,
-  quantity:     number,
-  fee:          number,
-  value:        number, /* TODO: address inconsistency with `total` in database */
-  initialValue: number, /* as `total` in database */
-  currentValue: number,
-  purchasedAt:  Date,
+  id:            string,
+  type:          string | undefined, /* TODO: pending enforced value */
+  price:         number,
+  quantity:      number,
+  fee:           number,
+  value:         number, /* TODO: address inconsistency with `total` in database */
+  initialValue:  number, /* as `total` in database */
+  adjustedValue: number,
+  currentValue:  number,
+  purchasedAt:   Date,
 };
