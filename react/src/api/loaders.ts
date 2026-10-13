@@ -11,7 +11,7 @@ export type HoldingLoaderProps = {
   transactions: Transaction[],
 };
 
-export type TransactionAddLoaderProps = {
+export type TransactionCreateLoaderProps = {
   asset: Asset,
 };
 
@@ -45,7 +45,7 @@ export async function transactionsLoader({ context, params, deps }: any): Promis
   };
 }
 
-export async function transactionAddLoader({ context, params }: any): Promise<TransactionAddLoaderProps> {
+export async function transactionCreateLoader({ context, params }: any): Promise<TransactionCreateLoaderProps> {
   return {
     asset: await context.queryClient.query(buildAssetQueryOptions(params.holdingId)),
   };

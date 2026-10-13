@@ -1,4 +1,4 @@
-import type { TransactionAddLoaderProps } from "@/api/loaders";
+import type { TransactionCreateLoaderProps } from "@/api/loaders";
 import { buildAddTransactionFn } from "@/api/mutationFunctions";
 import NavigationBar from "@/components/layout/navigationBar.tsx";
 import { Urls } from "@/config/urls.ts";
@@ -12,8 +12,8 @@ import { ArrowLeft } from "lucide-react";
 import { useSnackbar } from "notistack";
 import { useActionState } from "react";
 
-function TransactionAddPage() {
-  const { asset }: TransactionAddLoaderProps = getRouteApi(Urls.TransactionAdd).useLoaderData();
+function TransactionCreatePage() {
+  const { asset }: TransactionCreateLoaderProps = getRouteApi(Urls.TransactionCreate).useLoaderData();
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -59,4 +59,4 @@ function TransactionAddPage() {
   );
 }
 
-export default TransactionAddPage;
+export default TransactionCreatePage;

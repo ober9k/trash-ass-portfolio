@@ -1,4 +1,4 @@
-import { portfolioLoader, rootBeforeLoader, transactionAddLoader, transactionsLoader, transactionUpdateLoader } from "@/api/loaders.ts";
+import { portfolioLoader, rootBeforeLoader, transactionCreateLoader, transactionsLoader, transactionUpdateLoader } from "@/api/loaders.ts";
 import { Urls } from "@/config/urls.ts";
 import DefaultLayout from "@/layouts/defaultLayout.tsx";
 import ProfilePage from "@/pages/auth/profilePage";
@@ -7,7 +7,7 @@ import SignOutPage from "@/pages/auth/signOutPage";
 import HoldingErrorPage from "@/pages/errors/holdings/holdingErrorPage.tsx";
 import NotFoundPage from "@/pages/errors/notFoundPage.tsx";
 import HoldingPage from "@/pages/holdings/holdingPage.tsx";
-import TransactionAddPage from "@/pages/holdings/transactions/transactionAddPage";
+import TransactionCreatePage from "@/pages/holdings/transactions/transactionCreatePage.tsx";
 import TransactionUpdatePage from "@/pages/holdings/transactions/transactionUpdatePage";
 import PortfolioPage from "@/pages/portfolioPage.tsx";
 import { PeriodSearchSchema } from "@shared/schemas/search/periodSearchSchema.ts";
@@ -38,11 +38,11 @@ const holdingRoute = createRoute({
   errorComponent: HoldingErrorPage,
 });
 
-const transactionAddRoute = createRoute({
+const transactionCreateRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: Urls.TransactionAdd,
-  component: TransactionAddPage,
-  loader: transactionAddLoader,
+  path: Urls.TransactionCreate,
+  component: TransactionCreatePage,
+  loader: transactionCreateLoader,
 })
 
 const transactionUpdateRoute = createRoute({
@@ -74,7 +74,7 @@ const signOutRoute = createRoute({
 export const routeTree = rootRoute.addChildren([
   portfolioRoute, 
   holdingRoute, 
-  transactionAddRoute, 
+  transactionCreateRoute,
   transactionUpdateRoute,
   profilePage,
   signInRoute,
