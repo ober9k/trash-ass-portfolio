@@ -1,4 +1,4 @@
-import { FirestoreError } from "@/models/firestoreError";
+// import { FirestoreError } from "@/models/firestoreError";
 import { isHttpException } from "@/models/httpException";
 import { type NextFunction, type Request, type Response } from "express";
 import { StatusCodes } from "http-status-codes";
@@ -8,7 +8,7 @@ import { StatusCodes } from "http-status-codes";
  * https://github.com/gothinkster/node-express-realworld-example-app/
  */
 export function errorHandler(
-  err: Error | FirestoreError,
+  err: Error,
   req: Request,
   res: Response,
   next: NextFunction,
