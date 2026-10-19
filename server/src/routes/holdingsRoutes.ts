@@ -54,7 +54,7 @@ router.post("/:holdingId/transactions", [authenticateToken, holdingIdValidationH
 router.put("/:holdingId/transactions/:transactionId", [authenticateToken, transactionIdValidationHandler(), transactionSchemaValidationHandler()], async (req: Request, res: Response) => {
   const accountId = getAccountId(req);
   const transactionId = req.params["transactionId"] as string;
-  const { type, price, quantity, fee, value } = req.body;
+  const { type, price, quantity, fee, value, purchasedAt } = req.body;
 
   const transaction = await updateTransactionById(transactionId, { type, price, quantity, fee, value });
   // also apply update

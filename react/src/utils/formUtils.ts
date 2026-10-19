@@ -101,3 +101,20 @@ export function getCheckboxValue(formData: FormData, key: string): boolean {
     ? formData.get(key) === "on"
     : false;
 }
+
+/**
+ * Temp copypasta from Gemini.
+ * TODO: revisit using new JS date handling instead
+ */
+export function toDateTimeLocalString(date: Date): string {
+
+  const pv = (v: number) => String(v).padStart(2, "0");
+
+  const year    = date.getFullYear();
+  const month   = pv(date.getMonth() + 1);
+  const day     = pv(date.getDate());
+  const hours   = pv(date.getHours());
+  const minutes = pv(date.getMinutes());
+
+  return `${year}-${month}-${day}T${hours}:${minutes}`;
+}

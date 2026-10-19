@@ -1,11 +1,10 @@
-import AssetIcon from "@/components/assets/assetIcon.tsx";
 import type { FormRadioFieldState } from "@/components/forms/formRadioField.tsx";
 import FormRadioField from "@/components/forms/formRadioField.tsx";
 import FormTextField, { type FormTextFieldState } from "@/components/forms/formTextField.tsx";
 import AltCardHeader from "@/components/miscellaneous/altCardHeader.tsx";
 import FormAssetField from "@/pages/holdings/transactions/forms/formAssetField.tsx";
 import type { FormState } from "@/types/formState.ts";
-import { Box, Card, CardActions, CardContent, Divider, FormControl, FormLabel, TextField } from "@mui/material";
+import { Box, Card, CardActions, CardContent, Divider } from "@mui/material";
 import Button from "@mui/material/Button";
 import type { TransactionData } from "@shared/schemas/transactionSchema.ts";
 import type { Asset } from "@shared/types/portfolio.ts";
@@ -72,6 +71,15 @@ function UpdateForm(props: Props) {
     errors:   fieldErrors.value || [],
   };
 
+  const purchasedAtFieldState: FormTextFieldState = {
+    name:     "purchasedAt",
+    type:     "datetime-local",
+    label:    "PurchasedAt",
+    required: true,
+    value:    fieldValues.purchasedAt?.toString(),
+    errors:   fieldErrors.purchasedAt || [],
+  };
+
   return (<>
     <Box component="form" action={formAction} noValidate>
       <Card>
@@ -84,6 +92,7 @@ function UpdateForm(props: Props) {
           <FormTextField fieldState={quantityFieldState} />
           <FormTextField fieldState={feeFieldState} />
           <FormTextField fieldState={valueFieldState} />
+          <FormTextField fieldState={purchasedAtFieldState} />
         </CardContent>
         <Divider className={"py-2"} />
         <CardActions className="flex flex-row gap-2 justify-center p-4">

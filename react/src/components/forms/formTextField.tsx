@@ -3,7 +3,7 @@ import { FormControl, FormControlLabel, FormLabel, TextField } from "@mui/materi
 
 export type FormTextFieldState = {
   name:      string,
-  type:      "text" | "date" | "email" | "password",
+  type:      "text" | "date" | "datetime-local" | "email" | "password",
   label:     string,
   required?: boolean,
   value?:    string,

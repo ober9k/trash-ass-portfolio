@@ -42,6 +42,10 @@ export async function fetchHoldingTransactionsByTicker({ queryKey }: { queryKey:
 
 export async function fetchTransaction({ queryKey }: { queryKey: QueryKey[] }): Promise<Transaction> {
   const { data } = await axios.get(buildApiUrlFromQueryKey(queryKey), await getAuthConfig());
+
+  // TODO: temp workaround, emply DTO => local object
+  data.purchasedAt = new Date(data.purchasedAt);
+
   return data as Transaction;
 }
 
