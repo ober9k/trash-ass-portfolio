@@ -12,7 +12,7 @@ import { getRouteApi, useRouter } from "@tanstack/react-router";
 import { useSnackbar } from "notistack";
 import { useActionState } from "react";
 
-function TransactionCreatePage() {
+function CreatePage() {
   const { asset }: TransactionCreateLoaderProps = getRouteApi(Urls.TransactionCreate).useLoaderData();
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
@@ -53,4 +53,4 @@ function TransactionCreatePage() {
   );
 }
 
-export default TransactionCreatePage;
+export default CreatePage;

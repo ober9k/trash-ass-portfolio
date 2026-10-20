@@ -7,8 +7,8 @@ import SignOutPage from "@/pages/auth/signOutPage";
 import HoldingErrorPage from "@/pages/errors/holdings/holdingErrorPage.tsx";
 import NotFoundPage from "@/pages/errors/notFoundPage.tsx";
 import HoldingPage from "@/pages/holdings/holdingPage.tsx";
-import TransactionCreatePage from "@/pages/holdings/transactions/transactionCreatePage.tsx";
-import TransactionUpdatePage from "@/pages/holdings/transactions/transactionUpdatePage";
+import CreatePage from "@/pages/holdings/transactions/createPage.tsx";
+import UpdatePage from "@/pages/holdings/transactions/updatePage.tsx";
 import PortfolioPage from "@/pages/portfolioPage.tsx";
 import { PeriodSearchSchema } from "@shared/schemas/search/periodSearchSchema.ts";
 import { createRootRoute, createRoute, } from "@tanstack/react-router";
@@ -41,14 +41,14 @@ const holdingRoute = createRoute({
 const transactionCreateRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: Urls.TransactionCreate,
-  component: TransactionCreatePage,
+  component: CreatePage,
   loader: transactionCreateLoader,
 })
 
 const transactionUpdateRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: Urls.TransactionUpdate,
-  component: TransactionUpdatePage,
+  component: UpdatePage,
   loader: transactionUpdateLoader,
 });
 

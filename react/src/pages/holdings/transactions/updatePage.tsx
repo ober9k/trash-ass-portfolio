@@ -12,7 +12,7 @@ import { getRouteApi, useRouter } from "@tanstack/react-router";
 import { useSnackbar } from "notistack";
 import { useActionState } from "react";
 
-function TransactionUpdatePage() {
+function UpdatePage() {
   const { asset, transaction }: TransactionUpdateLoaderProps = getRouteApi(Urls.TransactionUpdate).useLoaderData();
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
@@ -53,4 +53,4 @@ function TransactionUpdatePage() {
   );
 }
 
-export default TransactionUpdatePage;
+export default UpdatePage;
