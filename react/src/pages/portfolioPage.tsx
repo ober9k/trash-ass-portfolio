@@ -1,10 +1,10 @@
 import type { PortfolioLoaderProps } from "@/api/loaders.ts";
 import HoldingsCard from "@/components/holdings/holdingsCard";
+import NavigationTitle from "@/components/layout/navigation/navigationTitle.tsx";
 import NavigationBar from "@/components/layout/navigationBar.tsx";
 import PeriodToggle from "@/components/miscellaneous/periodToggle.tsx";
 import PortfolioCard from "@/components/portfolio/portfolioCard.tsx";
 import { Urls } from "@/config/urls.ts";
-import { Typography } from "@mui/material";
 import { Period } from "@shared/types/period.ts";
 import { getRouteApi, useRouter } from "@tanstack/react-router";
 
@@ -27,9 +27,7 @@ function PortfolioPage() {
     <>
       <article className="h-full min-h-screen bg-[#121212] pb-1">
         <NavigationBar>
-          <Typography variant="h4" component="h4" className="text-lg">
-            My Portfolio
-          </Typography>
+          <NavigationTitle>My Portfolio</NavigationTitle>
         </NavigationBar>
         <article className="flex flex-col gap-4 p-2 m-2">
           <PortfolioCard portfolio={portfolio} />

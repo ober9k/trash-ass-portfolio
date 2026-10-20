@@ -1,8 +1,8 @@
 import HomeBackButton from "@/components/layout/navigation/homeBackButton.tsx";
+import NavigationTitle from "@/components/layout/navigation/navigationTitle.tsx";
 import NavigationBar from "@/components/layout/navigationBar.tsx";
 import { auth, signInWithGooglePopup } from "@/firebase.ts";
 import useAuthContext from "@/hooks/useAuthContext.ts";
-import { Typography } from "@mui/material";
 import { useQueryClient } from "@tanstack/react-query";
 import { signOut } from "firebase/auth";
 
@@ -33,9 +33,7 @@ function SignInPage() {
   return (
     <>
       <NavigationBar leftSlot={HomeBackButton}>
-        <Typography variant="h4" component="h4" className="text-lg">
-         Sign In
-        </Typography>
+        <NavigationTitle>Sign In</NavigationTitle>
       </NavigationBar>
       {user ? (
         <section className={"p-4"}>

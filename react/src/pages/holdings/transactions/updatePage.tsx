@@ -1,5 +1,6 @@
 import type { TransactionUpdateLoaderProps } from "@/api/loaders";
 import { buildUpdateTransactionFn } from "@/api/mutationFunctions";
+import NavigationTitle from "@/components/layout/navigation/navigationTitle.tsx";
 import NavigationBar from "@/components/layout/navigationBar.tsx";
 import { Urls } from "@/config/urls.ts";
 import { buildFormAction } from "@/forms/transactions/actions";
@@ -41,9 +42,7 @@ function UpdatePage() {
     <>
       <article className="h-full min-h-screen bg-[#121212] pb-1">
         <NavigationBar leftSlot={leftSlot}>
-          <Typography variant="h4" component="h4" className="text-lg">
-            Update Transaction
-          </Typography>
+          <NavigationTitle>Update Transaction</NavigationTitle>
         </NavigationBar>
         <article className="flex flex-col gap-4 p-2 m-2">
           <UpdateForm asset={asset} formState={formState} formAction={formAction} isPending={isPending} onCancel={onCancel} />
