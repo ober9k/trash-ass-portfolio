@@ -1,11 +1,10 @@
 import FormErrors from "@/components/forms/formErrors.tsx";
-import type { TextFieldConfig } from "@/forms/transactions/fields";
-import type { FieldState } from "@/types/formState";
+import type { State, TextConfig } from "@/types/forms/fields";
 import { FormControl, FormLabel, TextField } from "@mui/material";
 
 type Props = {
-  config: TextFieldConfig,
-  state:  FieldState,
+  config: TextConfig,
+  state:  State,
 };
 
 function FormTextField(props: Props) {

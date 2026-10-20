@@ -1,7 +1,6 @@
 import AssetIcon from "@/components/assets/assetIcon.tsx";
 import FormTextField from "@/components/forms/formTextField";
-import type { FieldConfig } from "@/forms/transactions/fields";
-import type { FieldState } from "@/types/formState";
+import type { Config, State } from "@/types/forms/fields";
 import { FormFieldType } from "@/types/forms/fields/type";
 import { Box } from "@mui/material";
 import type { Asset } from "@shared/types/portfolio.ts";
@@ -13,7 +12,7 @@ type Props = {
 function AssetField(props: Props) {
   const { asset } = props;
 
-  const fieldConfig: FieldConfig = {
+  const config: Config = {
     label:    "Asset",
     name:     "asset",
     type:     FormFieldType.Text,
@@ -26,13 +25,13 @@ function AssetField(props: Props) {
     }
   };
 
-  const fieldState: FieldState = {
+  const state: State = {
     value:  asset.name,
     errors: [],
   };
 
   return (<>
-    <FormTextField config={fieldConfig} state={fieldState} />
+    <FormTextField config={config} state={state} />
   </>);
 }
 

@@ -6,10 +6,11 @@ export const Type = {
   Email:     "email",    // not yet handled
   Password:  "password", // not yet handled
   // special types
+  Checkbox:  "checkbox",
   Radio:     "radio",
+  Select:    "select",
 } as const;
 
 export type Type = typeof Type[keyof typeof Type];
 
-export { Type as FieldType }; /* aliased alternate */
-export { Type as FormFieldType }; /* aliased alternate */
+export { Type as FieldType, Type as FormFieldType }; /* aliased alternate */

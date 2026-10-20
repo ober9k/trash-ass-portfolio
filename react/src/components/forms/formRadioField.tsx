@@ -1,11 +1,10 @@
 import FormErrors from "@/components/forms/formErrors.tsx";
-import type { RadioFieldConfig } from "@/forms/transactions/fields";
-import type { FieldState } from "@/types/formState";
+import type { RadioConfig, State } from "@/types/forms/fields";
 import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from "@mui/material";
 
 type Props = {
-  config: RadioFieldConfig,
-  state:  FieldState,
+  config: RadioConfig,
+  state:  State,
 };
 
 function FormRadioField(props: Props) {

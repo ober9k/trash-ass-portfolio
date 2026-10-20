@@ -1,16 +1,16 @@
 import FormRadioField from "@/components/forms/formRadioField";
 import FormTextField from "@/components/forms/formTextField";
-import type { FieldConfig, RadioFieldConfig } from "@/forms/transactions/fields";
-import type { FormField } from "@/types/formState";
+import type { Config, RadioConfig } from "@/types/forms/fields";
+import type { Field } from "@/types/forms/fields/field";
 
 type Props = {
-  formFields: FormField[];
+  fields: Field[];
 }
 
 function FormFields(props: Props) {
-  const { formFields } = props;
+  const { fields: formFields } = props;
   
-  const isRadioField = (config: FieldConfig): config is RadioFieldConfig => {
+  const isRadioField = (config: Config): config is RadioConfig => {
     return config.type === "radio";
   };
 
