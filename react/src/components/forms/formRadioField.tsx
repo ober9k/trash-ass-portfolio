@@ -1,9 +1,11 @@
 import FormErrors from "@/components/forms/formErrors.tsx";
+import { FormFieldType } from "@/types/forms/fields/type.ts";
 import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from "@mui/material";
 
 export type FormRadioFieldState = {
   name:      string,
   label:     string,
+  type:      FormFieldType,
   required?: boolean,
   value?:    string,
   options:   { [key: string]: any }[],

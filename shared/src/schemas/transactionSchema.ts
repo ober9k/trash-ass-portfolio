@@ -10,7 +10,7 @@ export const TransactionSchema = z.object({
   quantity:    z.number().min(0),
   fee:         z.number().min(0),
   value:       z.number().min(0),
-  purchasedAt: z.date(),
+  purchasedAt: z.iso.datetime(),
 });
 
 export type TransactionData = z.infer<typeof TransactionSchema>;

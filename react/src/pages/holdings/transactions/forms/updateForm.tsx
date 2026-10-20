@@ -1,8 +1,9 @@
-import type { FormRadioFieldState } from "@/components/forms/formRadioField.tsx";
 import FormRadioField from "@/components/forms/formRadioField.tsx";
-import FormTextField, { type FormTextFieldState } from "@/components/forms/formTextField.tsx";
+import FormTextField from "@/components/forms/formTextField.tsx";
 import AltCardHeader from "@/components/miscellaneous/altCardHeader.tsx";
 import FormAssetField from "@/pages/holdings/transactions/forms/formAssetField.tsx";
+import { formFields } from "@/pages/holdings/transactions/forms/formFields.ts";
+import { FormFieldType } from "@/types/forms/fields/type.ts";
 import type { FormState } from "@/types/formState.ts";
 import { Box, Card, CardActions, CardContent, Divider } from "@mui/material";
 import Button from "@mui/material/Button";
@@ -21,64 +22,11 @@ function UpdateForm(props: Props) {
   const { asset, formState, formAction, isPending, onCancel } = props;
   const { formErrors, fieldValues, fieldErrors } = formState;
 
-  const typeFieldState: FormRadioFieldState = {
-    name:     "type",
-    label:    "Type",
-    required: true,
-    value:    fieldValues.type?.toString(),
-    options:  [
-      { label: "Buy",      value: "buy" },
-      { label: "Sell",     value: "sell" },
-      { label: "Yield",    value: "yield" },
-      { label: "Transfer", value: "transfer" },
-    ],
-    errors:   fieldErrors.type || [],
-  };
-
-  const priceFieldState: FormTextFieldState = {
-    name:     "price",
-    type:     "text",
-    label:    "Price",
-    required: true,
-    value:    fieldValues.price?.toString(),
-    errors:   fieldErrors.price || [],
-  };
-
-  const quantityFieldState: FormTextFieldState = {
-    name:     "quantity",
-    type:     "text",
-    label:    "Quantity",
-    required: true,
-    value:    fieldValues.quantity?.toString(),
-    errors:   fieldErrors.quantity || [],
-  };
-
-  const feeFieldState: FormTextFieldState = {
-    name:     "fee",
-    type:     "text",
-    label:    "Fee",
-    required: true,
-    value:    fieldValues.fee?.toString(),
-    errors:   fieldErrors.fee || [],
-  };
-
-  const valueFieldState: FormTextFieldState = {
-    name:     "value",
-    type:     "text",
-    label:    "Value",
-    required: true,
-    value:    fieldValues.value?.toString(),
-    errors:   fieldErrors.value || [],
-  };
-
-  const purchasedAtFieldState: FormTextFieldState = {
-    name:     "purchasedAt",
-    type:     "datetime-local",
-    label:    "PurchasedAt",
-    required: true,
-    value:    fieldValues.purchasedAt?.toString(),
-    errors:   fieldErrors.purchasedAt || [],
-  };
+  const formFieldStates = formFields.map((formField) => ({
+    ...formField,
+    value:  fieldValues[formField.name as keyof typeof fieldValues] ?? "",
+    errors: fieldErrors[formField.name as keyof typeof fieldErrors] || [],
+  }));
 
   return (<>
     <Box component="form" action={formAction} noValidate>
@@ -87,12 +35,13 @@ function UpdateForm(props: Props) {
         <Divider className={"py-2"} />
         <CardContent className="flex flex-col gap-3">
           <FormAssetField asset={asset} />
-          <FormRadioField fieldState={typeFieldState} />
-          <FormTextField fieldState={priceFieldState} />
-          <FormTextField fieldState={quantityFieldState} />
-          <FormTextField fieldState={feeFieldState} />
-          <FormTextField fieldState={valueFieldState} />
-          <FormTextField fieldState={purchasedAtFieldState} />
+          {formFieldStates.map((fieldState) => (
+            (fieldState.type === FormFieldType.Radio) ? (
+              <FormRadioField key={fieldState.name} fieldState={fieldState} />
+            ) : (
+              <FormTextField key={fieldState.name} fieldState={fieldState} />
+            )
+          ))}
         </CardContent>
         <Divider className={"py-2"} />
         <CardActions className="flex flex-row gap-2 justify-center p-4">

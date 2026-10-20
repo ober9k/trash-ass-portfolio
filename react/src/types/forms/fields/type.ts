@@ -5,6 +5,8 @@ export const Type = {
   Number:    "number",
   Email:     "email",    // not yet handled
   Password:  "password", // not yet handled
+  // special types
+  Radio:     "radio",
 } as const;
 
 export type Type = typeof Type[keyof typeof Type];

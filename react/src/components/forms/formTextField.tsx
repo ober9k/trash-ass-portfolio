@@ -1,6 +1,6 @@
 import FormErrors from "@/components/forms/formErrors.tsx";
-import { FormControl, FormControlLabel, FormLabel, TextField } from "@mui/material";
-import type { Type } from "@/types/forms/fields/field";
+import type { Type } from "@/types/forms/fields/type";
+import { FormControl, FormLabel, TextField } from "@mui/material";
 
 export type FormTextFieldState = {
   name:      string,
