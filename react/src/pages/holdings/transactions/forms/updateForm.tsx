@@ -2,7 +2,7 @@ import { CancelButton, CreateButton, UpdateButton } from "@/components/forms/but
 import AssetField from "@/components/forms/customFields/assetField";
 import FormFields from "@/components/forms/formFields";
 import AltCardHeader from "@/components/miscellaneous/altCardHeader.tsx";
-import { fieldConfigs } from "@/forms/transactions/fieldConfigs";
+import { configs } from "@/forms/transactions/configs.ts";
 import type { Field } from "@/types/forms/fields";
 import type { FormState } from "@/types/formState.ts";
 import { Box, Card, CardActions, CardContent, Divider } from "@mui/material";
@@ -22,7 +22,7 @@ function UpdateForm(props: Props) {
   const { asset, formState, formAction, isCreate = false, isPending = false, onCancel } = props;
   const { formErrors, fieldValues, fieldErrors } = formState;
 
-  const fields: Field[] = fieldConfigs.map((config) => ({
+  const fields: Field[] = configs.map((config) => ({
     config: config,
     state: {
       value:  fieldValues[config.name as keyof typeof fieldValues].toString() ?? "",

@@ -4,7 +4,7 @@ import { FormFieldType } from "@/types/forms/fields/type";
 /**
  * TODO: update to instead include radio/text field as a single generic type
  */
-export const fieldConfigs: Array<Config> = [{
+export const configs: Array<Config> = [{
   label:    "Type",
   name:     "type",
   type:     FormFieldType.Radio,
