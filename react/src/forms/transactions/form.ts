@@ -13,7 +13,7 @@ export function buildInitialState(transaction?: TransactionData): FormState<Tran
       quantity:    transaction.quantity,
       fee:         transaction.fee,
       value:       transaction.value,
-      purchasedAt: toDateTimeLocalString(transaction.purchasedAt),
+      purchasedAt: toDateTimeLocalString(new Date(transaction.purchasedAt)), /* TODO: lol, eww */
     } : {
       type:        "",
       price:       0,

@@ -47,6 +47,14 @@ export function getValue(formData: FormData, key: string): string | undefined {
 }
 
 /**
+ * Helper for handling date time values.
+ * TODO: this needs to be improved as it's the bare minimum
+ */
+export function getIsoDateValue(formData: FormData, key: string): string | undefined {
+  return new Date(getValue(formData, key)?? "").toISOString();
+}
+
+/**
  * Helper for handling int values from `formData`.
  * TODO: reduce duplication
  */

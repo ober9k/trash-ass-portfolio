@@ -1,5 +1,5 @@
 import type { FormState } from "@/types/formState.ts";
-import { getFloatValue, getValue, onFieldError, onFormError, onSuccess, onUnexpectedError } from "@/utils/formUtils";
+import { getFloatValue, getIsoDateValue, getValue, onFieldError, onFormError, onSuccess, onUnexpectedError, toDateTimeLocalString } from "@/utils/formUtils";
 import { type TransactionData, TransactionSchema } from "@shared/schemas/transactionSchema";
 import axios from "axios";
 import { z } from "zod";
@@ -13,17 +13,17 @@ export const buildFormAction = (mutation) => {
       quantity:    getFloatValue(formData, "quantity"),
       fee:         getFloatValue(formData, "fee"),
       value:       getFloatValue(formData, "value"),
-      purchasedAt: new Date(getValue(formData, "purchasedAt")?.toString() ?? ""),
+      purchasedAt: getIsoDateValue(formData, "purchasedAt"),
     };
 
-    console.log("fieldValues", getFloatValue(formData, "price"));
-
     try {
-      const data: TransactionData = { ... fieldValues };
-      TransactionSchema.parse(data);
+      const data = TransactionSchema.parse(fieldValues);
       await mutation.mutateAsync(data);
     }
     catch (error) {
+      // TODO: handle date properly
+      fieldValues.purchasedAt = toDateTimeLocalString(new Date(fieldValues.purchasedAt!));
+
       if (error instanceof z.ZodError) {
         const { fieldErrors } = z.flattenError(error);
         return onFieldError(fieldValues, fieldErrors);
