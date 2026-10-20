@@ -46,7 +46,7 @@ function TransactionCreatePage() {
           </Typography>
         </NavigationBar>
         <article className="flex flex-col gap-4 p-2 m-2">
-          <UpdateForm asset={asset} formState={formState} formAction={formAction} isPending={isPending} onCancel={onCancel} />
+          <UpdateForm asset={asset} formState={formState} formAction={formAction} isPending={isPending} isCreate={true} onCancel={onCancel} />
         </article>
       </article>
     </>
