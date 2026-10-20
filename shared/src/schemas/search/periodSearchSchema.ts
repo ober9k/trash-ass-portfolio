@@ -1,5 +1,5 @@
+import { Period } from "@shared/types/period";
 import { z } from "zod";
-import { Period } from "../../types/period";
 
 const Periods = [Period.OneHour, Period.OneDay, Period.OneWeek, Period.OneMonth, Period.OneYear].map(_ => _.toString());
 

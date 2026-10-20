@@ -1,4 +1,4 @@
-import { Ticker } from "../ticker";
+import { Ticker } from "@shared/types/ticker";
 
 export type DbAsset = {
   id:     string,

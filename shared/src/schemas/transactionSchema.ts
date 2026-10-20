@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { TransactionType } from "../types/transactionType";
+import { TransactionType } from "@shared/types/transactionType";
 
 const TransactionTypes = [TransactionType.Buy, TransactionType.Sell, TransactionType.Yield, TransactionType.Transfer].map(_ => _.toString());
 const TransactionTypeLabels = TransactionTypes.join(", ");

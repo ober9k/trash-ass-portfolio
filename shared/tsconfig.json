@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    // TODO: use shared options from tsconfig.base.json file 
+
+    "paths": {
+      "@shared/*": ["./../shared/src/*"]
+    }
+  }
+}

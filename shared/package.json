@@ -1,4 +1,10 @@
 {
+  "name": "trash-ass-portfolio/shared",
+  "version": "1.0.0",
+  "description": "Shared types and schemas used for the Trash Ass Portfolio web application.",
+  "license": "ISC",
+  "author": "Dean H",
+  
   "dependencies": {
     "zod": "^4.6.5"
   }
