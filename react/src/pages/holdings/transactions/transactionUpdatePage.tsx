@@ -4,11 +4,11 @@ import NavigationBar from "@/components/layout/navigationBar.tsx";
 import { Urls } from "@/config/urls.ts";
 import { buildFormAction } from "@/forms/transactions/actions";
 import { buildInitialState } from "@/forms/transactions/form.ts";
+import BackButton from "@/pages/holdings/transactions/components/backButton";
 import UpdateForm from "@/pages/holdings/transactions/forms/updateForm.tsx";
-import { IconButton, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
-import { getRouteApi, Link, useRouter } from "@tanstack/react-router";
-import { ArrowLeft } from "lucide-react";
+import { getRouteApi, useRouter } from "@tanstack/react-router";
 import { useSnackbar } from "notistack";
 import { useActionState } from "react";
 
@@ -17,13 +17,7 @@ function TransactionUpdatePage() {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
 
-  const leftSlot = (
-    <IconButton size="large" color="inherit" edge="start" aria-label="go back">
-      <Link to={Urls.Holding} params={{ holdingId: asset.id }}>
-        <ArrowLeft />
-      </Link>
-    </IconButton>
-  );
+  const leftSlot = (<BackButton asset={asset} />);
 
   const mutation = useMutation({
     mutationFn: buildUpdateTransactionFn(asset.id, transaction.id),
