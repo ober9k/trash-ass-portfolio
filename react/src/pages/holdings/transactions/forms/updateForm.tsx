@@ -1,8 +1,8 @@
 import FormRadioField from "@/components/forms/formRadioField.tsx";
 import FormTextField from "@/components/forms/formTextField.tsx";
 import AltCardHeader from "@/components/miscellaneous/altCardHeader.tsx";
+import { fields } from "@/forms/transactions/fields.ts";
 import FormAssetField from "@/pages/holdings/transactions/forms/formAssetField.tsx";
-import { formFields } from "@/pages/holdings/transactions/forms/formFields.ts";
 import { FormFieldType } from "@/types/forms/fields/type.ts";
 import type { FormState } from "@/types/formState.ts";
 import { Box, Card, CardActions, CardContent, Divider } from "@mui/material";
@@ -22,7 +22,7 @@ function UpdateForm(props: Props) {
   const { asset, formState, formAction, isPending, onCancel } = props;
   const { formErrors, fieldValues, fieldErrors } = formState;
 
-  const formFieldStates = formFields.map((formField) => ({
+  const formFieldStates = fields.map((formField) => ({
     ...formField,
     value:  fieldValues[formField.name as keyof typeof fieldValues] ?? "",
     errors: fieldErrors[formField.name as keyof typeof fieldErrors] || [],

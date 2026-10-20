@@ -16,7 +16,7 @@ export type FieldConfig = {
 /**
  * TODO: update to instead include radio/text field as a single generic type
  */
-export const formFields: Array<FieldConfig> = [{
+export const fields: Array<FieldConfig> = [{
   label:    "Type",
   name:     "type",
   type:     FormFieldType.Radio,
