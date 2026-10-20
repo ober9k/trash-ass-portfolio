@@ -1,7 +1,6 @@
-import FormRadioField from "@/components/forms/formRadioField.tsx";
-import FormTextField from "@/components/forms/formTextField.tsx";
+import FormFields from "@/components/forms/formFields";
 import AltCardHeader from "@/components/miscellaneous/altCardHeader.tsx";
-import { fields, type FieldConfig, type RadioFieldConfig } from "@/forms/transactions/fields.ts";
+import { fields, type FieldConfig } from "@/forms/transactions/fields.ts";
 import FormAssetField from "@/pages/holdings/transactions/forms/formAssetField.tsx";
 import type { FieldState, FormState } from "@/types/formState.ts";
 import { Box, Card, CardActions, CardContent, Divider } from "@mui/material";
@@ -34,10 +33,6 @@ function UpdateForm(props: Props) {
     },
   }));
 
-  const isRadioField = (config: FieldConfig): config is RadioFieldConfig => {
-    return config.type === "radio";
-  };
-
   return (<>
     <Box component="form" action={formAction} noValidate>
       <Card>
@@ -45,13 +40,7 @@ function UpdateForm(props: Props) {
         <Divider className={"py-2"} />
         <CardContent className="flex flex-col gap-3">
           <FormAssetField asset={asset} />
-          {formFields.map(({ config, state }) => (
-            (isRadioField(config)) ? (
-              <FormRadioField key={config.name} config={config} state={state} />
-            ) : (
-              <FormTextField key={config.name} config={config} state={state} />
-            )
-          ))}
+          <FormFields formFields={formFields} />
         </CardContent>
         <Divider className={"py-2"} />
         <CardActions className="flex flex-row gap-2 justify-center p-4">
