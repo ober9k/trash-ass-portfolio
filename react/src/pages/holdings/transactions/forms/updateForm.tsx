@@ -1,7 +1,7 @@
 import FormFields from "@/components/forms/formFields";
 import AltCardHeader from "@/components/miscellaneous/altCardHeader.tsx";
 import { fields, type FieldConfig } from "@/forms/transactions/fields.ts";
-import FormAssetField from "@/pages/holdings/transactions/forms/formAssetField.tsx";
+import AssetField from "@/components/forms/customFields/assetField";
 import type { FieldState, FormState } from "@/types/formState.ts";
 import { Box, Card, CardActions, CardContent, Divider } from "@mui/material";
 import Button from "@mui/material/Button";
@@ -39,7 +39,7 @@ function UpdateForm(props: Props) {
         <AltCardHeader title={"Transaction Details"} />
         <Divider className={"py-2"} />
         <CardContent className="flex flex-col gap-3">
-          <FormAssetField asset={asset} />
+          <AssetField asset={asset} />
           <FormFields formFields={formFields} />
         </CardContent>
         <Divider className={"py-2"} />

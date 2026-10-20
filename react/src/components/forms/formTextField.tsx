@@ -9,13 +9,13 @@ type Props = {
 };
 
 function FormTextField(props: Props) {
-  const { name, type, label, required } = props.config;
+  const { name, type, label, required = false, disabled = false, slotProps } = props.config;
   const { value, errors } = props.state;
 
   return (<>
     <FormControl fullWidth={true}>
       <FormLabel id={name + "-label"} htmlFor={name} required={required} className="py-3">{label}</FormLabel>
-      <TextField id={name} name={name} type={type} required={required} defaultValue={value} />
+      <TextField id={name} name={name} type={type} required={required} disabled={disabled} defaultValue={value} slotProps={slotProps} />
       <FormErrors errors={errors} />
     </FormControl>
   </>)

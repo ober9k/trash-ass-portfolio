@@ -1,9 +1,12 @@
 import { FormFieldType } from "@/types/forms/fields/type";
+import type { TextFieldSlots } from "@mui/material";
 
 type BaseFieldConfig = {
-  name:      string,
-  label:     string,
-  required?: boolean,
+  name:       string,
+  label:      string,
+  required?:  boolean,
+  disabled?:  boolean,
+  slotProps?: Pick<TextFieldSlots, "input">,
 };
 
 type WithFieldOptions = {
