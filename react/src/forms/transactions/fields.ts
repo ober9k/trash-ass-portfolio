@@ -1,17 +1,24 @@
 import { FormFieldType } from "@/types/forms/fields/type";
 
-export type FieldConfig = {
-  type:      "radio",
-  name:      string,
-  label:     string,
-  required?: boolean,
-  options:   Record<string, string>[],
-} | {
-  type:      FormFieldType,
+type BaseFieldConfig = {
   name:      string,
   label:     string,
   required?: boolean,
 };
+
+type WithFieldOptions = {
+  options: Record<string, string>[],
+};
+
+export type RadioFieldConfig = {
+  type: Extract<FormFieldType, "radio">,
+} & BaseFieldConfig & WithFieldOptions;
+
+export type TextFieldConfig = {
+  type: Exclude<FormFieldType, "radio">,
+} & BaseFieldConfig;
+
+export type FieldConfig = RadioFieldConfig | TextFieldConfig;
 
 /**
  * TODO: update to instead include radio/text field as a single generic type

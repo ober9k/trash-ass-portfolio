@@ -1,23 +1,16 @@
 import FormErrors from "@/components/forms/formErrors.tsx";
-import { FormFieldType } from "@/types/forms/fields/type.ts";
+import type { RadioFieldConfig } from "@/forms/transactions/fields";
+import type { FieldState } from "@/types/formState";
 import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from "@mui/material";
 
-export type FormRadioFieldState = {
-  name:      string,
-  label:     string,
-  type:      FormFieldType,
-  required?: boolean,
-  value?:    string,
-  options:   { [key: string]: any }[],
-  errors:    string[],
-};
-
 type Props = {
-  fieldState: FormRadioFieldState,
+  config: RadioFieldConfig,
+  state:  FieldState,
 };
 
 function FormRadioField(props: Props) {
-  const { name, label, required, value, options, errors } = props.fieldState;
+  const { name, label, required, options } = props.config;
+  const { value, errors } = props.state;
 
   return (<>
     <FormControl fullWidth={true}>

@@ -1,10 +1,9 @@
 import FormRadioField from "@/components/forms/formRadioField.tsx";
 import FormTextField from "@/components/forms/formTextField.tsx";
 import AltCardHeader from "@/components/miscellaneous/altCardHeader.tsx";
-import { fields } from "@/forms/transactions/fields.ts";
+import { fields, type FieldConfig, type RadioFieldConfig } from "@/forms/transactions/fields.ts";
 import FormAssetField from "@/pages/holdings/transactions/forms/formAssetField.tsx";
-import { FormFieldType } from "@/types/forms/fields/type.ts";
-import type { FormState } from "@/types/formState.ts";
+import type { FieldState, FormState } from "@/types/formState.ts";
 import { Box, Card, CardActions, CardContent, Divider } from "@mui/material";
 import Button from "@mui/material/Button";
 import type { TransactionData } from "@shared/schemas/transactionSchema.ts";
@@ -18,15 +17,26 @@ type Props = {
   onCancel:   () => void,
 };
 
+type Field = {
+  config: FieldConfig,
+  state:  FieldState,
+};
+
 function UpdateForm(props: Props) {
   const { asset, formState, formAction, isPending, onCancel } = props;
   const { formErrors, fieldValues, fieldErrors } = formState;
 
-  const formFieldStates = fields.map((formField) => ({
-    ...formField,
-    value:  fieldValues[formField.name as keyof typeof fieldValues] ?? "",
-    errors: fieldErrors[formField.name as keyof typeof fieldErrors] || [],
+  const formFields: Field[] = fields.map((config) => ({
+    config: config,
+    state: {
+      value:  fieldValues[config.name as keyof typeof fieldValues].toString() ?? "",
+      errors: fieldErrors[config.name as keyof typeof fieldErrors] || [],
+    },
   }));
+
+  const isRadioField = (config: FieldConfig): config is RadioFieldConfig => {
+    return config.type === "radio";
+  };
 
   return (<>
     <Box component="form" action={formAction} noValidate>
@@ -35,11 +45,11 @@ function UpdateForm(props: Props) {
         <Divider className={"py-2"} />
         <CardContent className="flex flex-col gap-3">
           <FormAssetField asset={asset} />
-          {formFieldStates.map((fieldState) => (
-            (fieldState.type === FormFieldType.Radio) ? (
-              <FormRadioField key={fieldState.name} fieldState={fieldState} />
+          {formFields.map(({ config, state }) => (
+            (isRadioField(config)) ? (
+              <FormRadioField key={config.name} config={config} state={state} />
             ) : (
-              <FormTextField key={fieldState.name} fieldState={fieldState} />
+              <FormTextField key={config.name} config={config} state={state} />
             )
           ))}
         </CardContent>

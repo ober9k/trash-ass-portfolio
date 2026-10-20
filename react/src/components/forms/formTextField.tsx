@@ -1,22 +1,16 @@
 import FormErrors from "@/components/forms/formErrors.tsx";
-import type { Type } from "@/types/forms/fields/type";
+import type { TextFieldConfig } from "@/forms/transactions/fields";
+import type { FieldState } from "@/types/formState";
 import { FormControl, FormLabel, TextField } from "@mui/material";
 
-export type FormTextFieldState = {
-  name:      string,
-  type:      Type,
-  label:     string,
-  required?: boolean,
-  value?:    string,
-  errors:    string[],
-};
-
 type Props = {
-  fieldState: FormTextFieldState,
+  config: TextFieldConfig,
+  state:  FieldState,
 };
 
 function FormTextField(props: Props) {
-  const { name, type, label, required, value, errors } = props.fieldState;
+  const { name, type, label, required } = props.config;
+  const { value, errors } = props.state;
 
   return (<>
     <FormControl fullWidth={true}>

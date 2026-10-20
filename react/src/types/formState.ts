@@ -10,3 +10,8 @@ export type FormState<T> = {
   fieldValues: T,
   fieldErrors: Partial<AsFieldError<T>>,
 };
+
+export type FieldState = {
+  value:  string,
+  errors: string[],
+};
