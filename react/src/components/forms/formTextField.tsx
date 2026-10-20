@@ -1,9 +1,10 @@
 import FormErrors from "@/components/forms/formErrors.tsx";
 import { FormControl, FormControlLabel, FormLabel, TextField } from "@mui/material";
+import type { Type } from "@/types/forms/fields/field";
 
 export type FormTextFieldState = {
   name:      string,
-  type:      "text" | "date" | "datetime-local" | "email" | "password",
+  type:      Type,
   label:     string,
   required?: boolean,
   value?:    string,
