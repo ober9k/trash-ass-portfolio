@@ -25,6 +25,7 @@ function PortfolioPage() {
 
   return (
     <>
+      <title>My Portfolio</title>
       <article className="h-full min-h-screen bg-[#121212] pb-1">
         <NavigationBar>
           <NavigationTitle>My Portfolio</NavigationTitle>

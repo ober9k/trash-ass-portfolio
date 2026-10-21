@@ -40,6 +40,7 @@ function CreatePage() {
 
   return (
     <>
+      <title>Create Transaction</title>
       <article className="h-full min-h-screen bg-[#121212] pb-1">
         <NavigationBar leftSlot={leftSlot}>
           <NavigationTitle>Add Transaction</NavigationTitle>

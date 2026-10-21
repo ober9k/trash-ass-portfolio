@@ -40,6 +40,7 @@ function UpdatePage() {
 
   return (
     <>
+      <title>Update Transaction</title>
       <article className="h-full min-h-screen bg-[#121212] pb-1">
         <NavigationBar leftSlot={leftSlot}>
           <NavigationTitle>Update Transaction</NavigationTitle>

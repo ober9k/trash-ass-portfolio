@@ -5,6 +5,7 @@ import { Card, CardContent } from "@mui/material";
 
 function SignOutPage() {
   return (<>
+    <title>Sign Out</title>
     <article className="h-full min-h-screen bg-[#121212] pb-1">
       <NavigationBar leftSlot={HomeBackButton}>
         <NavigationTitle>Sign Out</NavigationTitle>

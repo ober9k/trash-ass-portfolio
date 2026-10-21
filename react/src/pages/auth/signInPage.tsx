@@ -32,6 +32,7 @@ function SignInPage() {
 
   return (
     <>
+      <title>Sign In</title>
       <NavigationBar leftSlot={HomeBackButton}>
         <NavigationTitle>Sign In</NavigationTitle>
       </NavigationBar>

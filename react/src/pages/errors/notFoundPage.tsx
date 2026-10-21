@@ -7,9 +7,10 @@ import { Card, CardContent } from "@mui/material";
 function NotFoundPage() {
   return (
     <>
+      <title>Not Found</title>
       <article className="h-full min-h-screen bg-[#121212] pb-1">
         <NavigationBar leftSlot={HomeBackButton}>
-          <NavigationTitle>Error: Not Found</NavigationTitle>
+          <NavigationTitle>Not Found</NavigationTitle>
         </NavigationBar>
         <article className="flex flex-col gap-4 p-2 m-2">
           <Card>

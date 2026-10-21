@@ -17,16 +17,17 @@ function ProfilePage() {
   };
 
   return (<>
+    <title>My Profile</title>
     <article className="h-full min-h-screen bg-[#121212] pb-1">
       <NavigationBar leftSlot={HomeBackButton}>
-        <NavigationTitle>Profile</NavigationTitle>
+        <NavigationTitle>My Profile</NavigationTitle>
       </NavigationBar>
       <article className="flex flex-col gap-4 p-2 m-2">
         <Card>
           <CardContent>
-            <img src={user.photoURL} /><br/>
+            <img src={user.photoURL} /><br />
             <Typography>{user.displayName}</Typography>
-            <Typography>{user.email}</Typography><br/>
+            <Typography>{user.email}</Typography><br />
             <Button onClick={triggerToastNotification()}>Show Success</Button>
           </CardContent>
         </Card>
