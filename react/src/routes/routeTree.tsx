@@ -9,6 +9,7 @@ import NotFoundPage from "@/pages/errors/notFoundPage.tsx";
 import HoldingPage from "@/pages/holdings/holdingPage.tsx";
 import CreatePage from "@/pages/holdings/transactions/createPage.tsx";
 import UpdatePage from "@/pages/holdings/transactions/updatePage.tsx";
+import AboutPage from "@/pages/aboutPage.tsx";
 import PortfolioPage from "@/pages/portfolioPage.tsx";
 import { PeriodSearchSchema } from "@shared/schemas/search/periodSearchSchema.ts";
 import { createRootRoute, createRoute, } from "@tanstack/react-router";
@@ -26,6 +27,12 @@ const portfolioRoute = createRoute({
   loader: portfolioLoader,
   validateSearch: PeriodSearchSchema,
   loaderDeps: ({ search: { period } }) => ({ period }),
+});
+
+const aboutRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: Urls.About,
+  component: AboutPage,
 });
 
 const holdingRoute = createRoute({
@@ -72,7 +79,8 @@ const signOutRoute = createRoute({
 });
 
 export const routeTree = rootRoute.addChildren([
-  portfolioRoute, 
+  portfolioRoute,
+  aboutRoute,
   holdingRoute, 
   transactionCreateRoute,
   transactionUpdateRoute,

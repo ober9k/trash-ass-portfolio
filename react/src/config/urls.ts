@@ -1,6 +1,7 @@
 export const Urls = {
   // standard pages
   Portfolio:   "/",
+  About:       "/about",
   Holding:     "/holdings/$holdingId", /* working off `ticker` for now */
   TransactionCreate: "/holdings/$holdingId/transactions/create",
   TransactionUpdate: "/holdings/$holdingId/transactions/$transactionId/update",
