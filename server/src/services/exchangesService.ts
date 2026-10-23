@@ -56,6 +56,18 @@ export async function updateExchange(id: string, data: any): Promise<DbExchange>
   return toExchange(await ref.get());
 }
 
+export async function createFixedExchange(id: string, data: any): Promise<DbExchange> {
+  const ref = getCollection().doc(id);
+  await ref.set({
+    name:      data.name,
+    website:   data.website,
+    createdAt: FieldValue.serverTimestamp(),
+    updatedAt: FieldValue.serverTimestamp(),
+  }, { merge: true });
+
+  return toExchange(await ref.get());
+}
+
 /* aliases to avoid conflicts */
 export { fetchExchanges as dbFetchExchanges };
 export { fetchExchange  as dbFetchExchange  };
