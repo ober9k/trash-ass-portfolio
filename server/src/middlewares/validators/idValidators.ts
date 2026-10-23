@@ -1,13 +1,13 @@
 import { idValidationHandler } from "../idValidationHandler";
 
-export function assetIdValidationHandler() {
+export function validateAssetId() {
   return idValidationHandler("assetId");
 }
 
-export function holdingIdValidationHandler() {
+export function validateHoldingId() {
   return idValidationHandler("holdingId");
 }
 
-export function transactionIdValidationHandler() {
+export function validateTransactionId() {
   return idValidationHandler("transactionId");
 }
