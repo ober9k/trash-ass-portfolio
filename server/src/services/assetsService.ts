@@ -66,6 +66,18 @@ export async function updateAsset(id: string, data: any): Promise<DbAsset> {
   return toAsset(await ref.get());
 }
 
+export async function createFixedAsset(id: string, data: any): Promise<DbAsset> {
+  const ref = getCollection().doc(id);
+  await ref.set({
+    apiId:     data.apiId,
+    name:      data.name,
+    ticker:    data.ticker,
+    createdAt: FieldValue.serverTimestamp(),
+    updatedAt: FieldValue.serverTimestamp(),
+  });
+
+  return toAsset(await ref.get());
+}
 
 /* aliases to avoid conflicts */
 export { fetchAssets as dbFetchAssets };
