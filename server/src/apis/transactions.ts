@@ -21,6 +21,10 @@ function toTransaction(doc): DbTransaction {
   };
 }
 
+function isOwnTransaction(doc, accountId: string): boolean {
+  return doc.data()?.accountId === accountId;
+}
+
 /**
  * Return all transactions.
  * Not recommended for use as the asset is not returned.
@@ -72,7 +76,7 @@ export async function fetchUserTransactionById(accountId: string, transactionId:
     throw new HttpException(StatusCodes.NOT_FOUND, "Not Found", "Transaction for given `transactionId` not found.");
   }
 
-  if (res.data().accountId !== accountId) {
+  if (!isOwnTransaction(res, accountId)) {
     throw new HttpException(StatusCodes.FORBIDDEN, "Forbidden", "Transaction for given `transactionId` is not accessible.");
   }
 
