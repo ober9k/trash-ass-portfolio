@@ -11,6 +11,12 @@ import { SnackbarProvider } from "notistack";
 /* pass with all requests */
 axios.defaults.withCredentials = true;
 
+declare module "@tanstack/react-router" {
+  interface Register {
+    router: typeof router
+  }
+}
+
 export const router = createRouter({
   routeTree,
   context: {
