@@ -1,13 +1,12 @@
-import { fetchAssetById, fetchAssetByTicker, fetchAssetsByIds } from "@/apis/assets";
-import { getHistoricPrices, getLatestPrices, getPrices, getQuote } from "@/apis/prices";
+import { getHistoricPrices, getLatestPrices } from "@/apis/prices";
 import { fetchSummariesByAccountId, fetchSummaryByAccountIdAndAssetId } from "@/apis/summaries";
-import { fetchTransactionsByAssetId } from "@/apis/transactions";
+import { dbFetchAsset, dbFetchAssetsByIds } from "@/services/assetsService";
 import { buildBaseHoldingFromAssetAndSummary, buildEmptyPortfolio } from "@/utils";
 import { byApiId } from "@/utils/pricesUtils";
 import { calculateQuotedValue, mapApiIds, mapAssetIds } from "@/utils/summariesUtils";
 import { Firestore } from "@google-cloud/firestore";
 import { Period } from "@shared/types/period";
-import type { Holding, Portfolio, Transaction } from "@shared/types/portfolio";
+import type { Holding, Portfolio } from "@shared/types/portfolio";
 
 Firestore.name; /* hack: leave in for types (for now) */
 
@@ -74,7 +73,7 @@ export async function getHoldingsByAccountId(accountId: string, period: Period):
     ? await getHistoricPrices(apiIds, periodParam as Period)
     : [];
 
-  const assets = await fetchAssetsByIds(assetIds);
+  const assets = await dbFetchAssetsByIds(assetIds);
   const holdings = [];
 
   /* TODO: initial to check it works, need to tidy up */
@@ -102,7 +101,7 @@ export async function getHoldingsByAccountId(accountId: string, period: Period):
  * Retrieve holding asset/summary based on the provided ticker.
  */
 export async function getHoldingByAccountIdAndAssetId(accountId: string, assetId: string): Promise<Holding> {
-  const asset   = await fetchAssetById(assetId);
+  const asset   = await dbFetchAsset(assetId);
   const summary = await fetchSummaryByAccountIdAndAssetId(accountId, assetId);
   const currentPrices = await getLatestPrices([asset.apiId]);
   const currentQuotedAsset = currentPrices.find(byApiId(asset.apiId));
@@ -111,19 +110,4 @@ export async function getHoldingByAccountIdAndAssetId(accountId: string, assetId
   holding.summary.currentValue = calculateQuotedValue(summary, currentQuotedAsset);
 
   return holding;
-}
-
-/**
- Retrieve holding transactions based on the provided ticker.
- * @param ticker
- */
-export async function getHoldingTransactionsByTicker(ticker: string): Promise<Transaction[]> {
-  const asset  = await fetchAssetByTicker(ticker);
-  const prices = await getPrices([asset.ticker])
-  const quote  = await getQuote(prices, asset.ticker);
-  const transactions = await fetchTransactionsByAssetId(asset.id);
-
-  return transactions.map((t) => ({
-    ...t, currentValue: t.quantity * quote.price,
-  }));
 }

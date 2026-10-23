@@ -1,26 +1,13 @@
-import { fetchAssetById, fetchAssetByTicker } from "@/apis/assets";
+import { createAsset, getAsset, getAssets, updateAsset } from "@/controllers/assetsController";
 import { validateAssetId } from "@/middlewares/validators/idValidators";
-import { type Request, type Response, Router } from "express";
-import { StatusCodes } from "http-status-codes/build/cjs/status-codes";
+import { validateAssetSchema } from "@/middlewares/validators/schemaValidators";
+import { Router } from "express";
 
 const router = Router();
 
-// router.use(isAuthenticated);
-
-router.get("/:assetId", [validateAssetId()], async (req: Request, res: Response) => {
-  const assetId = req.params["assetId"] as string;
-
-  return res.status(StatusCodes.OK).json(
-    await fetchAssetById(assetId),
-  );
-});
-
-router.get("/tickers/:ticker", [/* ticker check */], async (req: Request, res: Response) => {
-  const ticker = req.params["ticker"] as string;
-
-  return res.status(StatusCodes.OK).json(
-    await fetchAssetByTicker(ticker.toLocaleUpperCase()),
-  );
-});
+router.get("/", [], getAssets);
+router.get("/:assetId", [validateAssetId()], getAsset);
+router.post("/", [validateAssetSchema()], createAsset);
+router.put("/:assetId", [validateAssetId, validateAssetSchema()], updateAsset);
 
 export { router as assetsRoutes };
