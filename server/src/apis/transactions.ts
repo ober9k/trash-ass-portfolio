@@ -43,7 +43,7 @@ export async function fetchTransactionsByAssetId(assetId: string, limit: number 
   return res.docs.map(toTransaction);
 }
 
-export async function fetchTransactionsByAccountIdAndAssetId(accountId: string, assetId: string, limit: number = 10): Promise<DbTransaction[]> {
+export async function fetchUserTransactionsByAssetId(accountId: string, assetId: string, limit: number = 10): Promise<DbTransaction[]> {
   const ref = getCollection()
     .where("accountId", "==", accountId)
     .where("assetId", "==", assetId)
@@ -64,10 +64,25 @@ export async function fetchTransactionById(transactionId: string): Promise<DbTra
   return toTransaction(res);
 }
 
-export async function addTransaction(data: any): Promise<DbTransaction> {
+export async function fetchUserTransactionById(accountId: string, transactionId: string): Promise<DbTransaction> {
+  const ref = getCollection().doc(transactionId);
+  const res = await ref.get();
+
+  if (!res.exists) {
+    throw new HttpException(StatusCodes.NOT_FOUND, "Not Found", "Transaction for given `transactionId` not found.");
+  }
+
+  if (res.data().accountId !== accountId) {
+    throw new HttpException(StatusCodes.FORBIDDEN, "Forbidden", "Transaction for given `transactionId` is not accessible.");
+  }
+
+  return toTransaction(res);
+}
+
+export async function createUserTransaction(accountId: string, data: any): Promise<DbTransaction> {
   const ref = getCollection();
   const res = await ref.add({
-    accountId:   data.accountId,
+    accountId, /* handle separately as it works relative to the current session */
     assetId:     data.assetId,
     type:        data.type,
     price:       data.price,
@@ -83,7 +98,7 @@ export async function addTransaction(data: any): Promise<DbTransaction> {
   return toTransaction(await res.get());
 }
 
-export async function updateTransactionById(id: string, data: any): Promise<DbTransaction> {
+export async function updateUserTransactionById(id: string, data: any): Promise<DbTransaction> {
   const ref = getCollection().doc(id);
   await ref.set({
     type:        data.type,
