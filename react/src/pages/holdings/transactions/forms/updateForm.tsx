@@ -25,7 +25,7 @@ function UpdateForm(props: Props) {
   const fields: Field[] = configs.map((config) => ({
     config: config,
     state: {
-      value:  fieldValues[config.name as keyof typeof fieldValues].toString() ?? "",
+      value:  fieldValues[config.name as keyof typeof fieldValues]?.toString() ?? "",
       errors: fieldErrors[config.name as keyof typeof fieldErrors] || [],
     },
   }));
