@@ -1,5 +1,5 @@
 import { getHistoricPrices, getLatestPrices } from "@/apis/prices";
-import { fetchSummariesByAccountId } from "@/apis/summaries";
+import { fetchUserSummaries } from "@/services/me/summariesService";
 import { buildEmptyPortfolio } from "@/utils";
 import { byApiId } from "@/utils/pricesUtils";
 import { calculateQuotedValue, mapApiIds } from "@/utils/summariesUtils";
@@ -20,7 +20,7 @@ export async function getUserPortfolio(accountId: string, period: Period): Promi
     Period.OneYear,
   ].map((p) => p.toString());
 
-  const summaries = await fetchSummariesByAccountId(accountId);
+  const summaries = await fetchUserSummaries(accountId);
   // const summaries = [];
 
   if (summaries.length === 0) {

@@ -1,6 +1,6 @@
 import { getHistoricPrices, getLatestPrices } from "@/apis/prices";
-import { fetchSummariesByAccountId, fetchSummaryByAccountIdAndAssetId } from "@/apis/summaries";
 import { dbFetchAsset, dbFetchAssetsByIds } from "@/services/assetsService";
+import { fetchUserSummaries, fetchUserSummaryByAssetId } from "@/services/me/summariesService";
 import { buildBaseHoldingFromAssetAndSummary } from "@/utils";
 import { byApiId } from "@/utils/pricesUtils";
 import { calculateQuotedValue, mapApiIds, mapAssetIds } from "@/utils/summariesUtils";
@@ -21,7 +21,7 @@ export async function getUserHoldings(accountId: string, period: Period): Promis
     Period.OneYear,
   ].map((p) => p.toString());
 
-  const summaries = await fetchSummariesByAccountId(accountId);
+  const summaries = await fetchUserSummaries(accountId);
   // const summaries = [];
 
   const assetIds = mapAssetIds(summaries);
@@ -60,7 +60,7 @@ export async function getUserHoldings(accountId: string, period: Period): Promis
  */
 export async function getUserHoldingByAssetId(accountId: string, assetId: string): Promise<Holding> {
   const asset   = await dbFetchAsset(assetId);
-  const summary = await fetchSummaryByAccountIdAndAssetId(accountId, assetId);
+  const summary = await fetchUserSummaryByAssetId(accountId, assetId);
   const currentPrices = await getLatestPrices([asset.apiId]);
   const currentQuotedAsset = currentPrices.find(byApiId(asset.apiId));
 

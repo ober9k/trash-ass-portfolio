@@ -22,6 +22,11 @@ function toSummary(doc): DbSummary {
   };
 }
 
+function assertSummaryExists(doc) {
+  if (doc.exists) return;
+  throw new HttpException(StatusCodes.NOT_FOUND, "Not Found", "Summary for given `summaryId` not found.");
+}
+
 /**
  * Return all summaries.
  * Not recommended for use as the asset is not returned.
@@ -32,7 +37,7 @@ export async function fetchSummaries(): Promise<DbSummary[]> {
   return res.docs.map(toSummary);
 }
 
-export async function fetchSummariesByAccountId(accountId: string): Promise<DbSummary[]> {
+export async function fetchUserSummaries(accountId: string): Promise<DbSummary[]> {
   const ref = getCollection()
     .where("accountId", "==", accountId);
 
@@ -44,15 +49,9 @@ async function fetchSummaryBy(field: string, value: string | number): Promise<Db
   const ref = getCollection().where(field, "==", value).limit(1);
   const res = await ref.get();
 
-  if (res.empty) {
-    throw new HttpException(StatusCodes.NOT_FOUND, "Not Found", "Summary for given \`${field}\` not found.");
-  }
+  assertSummaryExists(res);
 
   return res.docs.map(toSummary).pop();
-}
-
-export async function fetchSummaryByApiId(apiId: number): Promise<DbSummary> {
-  return await fetchSummaryBy("apiId", apiId);
 }
 
 export async function fetchSummaryByAssetId(assetId: string): Promise<DbSummary> {
@@ -103,13 +102,13 @@ export async function updateSummaryData(id: string, data: any): Promise<DbSummar
 }
 
 export async function refreshSummaryData(accountId: string, assetId: string): Promise<DbSummary> {
-  const id = await fetchSummaryIdByAccountIdAndAssetId(accountId, assetId);
+  const id = await fetchUserSummaryIdByAssetId(accountId, assetId);
   const data = await aggregateTransactionsByAccountIdAndAssetId(accountId, assetId);
 
   return await updateSummaryData(id, { ...data })
 }
 
-export async function fetchSummaryByAccountIdAndAssetId(accountId: string, assetId: string): Promise<DbSummary> {
+export async function fetchUserSummaryByAssetId(accountId: string, assetId: string): Promise<DbSummary> {
   const ref = getCollection()
     .where("accountId", "==", accountId)
     .where("assetId", "==", assetId)
@@ -124,17 +123,7 @@ export async function fetchSummaryByAccountIdAndAssetId(accountId: string, asset
   return res.docs.map(toSummary).pop();
 }
 
-export async function fetchSummaryIdByAccountIdAndAssetId(accountId: string, assetId: string): Promise<string> {
-  const ref = getCollection()
-    .where("accountId", "==", accountId)
-    .where("assetId", "==", assetId)
-    .limit(1);
-
-  const res = await ref.get();
-
-  if (res.empty) {
-    throw new HttpException(StatusCodes.NOT_FOUND, "Not Found", "Summary ID for given `accountId` and `assetId` not found.");
-  }
-
-  return res.docs.map((doc) => doc.id).pop();
+export async function fetchUserSummaryIdByAssetId(accountId: string, assetId: string): Promise<string> {
+  const summary = await fetchUserSummaryByAssetId(accountId, assetId);
+  return summary.id;
 }
