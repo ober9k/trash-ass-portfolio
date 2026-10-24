@@ -1,58 +1,16 @@
 import { getHistoricPrices, getLatestPrices } from "@/apis/prices";
 import { fetchSummariesByAccountId, fetchSummaryByAccountIdAndAssetId } from "@/apis/summaries";
 import { dbFetchAsset, dbFetchAssetsByIds } from "@/services/assetsService";
-import { buildBaseHoldingFromAssetAndSummary, buildEmptyPortfolio } from "@/utils";
+import { buildBaseHoldingFromAssetAndSummary } from "@/utils";
 import { byApiId } from "@/utils/pricesUtils";
 import { calculateQuotedValue, mapApiIds, mapAssetIds } from "@/utils/summariesUtils";
-import { Firestore } from "@google-cloud/firestore";
 import { Period } from "@shared/types/period";
-import type { Holding, Portfolio } from "@shared/types/portfolio";
-
-Firestore.name; /* hack: leave in for types (for now) */
-
-/**
- * Retrieve a basic summary of the portfolio.
- */
-export async function getPortfolioByAccountId(accountId: string, period: Period): Promise<Portfolio> {
-  const periodParam = (period) ? period : null;
-
-  const validPeriods = [
-    Period.OneHour,
-    Period.OneDay,
-    Period.OneWeek,
-    Period.OneMonth,
-    Period.OneYear,
-  ].map((p) => p.toString());
-
-  const summaries = await fetchSummariesByAccountId(accountId);
-  // const summaries = [];
-
-  if (summaries.length === 0) {
-    return buildEmptyPortfolio(); /* fix for handling later case */
-  }
-
-  const apiIds = mapApiIds(summaries);
-  const currentPrices = await getLatestPrices(apiIds);
-  const historicPrices = (validPeriods.includes(periodParam as Period))
-    ? await getHistoricPrices(apiIds, periodParam as Period)
-    : [];
-
-  return summaries.reduce((p, s) => {
-    const currentQuotedAsset  = currentPrices.find(byApiId(s.apiId));
-    const historicQuotedAsset = historicPrices.find(byApiId(s.apiId));
-
-    p.currentValue  += calculateQuotedValue(s, currentQuotedAsset);
-    p.adjustedValue += historicQuotedAsset ? calculateQuotedValue(s, historicQuotedAsset) : s.initialValue;
-    p.initialValue  += s.initialValue;
-    p.holdings++;
-    return p;
-  }, buildEmptyPortfolio());
-}
+import type { Holding } from "@shared/types/portfolio";
 
 /**
  * Retrieve all associated holdings.
  */
-export async function getHoldingsByAccountId(accountId: string, period: Period): Promise<Holding[]> {
+export async function getUserHoldings(accountId: string, period: Period): Promise<Holding[]> {
   const periodParam = (period) ? period : null;
 
   const validPeriods = [
@@ -100,7 +58,7 @@ export async function getHoldingsByAccountId(accountId: string, period: Period):
 /**
  * Retrieve holding asset/summary based on the provided ticker.
  */
-export async function getHoldingByAccountIdAndAssetId(accountId: string, assetId: string): Promise<Holding> {
+export async function getUserHoldingsByAssetId(accountId: string, assetId: string): Promise<Holding> {
   const asset   = await dbFetchAsset(assetId);
   const summary = await fetchSummaryByAccountIdAndAssetId(accountId, assetId);
   const currentPrices = await getLatestPrices([asset.apiId]);

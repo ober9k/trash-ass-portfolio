@@ -14,7 +14,7 @@ export function buildPortfolioQueryOptions(params: PeriodParams) {
 
 export function buildHoldingsQueryOptions(params: PeriodParams) {
   return {
-    queryKey: ["me", "portfolio", "holdings", params],
+    queryKey: ["me", "holdings", params],
     queryFn:  fetchHoldings,
   }
 }

@@ -20,6 +20,9 @@ app.use(cors({
 
 app.use(express.json());
 
+
+  return res.status(200).json(
+    data,
 app.use("/api/assets", assetsRoutes);
 app.use("/api/me/portfolio", portfolioRoutes);
 app.use("/api/me/holdings", holdingsRoutes);
