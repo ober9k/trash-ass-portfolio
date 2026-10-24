@@ -33,9 +33,9 @@ export function buildHoldingTransactionsOptions(holdingId: string, params: Perio
   };
 }
 
-export function buildTransactionOptions(holdingId: string, transactionId: string) {
+export function buildTransactionOptions(transactionId: string) {
   return {
-    queryKey: ["me", "holdings", holdingId, "transactions", transactionId],
+    queryKey: ["me", "transactions", transactionId],
     queryFn:  fetchTransaction,
   };
 }

@@ -47,7 +47,7 @@ function HoldingPage() {
         <TransactionsCard asset={asset} transactions={transactions} />
       </article>
       <Fab color="primary" aria-label="add" className="fixed right-8 bottom-8">
-        <Link to={Urls.TransactionCreate} params={{holdingId: asset.id}}>
+        <Link to={Urls.TransactionCreate} search={{assetId: asset.id}}>
           <PlusIcon />
         </Link>
       </Fab>

@@ -11,6 +11,7 @@ import CreatePage from "@/pages/holdings/transactions/createPage.tsx";
 import UpdatePage from "@/pages/holdings/transactions/updatePage.tsx";
 import AboutPage from "@/pages/aboutPage.tsx";
 import PortfolioPage from "@/pages/portfolioPage.tsx";
+import { AssetIdSearchSchema } from "@shared/schemas/search/assetIdSearchSchema.ts";
 import { PeriodSearchSchema } from "@shared/schemas/search/periodSearchSchema.ts";
 import { createRootRoute, createRoute, } from "@tanstack/react-router";
 
@@ -50,6 +51,8 @@ const transactionCreateRoute = createRoute({
   path: Urls.TransactionCreate,
   component: CreatePage,
   loader: transactionCreateLoader,
+  validateSearch: AssetIdSearchSchema,
+  loaderDeps: ({ search: { assetId } }) => ({ assetId }),
 })
 
 const transactionUpdateRoute = createRoute({

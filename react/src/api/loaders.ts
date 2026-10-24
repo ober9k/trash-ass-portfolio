@@ -45,15 +45,15 @@ export async function transactionsLoader({ context, params, deps }: any): Promis
   };
 }
 
-export async function transactionCreateLoader({ context, params }: any): Promise<TransactionCreateLoaderProps> {
+export async function transactionCreateLoader({ context, deps }: any): Promise<TransactionCreateLoaderProps> {
   return {
-    asset: await context.queryClient.query(buildAssetQueryOptions(params.holdingId)),
+    asset: await context.queryClient.query(buildAssetQueryOptions(deps.assetId)),
   };
 }
 
 export async function transactionUpdateLoader({ context, params }: any): Promise<TransactionUpdateLoaderProps> {
-  return {
-    asset:       await context.queryClient.query(buildAssetQueryOptions(params.holdingId)),
-    transaction: await context.queryClient.query(buildTransactionOptions(params.holdingId, params.transactionId)),
-  };
+  const transaction = await context.queryClient.query(buildTransactionOptions(params.transactionId));
+  const asset       = await context.queryClient.query(buildAssetQueryOptions(transaction.assetId))
+
+  return { asset, transaction };
 }
