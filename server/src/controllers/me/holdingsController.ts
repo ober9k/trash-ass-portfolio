@@ -1,6 +1,6 @@
 import { getAccountId } from "@/helpers/user";
 import { getUserHoldingByAssetId, getUserHoldings } from "@/services/me/holdingsService";
-import { fetchUserHoldingTransactionsByAssetId } from "@/services/me/transactionsService";
+import { fetchUserTransactionsByAssetId } from "@/services/me/transactionsService";
 import { Period } from "@shared/types/period";
 import type { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
@@ -32,6 +32,6 @@ export async function getHoldingTransactions(req: Request, res: Response) {
   const holdingId = getHoldingId(req);
 
   return res.status(StatusCodes.OK).json(
-    await fetchUserHoldingTransactionsByAssetId(accountId, holdingId), /* mapped to `assetId` */
+    await fetchUserTransactionsByAssetId(accountId, holdingId), /* mapped to `assetId` */
   );
 }

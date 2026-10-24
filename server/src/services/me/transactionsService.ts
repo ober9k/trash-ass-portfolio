@@ -25,6 +25,16 @@ function isOwnTransaction(doc, accountId: string): boolean {
   return doc.data()?.accountId === accountId;
 }
 
+function assertTransactionExists(doc) {
+  if (doc.exists) return;
+  throw new HttpException(StatusCodes.NOT_FOUND, "Not Found", "Transaction for given `transactionId` not found.");
+}
+
+function assertIsOwnTransaction(doc, accountId: string) {
+  if (isOwnTransaction(doc, accountId)) return;
+  throw new HttpException(StatusCodes.FORBIDDEN, "Forbidden", "Transaction for given `transactionId` is not accessible.");
+}
+
 /**
  * Return all transactions.
  * Not recommended for use as the asset is not returned.
@@ -47,7 +57,7 @@ export async function fetchTransactionsByAssetId(assetId: string, limit: number 
   return res.docs.map(toTransaction);
 }
 
-export async function fetchUserHoldingTransactionsByAssetId(accountId: string, assetId: string, limit: number = 10): Promise<DbTransaction[]> {
+export async function fetchUserTransactionsByAssetId(accountId: string, assetId: string, limit: number = 10): Promise<DbTransaction[]> {
   const ref = getCollection()
     .where("accountId", "==", accountId)
     .where("assetId", "==", assetId)
@@ -57,28 +67,21 @@ export async function fetchUserHoldingTransactionsByAssetId(accountId: string, a
   return res.docs.map(toTransaction);
 }
 
-export async function fetchTransactionById(transactionId: string): Promise<DbTransaction> {
+export async function fetchTransaction(transactionId: string): Promise<DbTransaction> {
   const ref = getCollection().doc(transactionId);
   const res = await ref.get();
 
-  if (!res.exists) {
-    throw new HttpException(StatusCodes.NOT_FOUND, "Not Found", "Transaction for given `transactionId` not found.");
-  }
+  assertTransactionExists(res);
 
   return toTransaction(res);
 }
 
-export async function fetchUserTransactionById(accountId: string, transactionId: string): Promise<DbTransaction> {
+export async function fetchUserTransaction(accountId: string, transactionId: string): Promise<DbTransaction> {
   const ref = getCollection().doc(transactionId);
   const res = await ref.get();
 
-  if (!res.exists) {
-    throw new HttpException(StatusCodes.NOT_FOUND, "Not Found", "Transaction for given `transactionId` not found.");
-  }
-
-  if (!isOwnTransaction(res, accountId)) {
-    throw new HttpException(StatusCodes.FORBIDDEN, "Forbidden", "Transaction for given `transactionId` is not accessible.");
-  }
+  assertTransactionExists(res);
+  assertIsOwnTransaction(res, accountId);
 
   return toTransaction(res);
 }
@@ -102,8 +105,13 @@ export async function createUserTransaction(accountId: string, data: any): Promi
   return toTransaction(await res.get());
 }
 
-export async function updateUserTransactionById(id: string, data: any): Promise<DbTransaction> {
-  const ref = getCollection().doc(id);
+export async function updateUserTransaction(accountId: string, transactionId: string, data: any): Promise<DbTransaction> {
+  const ref = getCollection().doc(transactionId);
+  const res = await ref.get();
+
+  assertTransactionExists(res);
+  assertIsOwnTransaction(res, accountId);
+
   await ref.set({
     type:        data.type,
     price:       data.price,

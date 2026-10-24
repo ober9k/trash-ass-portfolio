@@ -1,4 +1,4 @@
-import { createTransaction, getTransaction, getTransactions, updateTransaction } from "@/controllers/transactionsController";
+import { createTransaction, getTransaction, getTransactions, updateTransaction } from "@/controllers/me/transactionsController";
 import { validateTransactionId } from "@/middlewares/validators/idValidators";
 import { transactionSchemaValidationHandler } from "@/middlewares/validators/schemaValidators";
 import { Router } from "express";

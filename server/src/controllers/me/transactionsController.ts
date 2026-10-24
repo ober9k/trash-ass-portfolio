@@ -1,6 +1,6 @@
 import { refreshSummaryData } from "@/apis/summaries";
 import { getAccountId } from "@/helpers/user";
-import { createUserTransaction, fetchUserHoldingTransactionsByAssetId, fetchUserTransactionById, updateUserTransactionById } from "@/services/me/transactionsService";
+import { createUserTransaction, fetchUserTransactionsByAssetId, fetchUserTransaction, updateUserTransaction } from "@/services/me/transactionsService";
 import type { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -17,7 +17,7 @@ export async function getTransactions(req: Request, res: Response) {
   const holdingId = getHoldingId(req);
 
   return res.status(StatusCodes.OK).json(
-    await fetchUserHoldingTransactionsByAssetId(accountId, holdingId), /* mapped to `assetId` */
+    await fetchUserTransactionsByAssetId(accountId, holdingId), /* mapped to `assetId` */
   );
 }
 
@@ -26,7 +26,7 @@ export async function getTransaction(req: Request, res: Response) {
   const transactionId = getTransactionId(req);
 
   return res.status(StatusCodes.OK).json(
-    await fetchUserTransactionById(accountId, transactionId),
+    await fetchUserTransaction(accountId, transactionId),
   );
 }
 
@@ -49,7 +49,7 @@ export async function updateTransaction(req: Request, res: Response) {
   const transactionId = getTransactionId(req);
   const { type, price, quantity, fee, value, purchasedAt } = req.body;
 
-  const transaction = await updateUserTransactionById(transactionId, { type, price, quantity, fee, value, purchasedAt });
+  const transaction = await updateUserTransaction(accountId, transactionId, { type, price, quantity, fee, value, purchasedAt });
   await refreshSummaryData(accountId, holdingId); // also apply update
 
   return res.status(StatusCodes.OK).json(
