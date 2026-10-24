@@ -8,6 +8,6 @@ const router = Router();
 router.get("/", [], getExchanges);
 router.get("/:exchangeId", [validateExchangeId()], getExchange);
 router.post("/", [validateExchangeSchema()], createExchange);
-router.put("/:exchangeId", [validateExchangeId, validateExchangeSchema()], updateExchange);
+router.put("/:exchangeId", [validateExchangeId(), validateExchangeSchema()], updateExchange);
 
 export { router as exchangesRoutes };

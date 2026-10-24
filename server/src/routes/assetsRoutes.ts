@@ -8,6 +8,6 @@ const router = Router();
 router.get("/", [], getAssets);
 router.get("/:assetId", [validateAssetId()], getAsset);
 router.post("/", [validateAssetSchema()], createAsset);
-router.put("/:assetId", [validateAssetId, validateAssetSchema()], updateAsset);
+router.put("/:assetId", [validateAssetId(), validateAssetSchema()], updateAsset);
 
 export { router as assetsRoutes };
