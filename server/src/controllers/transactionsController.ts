@@ -1,5 +1,5 @@
 import { refreshSummaryData } from "@/apis/summaries";
-import { createUserTransaction, fetchUserTransactionById, fetchUserTransactionsByAssetId, updateUserTransactionById } from "@/apis/transactions";
+import { createUserTransaction, fetchUserTransactionById, fetchUserHoldingTransactionsByAssetId, updateUserTransactionById } from "@/apis/transactions";
 import { getAccountId } from "@/helpers/user";
 import type { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
@@ -17,7 +17,7 @@ export async function getTransactions(req: Request, res: Response) {
   const holdingId = getHoldingId(req);
 
   return res.status(StatusCodes.OK).json(
-    await fetchUserTransactionsByAssetId(accountId, holdingId), /* mapped to `assetId` */
+    await fetchUserHoldingTransactionsByAssetId(accountId, holdingId), /* mapped to `assetId` */
   );
 }
 

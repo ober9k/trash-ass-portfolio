@@ -1,5 +1,6 @@
+import { fetchUserHoldingTransactionsByAssetId } from "@/apis/transactions";
 import { getAccountId } from "@/helpers/user";
-import { getUserHoldings, getUserHoldingsByAssetId } from "@/services/me/holdingsService";
+import { getUserHoldings, getUserHoldingByAssetId } from "@/services/me/holdingsService";
 import { Period } from "@shared/types/period";
 import type { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
@@ -22,6 +23,15 @@ export async function getHolding(req: Request, res: Response) {
   const holdingId = getHoldingId(req);
 
   return res.status(StatusCodes.OK).json(
-    await getUserHoldingsByAssetId(accountId, holdingId)
+    await getUserHoldingByAssetId(accountId, holdingId)
+  );
+}
+
+export async function getHoldingTransactions(req: Request, res: Response) {
+  const accountId = getAccountId(req);
+  const holdingId = getHoldingId(req);
+
+  return res.status(StatusCodes.OK).json(
+    await fetchUserHoldingTransactionsByAssetId(accountId, holdingId), /* mapped to `assetId` */
   );
 }

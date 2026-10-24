@@ -58,7 +58,7 @@ export async function getUserHoldings(accountId: string, period: Period): Promis
 /**
  * Retrieve holding asset/summary based on the provided ticker.
  */
-export async function getUserHoldingsByAssetId(accountId: string, assetId: string): Promise<Holding> {
+export async function getUserHoldingByAssetId(accountId: string, assetId: string): Promise<Holding> {
   const asset   = await dbFetchAsset(assetId);
   const summary = await fetchSummaryByAccountIdAndAssetId(accountId, assetId);
   const currentPrices = await getLatestPrices([asset.apiId]);

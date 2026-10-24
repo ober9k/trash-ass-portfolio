@@ -8,12 +8,12 @@ const router = Router();
 
 router.use(authenticateToken);
 
-router.get("/:holdingId/transactions", [validateHoldingId()], getTransactions);
+router.get("", [validateHoldingId()], getTransactions);
 
-router.get("/:holdingId/transactions/:transactionId", [validateHoldingId(), validateTransactionId()], getTransaction);
+router.get("/:transactionId", [validateTransactionId()], getTransaction);
 
-router.post("/:holdingId/transactions", [validateHoldingId(), transactionSchemaValidationHandler()], createTransaction);
+router.post("", [transactionSchemaValidationHandler()], createTransaction);
 
-router.put("/:holdingId/transactions/:transactionId", [validateTransactionId(), transactionSchemaValidationHandler()], updateTransaction);
+router.put("/:transactionId", [validateTransactionId(), transactionSchemaValidationHandler()], updateTransaction);
 
 export { router as holdingsRoutes };
