@@ -1,12 +1,15 @@
-import { seedRoutes } from "@/helpers/seedRoutes";
 import { errorHandler } from "@/middlewares/errorHandler";
 import { assetsRoutes } from "@/routes/assetsRoutes";
-import { portfolioRoutes } from "@/routes/portfolioRoutes";
+import { exchangesRoutes } from "@/routes/exchangesRoutes";
+import { meRoutes } from "@/routes/meRoutes";
+import { seedRoutes } from "@/routes/seedRoutes";
+import { Firestore } from "@google-cloud/firestore";
 import cors from "cors";
 import express, { type Express } from "express";
-import { holdingsRoutes } from "./routes/holdingsRoutes";
 
 const app: Express = express();
+
+Firestore.name; /* hack: leave in for types (for now) */
 
 const allowedOrigins = [
   "http://localhost:4200", /* angular */
@@ -20,12 +23,9 @@ app.use(cors({
 
 app.use(express.json());
 
-
-  return res.status(200).json(
-    data,
 app.use("/api/assets", assetsRoutes);
-app.use("/api/me/portfolio", portfolioRoutes);
-app.use("/api/me/holdings", holdingsRoutes);
+app.use("/api/exchanges", exchangesRoutes);
+app.use("/api/me", meRoutes);
 app.use("/api/seed", seedRoutes);
 
 /* init error handler (last) */

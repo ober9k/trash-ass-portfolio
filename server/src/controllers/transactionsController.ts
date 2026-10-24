@@ -1,6 +1,6 @@
 import { refreshSummaryData } from "@/apis/summaries";
-import { createUserTransaction, fetchUserTransactionById, fetchUserHoldingTransactionsByAssetId, updateUserTransactionById } from "@/apis/transactions";
 import { getAccountId } from "@/helpers/user";
+import { createUserTransaction, fetchUserHoldingTransactionsByAssetId, fetchUserTransactionById, updateUserTransactionById } from "@/services/me/transactionsService";
 import type { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 

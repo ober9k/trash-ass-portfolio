@@ -1,6 +1,6 @@
-import { fetchUserHoldingTransactionsByAssetId } from "@/apis/transactions";
 import { getAccountId } from "@/helpers/user";
-import { getUserHoldings, getUserHoldingByAssetId } from "@/services/me/holdingsService";
+import { getUserHoldingByAssetId, getUserHoldings } from "@/services/me/holdingsService";
+import { fetchUserHoldingTransactionsByAssetId } from "@/services/me/transactionsService";
 import { Period } from "@shared/types/period";
 import type { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";

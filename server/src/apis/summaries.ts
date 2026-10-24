@@ -1,6 +1,6 @@
-import { aggregateTransactionsByAccountIdAndAssetId } from "@/apis/transactions";
 import { firestore } from "@/firebase";
 import HttpException from "@/models/httpException";
+import { aggregateTransactionsByAccountIdAndAssetId } from "@/services/me/transactionsService";
 import type { DbSummary } from "@shared/types/db/dbSummary";
 import { FieldValue } from "firebase-admin/firestore";
 import { StatusCodes } from "http-status-codes";

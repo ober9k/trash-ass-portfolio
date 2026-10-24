@@ -64,7 +64,7 @@ export async function fetchTransactionById(transactionId: string): Promise<DbTra
   if (!res.exists) {
     throw new HttpException(StatusCodes.NOT_FOUND, "Not Found", "Transaction for given `transactionId` not found.");
   }
-  
+
   return toTransaction(res);
 }
 
