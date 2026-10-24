@@ -11,7 +11,7 @@ export async function getAuthConfig() {
     return {};
   }
 
-  const idToken = await user.getIdToken(true);
+  const idToken = await user.getIdToken(false); /* no need to force refresh (for now) */
 
   return {
     headers: {
