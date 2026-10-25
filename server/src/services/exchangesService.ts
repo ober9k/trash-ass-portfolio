@@ -1,75 +1,83 @@
 import { firestore } from "@/firebase";
 import HttpException from "@/models/httpException";
+import { createConverter, deleteConverter, updateConverter } from "@/services/exchangesConverter";
+import type { ExchangeData } from "@shared/schemas/exchangeSchema";
 import type { DbExchange } from "@shared/types/db/dbExchange";
-import { FieldValue } from "firebase-admin/firestore";
+import { FieldPath } from "firebase-admin/firestore";
 import { StatusCodes } from "http-status-codes";
 
 function getCollection() {
   return firestore.collection("exchanges");
 }
 
-function toExchange(doc): DbExchange {
-  return {
-    id:      doc.id,
-    name:    doc.data().name,
-    website: doc.data().website,
-  };
-}
-
 export async function fetchExchanges(): Promise<DbExchange[]> {
-  const ref = getCollection();
+  const ref = getCollection()
+    .withConverter(createConverter)
+    .where("deleted", "==", false);
+
   const res = await ref.get();
-  return res.docs.map(toExchange);
+
+  return res.docs.map(_ => _.data()) as DbExchange[];
 }
 
 export async function fetchExchange(id: string): Promise<DbExchange> {
-  const ref = getCollection().doc(id);
+  const ref = getCollection()
+    .withConverter(createConverter)
+    .where(FieldPath.documentId(), "==", id)
+    .where("deleted", "==", false)
+    .limit(1);
+
   const res = await ref.get();
 
-  if (!res.exists) {
-    throw new HttpException(StatusCodes.NOT_FOUND, "Not Found", "Exchange for given `exchangeId` not found.");
+  if (res.empty) {
+      throw new HttpException(StatusCodes.NOT_FOUND, "Not Found", "Exchange for given `exchangeId` not found.");
   }
 
-  return toExchange(res);
+  return res.docs.map(_ => _.data()).pop() as DbExchange;
 }
 
-export async function createExchange(data: any): Promise<DbExchange> {
-  const ref = getCollection();
-  const res = await ref.add({
-    name:      data.name,
-    website:   data.website,
-    createdAt: FieldValue.serverTimestamp(),
-    updatedAt: FieldValue.serverTimestamp(),
-  });
+export async function createExchange(data: ExchangeData): Promise<DbExchange> {
+  const ref = await getCollection()
+    .withConverter(createConverter)
+    .add(data);
 
-  return toExchange(await res.get());
-}
+  const res = await ref.get();
 
-export async function updateExchange(id: string, data: any): Promise<DbExchange> {
-  const ref = getCollection().doc(id);
-  await ref.set({
-    name:      data.name,
-    website:   data.website,
-    updatedAt: FieldValue.serverTimestamp(),
-  });
-
-  return toExchange(await ref.get());
+  return res.data() as DbExchange;
 }
 
 export async function createFixedExchange(id: string, data: any): Promise<DbExchange> {
-  const ref = getCollection().doc(id);
-  await ref.set({
-    name:      data.name,
-    website:   data.website,
-    createdAt: FieldValue.serverTimestamp(),
-    updatedAt: FieldValue.serverTimestamp(),
-  }, { merge: true });
+  const ref = getCollection()
+    .withConverter(createConverter)
+    .doc(id);
 
-  return toExchange(await ref.get());
+  await ref.set(data, { merge: true });
+
+  return fetchExchange(id);
+}
+
+export async function updateExchange(id: string, data: any): Promise<DbExchange> {
+  const ref = getCollection()
+    .withConverter(updateConverter)
+    .doc(id);
+
+  await ref.set(data, { merge: true });
+
+  return fetchExchange(id);
+}
+
+export async function deleteExchange(id: string): Promise<void> {
+  const ref = getCollection()
+    .withConverter(deleteConverter)
+    .doc(id);
+
+  await ref.set({}, { merge: true });
+
+  return;
 }
 
 /* aliases to avoid conflicts */
-export { fetchExchanges as dbFetchExchanges };
-export { fetchExchange  as dbFetchExchange  };
-export { createExchange as dbCreateExchange };
-export { updateExchange as dbUpdateExchange };
+export {
+  createExchange as dbCreateExchange, deleteExchange as dbDeleteExchange, fetchExchange as dbFetchExchange,
+  fetchExchanges as dbFetchExchanges, updateExchange as dbUpdateExchange
+};
