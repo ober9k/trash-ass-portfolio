@@ -1,82 +1,90 @@
 import { firestore } from "@/firebase";
 import HttpException from "@/models/httpException";
+import { createConverter, updateConverter } from "@/services/assetsConverter";
+import { deleteConverter } from "@/services/exchangesConverter";
 import { type DbAsset } from "@shared/types/db/dbAsset";
-import { Ticker } from "@shared/types/ticker";
-import { FieldPath, FieldValue } from "firebase-admin/firestore";
+import { FieldPath } from "firebase-admin/firestore";
 import { StatusCodes } from "http-status-codes";
 
 function getCollection() {
   return firestore.collection("assets");
 }
 
-function toAsset(doc): DbAsset {
-  return {
-    id:     doc.id,
-    apiId:  doc.data().apiId,
-    ticker: doc.data().ticker as Ticker,
-    name:   doc.data().name,
-  };
-}
-
 export async function fetchAssets(): Promise<DbAsset[]> {
-  const ref = getCollection();
+  const ref = getCollection()
+    .withConverter(createConverter)
+    .where("deleted", "==", false);
+
   const res = await ref.get();
-  return res.docs.map(toAsset);
+
+  return res.docs.map(_ => _.data()) as DbAsset[];
 }
 
 export async function fetchAssetsByIds(ids: string[]): Promise<DbAsset[]> {
-  const ref = getCollection().where(FieldPath.documentId(), "in", ids);
+  const ref = getCollection()
+    .withConverter(createConverter)
+    .where(FieldPath.documentId(), "in", ids)
+    .where("deleted", "==", false);
+
   const res = await ref.get();
-  return res.docs.map(toAsset);
+
+  return res.docs.map(_ => _.data()) as DbAsset[];
 }
 
 export async function fetchAsset(id: string): Promise<DbAsset> {
-  const ref = getCollection().doc(id);
+  const ref = getCollection()
+    .withConverter(createConverter)
+    .where(FieldPath.documentId(), "==", id)
+    .where("deleted", "==", false)
+    .limit(1);
+
   const res = await ref.get();
 
-  if (!res.exists) {
+  if (res.empty) {
     throw new HttpException(StatusCodes.NOT_FOUND, "Not Found", "Asset for given `assetId` not found.");
   }
 
-  return toAsset(res);
+  return res.docs.map(_ => _.data()).pop() as DbAsset;
 }
 
 export async function createAsset(data: any): Promise<DbAsset> {
-  const ref = getCollection();
-  const res = await ref.add({
-    apiId:     data.apiId,
-    name:      data.name,
-    ticker:    data.ticker,
-    createdAt: FieldValue.serverTimestamp(),
-    updatedAt: FieldValue.serverTimestamp(),
-  });
+  const ref = await getCollection()
+    .withConverter(createConverter)
+    .add(data);
 
-  return toAsset(await res.get());
-}
+  const res = await ref.get();
 
-export async function updateAsset(id: string, data: any): Promise<DbAsset> {
-  const ref = getCollection().doc(id);
-  await ref.set({
-    apiId:     data.apiId,
-    name:      data.name,
-    ticker:    data.ticker,
-    updatedAt: FieldValue.serverTimestamp(),
-  });
-
-  return toAsset(await ref.get());
+  return res.data() as DbAsset;
 }
 
 export async function createFixedAsset(id: string, data: any): Promise<DbAsset> {
-  const ref = getCollection().doc(id);
-  await ref.set({
-    apiId:     data.apiId,
-    name:      data.name,
-    ticker:    data.ticker,
-    createdAt: FieldValue.serverTimestamp(),
-    updatedAt: FieldValue.serverTimestamp(),
-  });
+  const ref = getCollection()
+    .withConverter(createConverter)
+    .doc(id);
 
-  return toAsset(await ref.get());
+  await ref.set(data);
+
+  return fetchAsset(id);
+}
+
+export async function updateAsset(id: string, data: any): Promise<DbAsset> {
+  const ref = getCollection()
+    .withConverter(updateConverter)
+    .doc(id);
+
+  await ref.set(data, { merge: true });
+
+  return fetchAsset(id);
+}
+
+export async function deleteAsset(id: string): Promise<void> {
+  const ref = getCollection()
+    .withConverter(deleteConverter)
+    .doc(id);
+
+  await ref.set({}, { merge: true });
+
+  return;
 }
 
 /* aliases to avoid conflicts */
@@ -85,3 +93,4 @@ export { fetchAssetsByIds as dbFetchAssetsByIds };
 export { fetchAsset  as dbFetchAsset  };
 export { createAsset as dbCreateAsset };
 export { updateAsset as dbUpdateAsset };
+export { deleteAsset as dbDeleteAsset };
