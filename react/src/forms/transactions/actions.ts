@@ -4,10 +4,10 @@ import { type TransactionData, TransactionSchema } from "@shared/schemas/transac
 import axios from "axios";
 import { z } from "zod";
 
-export const buildFormAction = (mutation) => {
+export const buildFormAction = (mutation, externalData: any) => {
   return async (formState: FormState<TransactionData>, formData: FormData) => {
-
     const fieldValues = {
+      assetId:     externalData.assetId,
       type:        getValue(formData, "type"),
       price:       getFloatValue(formData, "price"),
       quantity:    getFloatValue(formData, "quantity"),
