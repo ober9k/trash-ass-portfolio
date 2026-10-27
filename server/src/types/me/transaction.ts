@@ -1,4 +1,5 @@
 import type { FieldValue, Timestamp } from "firebase-admin/firestore";
+import type { CreatedAt, DeletedAt, UpdatedAt } from "@/types/util";
 
 export type FsTransaction = {
   id:          string,
@@ -10,8 +11,7 @@ export type FsTransaction = {
   fee:         number,
   value:       number,
   purchasedAt: Timestamp | FieldValue,
-  deleted:     boolean,
-  createdAt:   Timestamp,
-  updatedAt:   Timestamp | FieldValue,
-  deletedAt:   Timestamp | undefined,
+  createdAt:   CreatedAt,
+  updatedAt:   UpdatedAt,
+  deletedAt:   DeletedAt,
 };
