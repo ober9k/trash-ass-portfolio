@@ -1,6 +1,6 @@
 import { firestore } from "@/firebase";
 import HttpException from "@/models/httpException";
-import { aggregateTransactionsByAccountIdAndAssetId } from "@/services/me/transactionsService";
+import { aggregateUserTransactionsByAssetId } from "@/services/me/transactionsService";
 import type { DbSummary } from "@shared/types/db/dbSummary";
 import { FieldValue } from "firebase-admin/firestore";
 import { StatusCodes } from "http-status-codes";
@@ -37,9 +37,9 @@ export async function fetchSummaries(): Promise<DbSummary[]> {
   return res.docs.map(toSummary);
 }
 
-export async function fetchUserSummaries(accountId: string): Promise<DbSummary[]> {
+export async function fetchUserSummaries(userId: string): Promise<DbSummary[]> {
   const ref = getCollection()
-    .where("accountId", "==", accountId);
+    .where("userId", "==", userId);
 
   const res = await ref.get();
   return res.docs.map(toSummary);
@@ -101,29 +101,29 @@ export async function updateSummaryData(id: string, data: any): Promise<DbSummar
   return toSummary(await ref.get());
 }
 
-export async function refreshSummaryData(accountId: string, assetId: string): Promise<DbSummary> {
-  const id = await fetchUserSummaryIdByAssetId(accountId, assetId);
-  const data = await aggregateTransactionsByAccountIdAndAssetId(accountId, assetId);
+export async function refreshSummaryData(userId: string, assetId: string): Promise<DbSummary> {
+  const id = await fetchUserSummaryIdByAssetId(userId, assetId);
+  const data = await aggregateUserTransactionsByAssetId(userId, assetId);
 
   return await updateSummaryData(id, { ...data })
 }
 
-export async function fetchUserSummaryByAssetId(accountId: string, assetId: string): Promise<DbSummary> {
+export async function fetchUserSummaryByAssetId(userId: string, assetId: string): Promise<DbSummary> {
   const ref = getCollection()
-    .where("accountId", "==", accountId)
+    .where("userId", "==", userId)
     .where("assetId", "==", assetId)
     .limit(1);
 
   const res = await ref.get();
 
   if (res.empty) {
-    throw new HttpException(StatusCodes.NOT_FOUND, "Not Found", "Summary for given `accountId` and `assetId` not found.");
+    throw new HttpException(StatusCodes.NOT_FOUND, "Not Found", "Summary for given `userId` and `assetId` not found.");
   }
 
   return res.docs.map(toSummary).pop();
 }
 
-export async function fetchUserSummaryIdByAssetId(accountId: string, assetId: string): Promise<string> {
-  const summary = await fetchUserSummaryByAssetId(accountId, assetId);
+export async function fetchUserSummaryIdByAssetId(userId: string, assetId: string): Promise<string> {
+  const summary = await fetchUserSummaryByAssetId(userId, assetId);
   return summary.id;
 }

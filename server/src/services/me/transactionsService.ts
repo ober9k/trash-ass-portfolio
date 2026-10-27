@@ -21,8 +21,8 @@ function toTransaction(doc): DbTransaction {
   };
 }
 
-function isOwnTransaction(doc, accountId: string): boolean {
-  return doc.data()?.accountId === accountId;
+function isOwnTransaction(doc, userId: string): boolean {
+  return doc.data()?.userId === userId;
 }
 
 function assertTransactionExists(doc) {
@@ -30,8 +30,8 @@ function assertTransactionExists(doc) {
   throw new HttpException(StatusCodes.NOT_FOUND, "Not Found", "Transaction for given `transactionId` not found.");
 }
 
-function assertIsOwnTransaction(doc, accountId: string) {
-  if (isOwnTransaction(doc, accountId)) return;
+function assertIsOwnTransaction(doc, userId: string) {
+  if (isOwnTransaction(doc, userId)) return;
   throw new HttpException(StatusCodes.FORBIDDEN, "Forbidden", "Transaction for given `transactionId` is not accessible.");
 }
 
@@ -57,9 +57,9 @@ export async function fetchTransactionsByAssetId(assetId: string, limit: number 
   return res.docs.map(toTransaction);
 }
 
-export async function fetchUserTransactionsByAssetId(accountId: string, assetId: string, limit: number = 10): Promise<DbTransaction[]> {
+export async function fetchUserTransactionsByAssetId(userId: string, assetId: string, limit: number = 10): Promise<DbTransaction[]> {
   const ref = getCollection()
-    .where("accountId", "==", accountId)
+    .where("userId", "==", userId)
     .where("assetId", "==", assetId)
     .orderBy("purchasedAt", "desc")
     .limit(limit);
@@ -76,20 +76,20 @@ export async function fetchTransaction(transactionId: string): Promise<DbTransac
   return toTransaction(res);
 }
 
-export async function fetchUserTransaction(accountId: string, transactionId: string): Promise<DbTransaction> {
+export async function fetchUserTransaction(userId: string, transactionId: string): Promise<DbTransaction> {
   const ref = getCollection().doc(transactionId);
   const res = await ref.get();
 
   assertTransactionExists(res);
-  assertIsOwnTransaction(res, accountId);
+  assertIsOwnTransaction(res, userId);
 
   return toTransaction(res);
 }
 
-export async function createUserTransaction(accountId: string, data: any): Promise<DbTransaction> {
+export async function createUserTransaction(userId: string, data: any): Promise<DbTransaction> {
   const ref = getCollection();
   const res = await ref.add({
-    userId:      accountId, /* handle separately as it works relative to the current session */
+    userId:      userId, /* handle separately as it works relative to the current session */
     assetId:     data.assetId,
     type:        data.type,
     price:       data.price,
@@ -105,12 +105,12 @@ export async function createUserTransaction(accountId: string, data: any): Promi
   return toTransaction(await res.get());
 }
 
-export async function updateUserTransaction(accountId: string, transactionId: string, data: any): Promise<DbTransaction> {
+export async function updateUserTransaction(userId: string, transactionId: string, data: any): Promise<DbTransaction> {
   const ref = getCollection().doc(transactionId);
   const res = await ref.get();
 
   assertTransactionExists(res);
-  assertIsOwnTransaction(res, accountId);
+  assertIsOwnTransaction(res, userId);
 
   await ref.set({
     type:        data.type,
@@ -125,9 +125,9 @@ export async function updateUserTransaction(accountId: string, transactionId: st
   return toTransaction(await ref.get());
 }
 
-export async function aggregateTransactionsByAccountIdAndAssetId(accountId: string, assetId: string): Promise<{ quantity: number, fee: number, total: number }> {
+export async function aggregateUserTransactionsByAssetId(userId: string, assetId: string): Promise<{ quantity: number, fee: number, total: number }> {
   const ref = getCollection()
-    .where("accountId", "==", accountId)
+    .where("userId", "==", userId)
     .where("assetId", "==", assetId);
 
   const res = await ref.aggregate({

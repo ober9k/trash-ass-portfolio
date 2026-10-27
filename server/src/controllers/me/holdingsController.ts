@@ -1,4 +1,4 @@
-import { getAccountId } from "@/helpers/user";
+import { getUserId } from "@/helpers/user";
 import { getUserHoldingByAssetId, getUserHoldings } from "@/services/me/holdingsService";
 import { fetchUserTransactionsByAssetId } from "@/services/me/transactionsService";
 import { Period } from "@shared/types/period";
@@ -10,28 +10,28 @@ function getHoldingId(req: Request): string {
 }
 
 export async function getHoldings(req: Request, res: Response) {
-  const accountId = getAccountId(req);
-  const period    = req.query.period; // this needs to be validated
+  const userId = getUserId(req);
+  const period = req.query.period; // this needs to be validated
 
   return res.status(StatusCodes.OK).json(
-    await getUserHoldings(accountId, period as Period),
+    await getUserHoldings(userId, period as Period),
   );
 }
 
 export async function getHolding(req: Request, res: Response) {
-  const accountId = getAccountId(req);
+  const userId    = getUserId(req);
   const holdingId = getHoldingId(req);
 
   return res.status(StatusCodes.OK).json(
-    await getUserHoldingByAssetId(accountId, holdingId)
+    await getUserHoldingByAssetId(userId, holdingId)
   );
 }
 
 export async function getHoldingTransactions(req: Request, res: Response) {
-  const accountId = getAccountId(req);
+  const userId    = getUserId(req);
   const holdingId = getHoldingId(req);
 
   return res.status(StatusCodes.OK).json(
-    await fetchUserTransactionsByAssetId(accountId, holdingId), /* mapped to `assetId` */
+    await fetchUserTransactionsByAssetId(userId, holdingId), /* mapped to `assetId` */
   );
 }

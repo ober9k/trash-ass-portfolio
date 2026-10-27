@@ -10,7 +10,7 @@ import type { Holding } from "@shared/types/portfolio";
 /**
  * Retrieve all associated holdings.
  */
-export async function getUserHoldings(accountId: string, period: Period): Promise<Holding[]> {
+export async function getUserHoldings(userId: string, period: Period): Promise<Holding[]> {
   const periodParam = (period) ? period : null;
 
   const validPeriods = [
@@ -21,7 +21,7 @@ export async function getUserHoldings(accountId: string, period: Period): Promis
     Period.OneYear,
   ].map((p) => p.toString());
 
-  const summaries = await fetchUserSummaries(accountId);
+  const summaries = await fetchUserSummaries(userId);
   // const summaries = [];
 
   const assetIds = mapAssetIds(summaries);
@@ -58,9 +58,9 @@ export async function getUserHoldings(accountId: string, period: Period): Promis
 /**
  * Retrieve holding asset/summary based on the provided ticker.
  */
-export async function getUserHoldingByAssetId(accountId: string, assetId: string): Promise<Holding> {
+export async function getUserHoldingByAssetId(userId: string, assetId: string): Promise<Holding> {
   const asset   = await dbFetchAsset(assetId);
-  const summary = await fetchUserSummaryByAssetId(accountId, assetId);
+  const summary = await fetchUserSummaryByAssetId(userId, assetId);
   const currentPrices = await getLatestPrices([asset.apiId]);
   const currentQuotedAsset = currentPrices.find(byApiId(asset.apiId));
 

@@ -9,7 +9,7 @@ import type { Portfolio } from "@shared/types/portfolio";
 /**
  * Retrieve a basic summary of the portfolio.
  */
-export async function getUserPortfolio(accountId: string, period: Period): Promise<Portfolio> {
+export async function getUserPortfolio(userId: string, period: Period): Promise<Portfolio> {
   const periodParam = (period) ? period : null;
 
   const validPeriods = [
@@ -20,7 +20,7 @@ export async function getUserPortfolio(accountId: string, period: Period): Promi
     Period.OneYear,
   ].map((p) => p.toString());
 
-  const summaries = await fetchUserSummaries(accountId);
+  const summaries = await fetchUserSummaries(userId);
   // const summaries = [];
 
   if (summaries.length === 0) {
