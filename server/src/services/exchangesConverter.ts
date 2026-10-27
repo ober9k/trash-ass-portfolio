@@ -1,8 +1,8 @@
 import type { FsExchange } from "@/types/exchange";
+import { withCreatedAt, withDeletedAt, withUpdatedAt } from "@/utils/converterUtils";
 import type { ExchangeData } from "@shared/schemas/exchangeSchema";
 import type { DbExchange } from "@shared/types/db/dbExchange";
-import type { FirestoreDataConverter, WithFieldValue } from "firebase-admin/firestore";
-import { FieldValue, QueryDocumentSnapshot } from "firebase-admin/firestore";
+import { QueryDocumentSnapshot } from "firebase-admin/firestore";
 
 /**
  * Shared converter for create/update cases.
@@ -13,29 +13,31 @@ const fromFirestore = (snapshot: QueryDocumentSnapshot<FsExchange>): DbExchange 
   website: snapshot.data().website,
 });
 
-export const createConverter: FirestoreDataConverter<ExchangeData> = {
-  toFirestore: (data: WithFieldValue<ExchangeData>) => ({
-    ...data,
-    deleted:   false, // handle delete field too
-    createdAt: FieldValue.serverTimestamp(),
-    updatedAt: FieldValue.serverTimestamp(),
+export const createConverter = {
+  toFirestore: (data: ExchangeData): Partial<FsExchange> => ({
+    name:    data.name,
+    website: data.website,
+    // special fields
+    ...withCreatedAt(),
+    ...withUpdatedAt(),
   }),
   fromFirestore,
 };
 
-export const updateConverter: FirestoreDataConverter<ExchangeData> = {
-  toFirestore: (data: WithFieldValue<ExchangeData>) => ({
-    ...data,
-    deleted:   false, // handle delete field too
-    updatedAt: FieldValue.serverTimestamp(),
+export const updateConverter = {
+  toFirestore: (data: ExchangeData): Partial<FsExchange> => ({
+    name:    data.name,
+    website: data.website,
+    // special fields
+    ...withUpdatedAt(),
   }),
   fromFirestore,
 };
 
-export const deleteConverter: FirestoreDataConverter<ExchangeData> = {
+export const deleteConverter = {
   toFirestore: () => ({
-    deleted:   true,
-    deletedAt: FieldValue.serverTimestamp(),
+    // special fields
+    ...withDeletedAt(),
   }),
-  fromFirestore,
+  fromFirestore: () => {},
 };

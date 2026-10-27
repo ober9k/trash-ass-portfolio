@@ -1,7 +1,6 @@
 import { firestore } from "@/firebase";
 import HttpException from "@/models/httpException";
-import { createConverter, updateConverter } from "@/services/assetsConverter";
-import { deleteConverter } from "@/services/exchangesConverter";
+import { createConverter, deleteConverter, updateConverter } from "@/services/assetsConverter";
 import { type DbAsset } from "@shared/types/db/dbAsset";
 import { FieldPath } from "firebase-admin/firestore";
 import { StatusCodes } from "http-status-codes";
@@ -24,7 +23,7 @@ export async function fetchAssetsByIds(ids: string[]): Promise<DbAsset[]> {
   const ref = getCollection()
     .withConverter(createConverter)
     .where(FieldPath.documentId(), "in", ids)
-    .where("deleted", "==", false);
+    .where("deletedAt", "==", null);
 
   const res = await ref.get();
 
@@ -35,7 +34,7 @@ export async function fetchAsset(id: string): Promise<DbAsset> {
   const ref = getCollection()
     .withConverter(createConverter)
     .where(FieldPath.documentId(), "==", id)
-    .where("deleted", "==", false)
+    .where("deletedAt", "==", null)
     .limit(1);
 
   const res = await ref.get();
@@ -88,9 +87,5 @@ export async function deleteAsset(id: string): Promise<void> {
 }
 
 /* aliases to avoid conflicts */
-export { fetchAssets as dbFetchAssets };
-export { fetchAssetsByIds as dbFetchAssetsByIds };
-export { fetchAsset  as dbFetchAsset  };
-export { createAsset as dbCreateAsset };
-export { updateAsset as dbUpdateAsset };
-export { deleteAsset as dbDeleteAsset };
+export { createAsset as dbCreateAsset, deleteAsset as dbDeleteAsset, fetchAsset as dbFetchAsset, fetchAssets as dbFetchAssets, fetchAssetsByIds as dbFetchAssetsByIds, updateAsset as dbUpdateAsset };
+

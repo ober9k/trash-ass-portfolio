@@ -13,7 +13,7 @@ function getCollection() {
 export async function fetchExchanges(): Promise<DbExchange[]> {
   const ref = getCollection()
     .withConverter(createConverter)
-    .where("deleted", "==", false);
+    .where("deletedAt", "==", null);
 
   const res = await ref.get();
 
@@ -24,7 +24,7 @@ export async function fetchExchange(id: string): Promise<DbExchange> {
   const ref = getCollection()
     .withConverter(createConverter)
     .where(FieldPath.documentId(), "==", id)
-    .where("deleted", "==", false)
+    .where("deletedAt", "==", null)
     .limit(1);
 
   const res = await ref.get();

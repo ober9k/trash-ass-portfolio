@@ -1,9 +1,8 @@
 import type { FsAsset } from "@/types/asset";
+import { withCreatedAt, withDeletedAt, withUpdatedAt } from "@/utils/converterUtils";
 import type { AssetData } from "@shared/schemas/assetSchema";
 import type { DbAsset } from "@shared/types/db/dbAsset";
-import type { Ticker } from "@shared/types/ticker";
-import type { FirestoreDataConverter, WithFieldValue } from "firebase-admin/firestore";
-import { FieldValue, QueryDocumentSnapshot } from "firebase-admin/firestore";
+import { QueryDocumentSnapshot } from "firebase-admin/firestore";
 
 /**
  * Shared converter for create/update cases.
@@ -12,32 +11,36 @@ const fromFirestore = (snapshot: QueryDocumentSnapshot<FsAsset>): DbAsset => ({
   id:     snapshot.id,
   apiId:  snapshot.data().apiId,
   name:   snapshot.data().name,
-  ticker: snapshot.data().ticker as Ticker,
+  ticker: snapshot.data().ticker,
 });
 
-export const createConverter: FirestoreDataConverter<AssetData> = {
-  toFirestore: (data: WithFieldValue<AssetData>) => ({
-    ...data,
-    deleted:   false, // handle delete field too
-    createdAt: FieldValue.serverTimestamp(),
-    updatedAt: FieldValue.serverTimestamp(),
+export const createConverter = {
+  toFirestore: (data: AssetData): Partial<FsAsset> => ({
+    apiId:  data.apiId,
+    name:   data.name,
+    ticker: data.ticker,
+    // special fields
+    ...withCreatedAt(),
+    ...withUpdatedAt(),
   }),
   fromFirestore,
 };
 
-export const updateConverter: FirestoreDataConverter<AssetData> = {
-  toFirestore: (data: WithFieldValue<AssetData>) => ({
-    ...data,
-    deleted:   false, // handle delete field too
-    updatedAt: FieldValue.serverTimestamp(),
+export const updateConverter = {
+  toFirestore: (data: AssetData): Partial<FsAsset> => ({
+    apiId:  data.apiId,
+    name:   data.name,
+    ticker: data.ticker,
+    // special fields
+    ...withUpdatedAt(),
   }),
   fromFirestore,
 };
 
-export const deleteConverter: FirestoreDataConverter<AssetData> = {
+export const deleteConverter = {
   toFirestore: () => ({
-    deleted:   true,
-    deletedAt: FieldValue.serverTimestamp(),
+    // special fields
+    ...withDeletedAt(),
   }),
-  fromFirestore,
+  fromFirestore: () => {},
 };
