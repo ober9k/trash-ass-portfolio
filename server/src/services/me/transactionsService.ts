@@ -63,6 +63,7 @@ export async function fetchUserTransactionsByAssetId(userId: string, assetId: st
     .where("assetId", "==", assetId)
     .orderBy("purchasedAt", "desc")
     .limit(limit);
+
   const res = await ref.get();
   return res.docs.map(toTransaction);
 }

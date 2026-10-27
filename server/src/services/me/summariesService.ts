@@ -58,9 +58,10 @@ export async function fetchSummaryByAssetId(assetId: string): Promise<DbSummary>
   return await fetchSummaryBy("assetId", assetId);
 }
 
-export async function addSummary(data: any): Promise<DbSummary> {
+export async function addUserSummary(userId, data: any): Promise<DbSummary> {
   const ref = getCollection();
   const res = await ref.add({
+    userId,
     assetId:      data.assetId,
     apiId:        data.apiId,
     quantity:     data.quantity,
@@ -73,8 +74,8 @@ export async function addSummary(data: any): Promise<DbSummary> {
   return toSummary(await res.get());
 }
 
-export async function updateSummary(id: string, data: any): Promise<DbSummary> {
-  const ref = getCollection().doc(id);
+export async function updateUserSummary(userId: string, transactionId: string, data: any): Promise<DbSummary> {
+  const ref = getCollection().doc(transactionId);
   await ref.set({
     assetId:      data.assetId,
     apiId:        data.apiId,
