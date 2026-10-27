@@ -31,7 +31,7 @@ function UpdatePage() {
     }
   });
 
-  const [ formState, formAction, isPending ] = useActionState(buildFormAction(mutation), buildInitialState(transaction));
+  const [ formState, formAction, isPending ] = useActionState(buildFormAction(mutation, { assetId: asset.id }), buildInitialState(transaction));
 
   const onCancel = () => {
     router.navigate({ to: Urls.Holding, params: { holdingId: asset.id } });

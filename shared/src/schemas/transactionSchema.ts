@@ -15,4 +15,9 @@ export const TransactionSchema = z.object({
   purchasedAt: z.iso.datetime(),
 });
 
+type WithUserId = {
+  userId: string,
+};
+
 export type TransactionData = z.infer<typeof TransactionSchema>;
+export type UserTransactionData = TransactionData &  WithUserId;

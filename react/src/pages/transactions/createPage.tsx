@@ -31,7 +31,7 @@ function CreatePage() {
     }
   });
 
-  const [ formState, formAction, isPending ] = useActionState(buildFormAction(mutation), buildInitialState());
+  const [ formState, formAction, isPending ] = useActionState(buildFormAction(mutation, { assetId: asset.id }), buildInitialState());
 
   const onCancel = () => {
     router.navigate({ to: Urls.Holding, params: { holdingId: asset.id } });

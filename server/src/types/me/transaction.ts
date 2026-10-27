@@ -3,8 +3,8 @@ import type { CreatedAt, DeletedAt, UpdatedAt } from "@/types/util";
 
 export type FsTransaction = {
   id:          string,
-  accountId:   string,
   assetId:     string,
+  userId:      string,
   type:        string,
   price:       number,
   quantity:    number,

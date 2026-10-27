@@ -1,4 +1,4 @@
-import { FieldValue } from "firebase-admin/firestore";
+import { FieldValue, Timestamp } from "firebase-admin/firestore";
 
 export const withCreatedAt = () => ({
   createdAt: FieldValue.serverTimestamp(),
@@ -13,3 +13,11 @@ export const withUpdatedAt = () => ({
 export const withDeletedAt = () => ({
   deletedAt: FieldValue.serverTimestamp(),
 });
+
+export function parseTimestamp(timestamp: Timestamp | FieldValue): Date {
+  if (!(timestamp instanceof Timestamp)) {
+    throw new Error("Unexpected value for `timestamp`.");
+  }
+
+  return timestamp.toDate();
+}

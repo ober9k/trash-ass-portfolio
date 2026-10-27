@@ -89,7 +89,7 @@ export async function fetchUserTransaction(accountId: string, transactionId: str
 export async function createUserTransaction(accountId: string, data: any): Promise<DbTransaction> {
   const ref = getCollection();
   const res = await ref.add({
-    accountId, /* handle separately as it works relative to the current session */
+    userId:      accountId, /* handle separately as it works relative to the current session */
     assetId:     data.assetId,
     type:        data.type,
     price:       data.price,
