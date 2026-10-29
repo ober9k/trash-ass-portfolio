@@ -1,6 +1,6 @@
 import { getHistoricPrices, getLatestPrices } from "@/apis/prices";
 import { dbFetchAsset, dbFetchAssetsByIds } from "@/services/assetsService";
-import { fetchUserSummaries, fetchUserSummaryByAssetId } from "@/services/me/summariesService";
+import { fetchUserSummaries, fetchUserSummaryByAssetId, refreshSummaryData } from "@/services/me/summariesService";
 import { buildBaseHoldingFromAssetAndSummary } from "@/utils";
 import { byApiId } from "@/utils/pricesUtils";
 import { calculateQuotedValue, mapApiIds, mapAssetIds } from "@/utils/summariesUtils";
@@ -68,4 +68,9 @@ export async function getUserHoldingByAssetId(userId: string, assetId: string): 
   holding.summary.currentValue = calculateQuotedValue(summary, currentQuotedAsset);
 
   return holding;
+}
+
+export async function refreshUserHoldingByAssetId(userId: string, assetId: string): Promise<boolean> {
+  await refreshSummaryData(userId, assetId);
+  return true; /* exception should otherwise be thrown */
 }

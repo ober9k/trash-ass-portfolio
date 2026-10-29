@@ -1,5 +1,5 @@
 import { getUserId } from "@/helpers/user";
-import { getUserHoldingByAssetId, getUserHoldings } from "@/services/me/holdingsService";
+import { getUserHoldingByAssetId, getUserHoldings, refreshUserHoldingByAssetId } from "@/services/me/holdingsService";
 import { fetchUserTransactionsByAssetId } from "@/services/me/transactionsService";
 import { Period } from "@shared/types/period";
 import type { Request, Response } from "express";
@@ -35,3 +35,13 @@ export async function getHoldingTransactions(req: Request, res: Response) {
     await fetchUserTransactionsByAssetId(userId, holdingId), /* mapped to `assetId` */
   );
 }
+
+export async function refreshHoldingSummary(req: Request, res: Response) {
+  const userId    = getUserId(req);
+  const holdingId = getHoldingId(req);
+
+  return res.status(StatusCodes.OK).json(
+    await refreshUserHoldingByAssetId(userId, holdingId), /* mapped to `assetId` */
+  );
+}
+
