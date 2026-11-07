@@ -17,7 +17,7 @@ export async function seedAssets() {
 
   for (let asset of assets) {
     const { id, apiId, name, ticker } = asset;
-    const res = await createFixedAsset(id, { apiId, name, ticker });
+    const res = await createFixedAsset(id, { apiId, name, ticker, deleted: false });
     savedAssets.push(res);
     console.log(`Added asset with ID: ${res.id}`);
   }
@@ -33,7 +33,7 @@ export async function seedExchanges() {
 
   for (let exchange of exchanges) {
     const { id, name, website } = exchange;
-    const res = await createFixedExchange(id, { name, website });
+    const res = await createFixedExchange(id, { name, website, deleted: false });
     savedExchanges.push(res);
     console.log(`Added exchange with ID: ${res.id}`);
   }
