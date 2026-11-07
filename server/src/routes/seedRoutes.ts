@@ -1,4 +1,4 @@
-import { seedAssets, seedExchanges, seedSummaries, seedTransactions } from "@/apis/helpers";
+import { seedAssets, seedExchanges, seedSummaries, seedTransactions } from "@/services/seedService";
 import type { Request, Response } from "express";
 import { Router } from "express";
 import { StatusCodes } from "http-status-codes";
